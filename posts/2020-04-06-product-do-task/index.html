@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话业务场景与解决方案：做任务 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话业务场景与解决方案：做任务" />
+<meta property="og:description" content="背景 多数的移动端 APP 都会有做任务领取奖励的功能模块，这类需求的目的是培养用户使用习惯，提升用户活跃性，用户完成任务获得积分奖励，通过积分兑换商" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2020-04-06-product-do-task/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-04-06T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-04-06T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话业务场景与解决方案：做任务"/>
+<meta name="twitter:description" content="背景 多数的移动端 APP 都会有做任务领取奖励的功能模块，这类需求的目的是培养用户使用习惯，提升用户活跃性，用户完成任务获得积分奖励，通过积分兑换商"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2020-04-06-product-do-task/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2019-10-08-config-model/" /><link rel="next" href="http://sflaqiu.github.io/posts/2020-05-01-array-pointer/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话业务场景与解决方案：做任务",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2020-04-06-product-do-task\/"
+        },"genre": "posts","keywords": "做任务","wordcount":  4349 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2020-04-06-product-do-task\/","datePublished": "2020-04-06T08:00:00+08:00","dateModified": "2020-04-06T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话业务场景与解决方案：做任务</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>业务设计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-04-06">2020-04-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4349 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h4 id="背景">背景</h4>
+<p>多数的移动端 APP 都会有做任务领取奖励的功能模块，这类需求的目的是培养用户使用习惯，提升用户活跃性，用户完成任务获得积分奖励，通过积分兑换商品或者充值话费，微信体现等。</p>
+<p>拟定需求场景(如图 ↓)，概要：APP 底部导航中新增小任务 Tab，点击 Tab 可查看任务完成进度和领取情况，点击去完成跳转到做任务的业务界面，当用户完成任务并且满足领取条件的时候，任务 Tab 需要红点提醒用户当前有奖励可领取，用户领取后并且当前没有待领取奖励小红点消失，任务完成进度和领取状态仅保持当天，隔天刷新。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/task_xq.png?v=221"
+        data-srcset="http://blog.thankbabe.com/imgs/task_xq.png?v=221, http://blog.thankbabe.com/imgs/task_xq.png?v=221 1.5x, http://blog.thankbabe.com/imgs/task_xq.png?v=221 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/task_xq.png?v=221"
+        title="任务需求" /></p>
+<hr>
+<h4 id="业务分析">业务分析</h4>
+<p>在开发前需要对需求进行整理，对细节进行确认，然后设计解决方案，预估开发时间，这里将对于业务中核心的内容进行梳理：</p>
+<ol>
+<li>
+<p>用户想要完成任务，需要去操作其他业务功能，如：评论成功后需要完成每日评论任务，关注主题后完成关注新手任务，这里就涉及核心问题，<strong>任务需要依赖于其他业务</strong></p>
+</li>
+<li>
+<p>为了保障后续拓展性，<strong>任务需要支持后台管理</strong>，配置任务名，描述，任务类型（每日，新手，活动），完成次数，奖励积分数量，去完成跳转 uri 等</p>
+</li>
+<li>
+<p>用户完成任务后不用自动领取奖励，需要进入到任务列表点击领取操作，可领取时导航 Tab 需要小红点提醒，和产品确认任务的完成和提醒的用户体验 <strong>可以接受短时间延迟</strong></p>
+</li>
+<li>
+<p>用户多次操作业务，或者出现重复操作（恶意并发请求刷积分），保证任务只能完成一次并且只能领取一次奖励，<strong>需要保证幂等性</strong></p>
+</li>
+</ol>
+<hr>
+<h4 id="方案设计">方案设计</h4>
+<h5 id="核心目标">核心目标：</h5>
+<ol>
+<li>任务依赖其他业务，需要进行解耦，不影响其他业务的功能和性能</li>
+<li>设计后台可管理，便于后续拓展</li>
+<li>抽象任务模块，代码抽象开发</li>
+<li>完成任务和领取需要保证幂等性</li>
+<li>高可用</li>
+</ol>
+<h5 id="名词定义">名词定义：</h5>
+<p>事件</p>
+<ul>
+<li>任务中涉及依赖其他业务，这里需要抽象出一个概念，用户通过操作业务，完成任务的这个操作，我们把这个过程定义为用户完成任务事件触发完成，如：评论事件，点赞事件，关注事件，等</li>
+</ul>
+<h5 id="解决方案">解决方案：</h5>
+<p>在实现方案上，采用异步消耗队列的方式，依赖业务接口埋入事件上报，将用户成功操作业务的任务事件上报到队里中，然后开发消息消耗的脚本程序，对消息中用户触发的任务事件进行业务逻辑处理和 DB 操作，更新用户任务进度和可领取状态，响应给用户(完成任务红点提醒)，设计图：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/task_design.jpg?v=221"
+        data-srcset="http://blog.thankbabe.com/imgs/task_design.jpg?v=221, http://blog.thankbabe.com/imgs/task_design.jpg?v=221 1.5x, http://blog.thankbabe.com/imgs/task_design.jpg?v=221 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/task_design.jpg?v=221"
+        title="任务功能设计图" /></p>
+<ul>
+<li>依赖业务解耦
+<ul>
+<li>依赖业务将操作成功用户的任务事件上报到消息队列，然后程序进行异步消耗</li>
+<li>方案解决了依赖业务之间的强耦合，并且基本不影响现有依赖业务的接口性能</li>
+</ul>
+</li>
+<li>高可用：
+<ul>
+<li>通过调度系统启动多进程对队列进行消耗
+<ul>
+<li>进程守护系统，守护进程保活，奔溃重启，可对执行日志进行记录与查看</li>
+<li>如： <a href="https://github.com/ouqiang/gocron" target="_blank" rel="noopener noreffer">gocron</a></li>
+</ul>
+</li>
+<li>消息队列监控，无法及时消耗进行预警，保障即时性，避免长时间的延迟
+<ul>
+<li>rabbitmq</li>
+<li>redis list</li>
+<li>&hellip; &hellip;</li>
+</ul>
+</li>
+<li>容错与补偿
+<ul>
+<li>队列消耗失败需要进行记录，并可根据业务场景，通过另外程序进行补充处理</li>
+<li>用户操作业务上报任务事件不限制次数，以免用户没完成任务，允许用户重新尝试去做任务，程序消耗需要控制任务只能完成一次</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>表结构：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 任务表
+</span><span class="c1"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">task</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;自增&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">icon</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;图标&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">title</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务标题&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="k">type</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务类型，新手任务=1,每日任务=2&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">event</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;事件&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">des</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务描述&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">target_num</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;目标数量&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">points</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;金币&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">sort</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;排序&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;状态 0=下线，1=上线，-1=删除&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">app_version</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;app版本号&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">app_version_compare</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;app版本号比较运算符&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="k">operator</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;操作人&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">jump_uri</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;跳转协议&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">create_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">update_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;更新时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">event_begin</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;事件开始时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">event_end</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;事件结束时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">task_begin</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务开始时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">task_end</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务结束时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 用户任务情况表
+</span><span class="c1"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">user_task_case</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;用户任务情况&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">user_id</span><span class="o">`</span><span class="w"> </span><span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;用户ID&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">task_id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务id&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">task_type</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务类型&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">event</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;事件&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">task_uni</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;任务唯一标识(唯一约束) &#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">target_num</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;目标数量&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">finish_num</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;完成数量&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">points</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;可领取金币数量&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;状态 0=待完成，1=待领取，2=已经领取&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">finish_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;完成任务时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">get_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1970-01-02 00:00:00&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;领取时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">create_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">uni_user_id_task_uni</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">user_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">task_uni</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="n">BTREE</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w">  </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COMMENT</span><span class="o">=</span><span class="s1">&#39;用户任务情况表&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><p>更新语句：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 更新领取状态，注意：WHERE条件，强校验
+</span><span class="c1"></span><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_task_case</span><span class="w">
+</span><span class="w"></span><span class="k">SET</span><span class="w">  </span><span class="o">`</span><span class="n">status</span><span class="o">`=</span><span class="mi">2</span><span class="p">,</span><span class="n">finish_at</span><span class="o">=</span><span class="k">CURRENT_TIMESTAMP</span><span class="w">
+</span><span class="w"></span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="p">:</span><span class="n">id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">user_id</span><span class="o">=</span><span class="p">:</span><span class="n">user_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="o">`</span><span class="n">status</span><span class="o">`=</span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">finish_num</span><span class="o">&gt;=</span><span class="n">target_num</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><p>表重点字段说明：</p>
+<ul>
+<li>
+<p>task_uni</p>
+<ul>
+<li>任务唯一标识</li>
+</ul>
+</li>
+<li>
+<p>user_id 和 task_uni 组合唯一约束索引</p>
+<ul>
+<li>每日任务：
+<ul>
+<li>任务 id<em>任务类型</em>日期（task_id_type_date）</li>
+</ul>
+</li>
+<li>默认都是只做一次(新手任务/活动任务)：
+<ul>
+<li>任务 id（task_id）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>幂等性</p>
+<ul>
+<li>user_task_case 表中 user_id 和 task_uni 组合唯一约束索引，通过 mysql 的唯一约束，保证了多进程并行消耗事件队列的情况下，每日任务和一次性任务不能重复 INSERT</li>
+<li>通过 UPDATE 的 WHERE 条件校验保障领取的幂等性</li>
+</ul>
+</li>
+</ul>
+<p>管理后台：</p>
+<p>产品在规划需求的时候会设计出相关后台，但是不一定设计的合理，所以这里需要根据确认的解决方案协助产品对于管理后台进行调整，保障后续的拓展性</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/task_manage.png?v=221"
+        data-srcset="http://blog.thankbabe.com/imgs/task_manage.png?v=221, http://blog.thankbabe.com/imgs/task_manage.png?v=221 1.5x, http://blog.thankbabe.com/imgs/task_manage.png?v=221 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/task_manage.png?v=221"
+        title="任务管理" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/task_add.png?v=221"
+        data-srcset="http://blog.thankbabe.com/imgs/task_add.png?v=221, http://blog.thankbabe.com/imgs/task_add.png?v=221 1.5x, http://blog.thankbabe.com/imgs/task_add.png?v=221 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/task_add.png?v=221"
+        title="任务添加" /></p>
+<p>代码层面：</p>
+<ul>
+<li>面向抽象开发，合理使用设计模式，便于后续的拓展</li>
+</ul>
+<hr>
+<h5 id="话外篇">话外篇：</h5>
+<p>谈近一年的感悟，近一年参与了新 APP 项目的开发，从 0 开始搭建项目，看着 DAU 一点点儿的涨起来，还是挺有成就感的。</p>
+<p>角色上产生了变化，现在感觉自己更像是一个项目的参与者，而不是任务的执行人，完成业务开发的同时也会对产品上有根深了解。</p>
+<p>空闲时间也会对竞品调研以及用户使用意见或者问题进行跟进，站在用户角度提供产品上的一些建议。</p>
+<p>后续会把新项目开发过程中遇到问题或者常见的业务场景下的解决方案进行梳理出来进行博文分享。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-04-06</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%81%9A%E4%BB%BB%E5%8A%A1/">做任务</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2019-10-08-config-model/" class="prev" rel="prev" title="大话APP配置功能的设计和落地"><i class="fas fa-angle-left fa-fw"></i>大话APP配置功能的设计和落地</a>
+            <a href="/posts/2020-05-01-array-pointer/" class="next" rel="next" title="大话业务场景与解决方案：数据分散周期筛选">大话业务场景与解决方案：数据分散周期筛选<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

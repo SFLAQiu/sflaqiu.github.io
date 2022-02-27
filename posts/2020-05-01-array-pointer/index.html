@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话业务场景与解决方案：数据分散周期筛选 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话业务场景与解决方案：数据分散周期筛选" />
+<meta property="og:description" content="背景： 用户上传的宝宝相册记录，一个记录可以包含 N 个照片，产品期望给用户输出影集，如：一周/宝宝百天/宝宝生日的影集 用户同一天可能会有多个记录" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2020-05-01-array-pointer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-01T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-05-01T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话业务场景与解决方案：数据分散周期筛选"/>
+<meta name="twitter:description" content="背景： 用户上传的宝宝相册记录，一个记录可以包含 N 个照片，产品期望给用户输出影集，如：一周/宝宝百天/宝宝生日的影集 用户同一天可能会有多个记录"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2020-05-01-array-pointer/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2020-04-06-product-do-task/" /><link rel="next" href="http://sflaqiu.github.io/posts/2020-05-27-liqi-paicuo/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话业务场景与解决方案：数据分散周期筛选",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2020-05-01-array-pointer\/"
+        },"genre": "posts","keywords": "数组指针","wordcount":  1320 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2020-05-01-array-pointer\/","datePublished": "2020-05-01T08:00:00+08:00","dateModified": "2020-05-01T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话业务场景与解决方案：数据分散周期筛选</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>业务设计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-01">2020-05-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1320 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h4 id="背景">背景：</h4>
+<p>用户上传的宝宝相册记录，一个记录可以包含 N 个照片，产品期望给用户输出影集，如：一周/宝宝百天/宝宝生日的影集</p>
+<blockquote>
+<p>用户同一天可能会有多个记录</p>
+</blockquote>
+<p>简化需求内容，产品期望可以将数据按周期筛选出并分散的到日期，相同记录 ID 下，再分散到每个照片</p>
+<hr>
+<p>如：将最近一周的数据，按天分组，然后分散到每个记录 ID 下，每个记录 ID 都尽可能覆盖到获取照片，最终筛选 N 条数据</p>
+<p>如：将最近 100 天的数据，按周分组，分散到每个周的日期数据，然后分散到每个记录 ID 下，每个记录 ID 都尽可能覆盖到获取照片，最终筛选 N 条数据</p>
+<p>如：将一年的数据，按月分组，分散到每个月份的日期数据，然后分散到每个记录 ID 下，每个记录 ID 都尽可能覆盖到获取照片，最终筛选 N 条数据</p>
+<p>结合实例说明下：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/date-data.jpg?v=1222"
+        data-srcset="http://blog.thankbabe.com/imgs/date-data.jpg?v=1222, http://blog.thankbabe.com/imgs/date-data.jpg?v=1222 1.5x, http://blog.thankbabe.com/imgs/date-data.jpg?v=1222 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/date-data.jpg?v=1222"
+        title="image" /></p>
+<p>取照片顺序：</p>
+<pre tabindex="0"><code>
+05-01-&gt;ID_1-&gt;1.jpg
+05-02-&gt;ID_4-&gt;7.jpg
+05-03-&gt;ID_5-&gt;9.jpg
+
+05-01-&gt;ID_2-&gt;3.jpg
+05-02-&gt;ID_4-&gt;8.jpg
+05-03-&gt;ID_5-&gt;10.jpg
+
+05-01-&gt;ID_3-&gt;6.jpg
+05-03-&gt;ID_6-&gt;11.jpg
+
+05-01-&gt;ID_1-&gt;2.jpg
+05-03-&gt;ID_6-&gt;12.jpg
+
+05-01-&gt;ID_2-&gt;4.jpg
+05-03-&gt;ID_6-&gt;13.jpg
+
+05-01-&gt;ID_2-&gt;5.jpg
+
+</code></pre><h4 id="方案">方案</h4>
+<p>分析需求，抽离出本质要解决的问题，其实就是根据周期（天，周，月），然后再遍历每个周围下的记录 ID，每个记录 ID 的照片都可以尽可能的覆盖到，继续遍历下一个周期下的记录 ID，直到获得 N 条数据/没数据，就结束</p>
+<p>最初的一个解决方案，就是将数据进行按周期分组，然后遍历每个周期，取出来周期中的日期记录数据，然后将它移除，继续遍历下一个周期日期记录，直到遍历完到 15 条/没数据结束</p>
+<p>后来发现实现起来相当的吃力，而且逻辑又有些复杂</p>
+<p>最后发现 PHP 数组支持内部指针，基于内置指针特性，将数据按周期分组后，通过内容指针，实现每次取数据的时候偏移位置，最终实现的通用的函数封装</p>
+<p>内部指针：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="nx">current</span><span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span> <span class="nx">每个数组的当前单元，初始值的</span> <span class="nx">数组的第一个单元</span>
+
+<span class="nx">next</span> <span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span>  <span class="nx">返回数组中的下一个单元，如果没值则返回falsh</span>
+
+<span class="nx">prev</span> <span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span> <span class="nx">返回数组中的上一个单元，如果没有值则返回true</span>
+
+<span class="nx">end</span> <span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span>  <span class="nx">将内部指针移动到最后一个单元，并返回其值</span>
+
+<span class="nx">reset</span> <span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span> <span class="nx">将内部指针移动到第一个单元，如果没值，则返回falsh</span>
+
+<span class="nx">each</span> <span class="p">(</span> <span class="o">&amp;</span><span class="nv">$arr</span> <span class="p">)</span> <span class="nx">返回数组中当前的键</span><span class="o">/</span><span class="nx">值，对并将数组指针，向前移动一步</span>
+
+</code></pre></div><p>逻辑：<br>
+先获取当前数组指针值 current<br>
+如果没有数据的时候尝试 reset，重置将内部指针移动到第一个单元<br>
+通过 array_shift 获取照片数据<br>
+没数据的时候 unset，继续遍历<br>
+最后将指针位移 next，等下一次来获取</p>
+<p>核心代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="sd">/**
+</span><span class="sd"> * 获取分组下的素材
+</span><span class="sd"> * @param array $periodGroups 周期分组
+</span><span class="sd"> * @param array $selAlbums 被选中素材album数组
+</span><span class="sd"> * @param array $log
+</span><span class="sd"> * @param int $max
+</span><span class="sd"> * @return bool
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getPeriodMaterial</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$periodGroups</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$selAlbums</span> <span class="o">=</span> <span class="p">[],</span> <span class="o">&amp;</span><span class="nv">$log</span> <span class="o">=</span> <span class="p">[],</span> <span class="nv">$max</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$periodGroups</span><span class="p">))</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$periodGroups</span> <span class="k">as</span> <span class="nv">$period</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="nv">$dates</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">//满足素材数量，out
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getSelAllNums</span><span class="p">(</span><span class="nv">$selAlbums</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nv">$max</span><span class="p">)</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$dates</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+
+        <span class="c1">//数组指针 - 日期关联数组
+</span><span class="c1"></span>        <span class="nv">$dateTarget</span> <span class="o">=</span> <span class="nx">current</span><span class="p">(</span><span class="nv">$dates</span><span class="p">);</span>
+        <span class="c1">//如果没有日期目标，重置数组指针，再尝试获取
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$dateTarget</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">reset</span><span class="p">(</span><span class="nv">$dates</span><span class="p">);</span>
+            <span class="nv">$dateTarget</span> <span class="o">=</span> <span class="nx">current</span><span class="p">(</span><span class="nv">$dates</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="c1">//还是不存在日期下的记录，直接删除日期分组
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$dateTarget</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nv">$dates</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$date</span> <span class="o">=</span> <span class="nx">key</span><span class="p">(</span><span class="nv">$dates</span><span class="p">);</span>
+        <span class="nx">next</span><span class="p">(</span><span class="nv">$dates</span><span class="p">);</span>
+
+
+        <span class="c1">//获取日期下的所有记录
+</span><span class="c1"></span>        <span class="nv">$records</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$dates</span><span class="p">[</span><span class="nv">$date</span><span class="p">];</span>
+        <span class="c1">//数组指针 - 记录数组
+</span><span class="c1"></span>        <span class="nv">$recordTarget</span> <span class="o">=</span> <span class="nx">current</span><span class="p">(</span><span class="nv">$records</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$recordTarget</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">reset</span><span class="p">(</span><span class="nv">$records</span><span class="p">);</span>
+            <span class="nv">$recordTarget</span> <span class="o">=</span> <span class="nx">current</span><span class="p">(</span><span class="nv">$records</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$recordTarget</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">unset</span><span class="p">(</span><span class="nv">$dates</span><span class="p">[</span><span class="nv">$date</span><span class="p">]);</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$recordIndex</span> <span class="o">=</span> <span class="nx">key</span><span class="p">(</span><span class="nv">$records</span><span class="p">);</span>
+        <span class="nx">next</span><span class="p">(</span><span class="nv">$records</span><span class="p">);</span>
+
+        <span class="c1">//获取记录
+</span><span class="c1"></span>        <span class="sd">/** @var MBabyRecord $mRecord */</span>
+        <span class="nv">$mRecord</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$records</span><span class="p">[</span><span class="nv">$recordIndex</span><span class="p">];</span>
+        <span class="sd">/** @var array $recordDetail */</span>
+        <span class="nv">$recordDetail</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$mRecord</span><span class="o">-&gt;</span><span class="na">record_detail</span><span class="p">;</span>
+        <span class="nv">$mAlbum</span> <span class="o">=</span> <span class="nx">array_shift</span><span class="p">(</span><span class="nv">$recordDetail</span><span class="p">);</span>
+        <span class="nv">$selAlbums</span><span class="p">[</span><span class="nv">$date</span><span class="p">][</span><span class="nv">$mAlbum</span><span class="o">-&gt;</span><span class="na">record_id</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$mAlbum</span><span class="p">;</span>
+        <span class="nv">$log</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;period_num&#39;</span> <span class="o">=&gt;</span> <span class="nv">$period</span><span class="p">,</span>
+            <span class="s1">&#39;date&#39;</span> <span class="o">=&gt;</span> <span class="nv">$date</span><span class="p">,</span>
+            <span class="s1">&#39;record_id&#39;</span> <span class="o">=&gt;</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$mRecord</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nv">$mRecord</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span>
+            <span class="s1">&#39;album_id&#39;</span> <span class="o">=&gt;</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$mAlbum</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nv">$mAlbum</span><span class="o">-&gt;</span><span class="na">id</span>
+        <span class="p">];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$mRecord</span><span class="o">-&gt;</span><span class="na">record_detail</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">unset</span><span class="p">(</span><span class="nv">$records</span><span class="p">[</span><span class="nv">$recordIndex</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$records</span><span class="p">))</span> <span class="nx">unset</span><span class="p">(</span><span class="nv">$dates</span><span class="p">[</span><span class="nv">$date</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$dates</span><span class="p">))</span> <span class="nv">$dates</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//清洗删除已经没有日期记录的分组
+</span><span class="c1"></span>    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$periodGroups</span> <span class="k">as</span> <span class="nv">$period</span> <span class="o">=&gt;</span> <span class="nv">$item</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$item</span><span class="p">))</span> <span class="nx">unset</span><span class="p">(</span><span class="nv">$periodGroups</span><span class="p">[</span><span class="nv">$period</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>百天数据，按：周数，分组</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="sd">/**
+</span><span class="sd"> * 根据周期分组，百天根据周分组
+</span><span class="sd"> * @param MBabyRecord[] $records
+</span><span class="sd"> * @return array
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">groupByPeriod</span><span class="p">(</span><span class="nv">$records</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$records</span><span class="p">))</span> <span class="k">return</span> <span class="p">[];</span>
+    <span class="nv">$groups</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$records</span> <span class="k">as</span> <span class="nv">$item</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$recordDate</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="na">record_date</span><span class="p">;</span>
+        <span class="nv">$week</span> <span class="o">=</span> <span class="nx">Carbon</span><span class="o">::</span><span class="na">parse</span><span class="p">(</span><span class="nv">$recordDate</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">weekOfYear</span><span class="p">;</span>
+        <span class="nv">$groups</span><span class="p">[</span><span class="nv">$week</span><span class="p">][</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="na">record_date</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$item</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>周岁数据，按：年-月份数，分组</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+ <span class="sd">/**
+</span><span class="sd"> * 根据周分组
+</span><span class="sd"> * @param MBabyRecord[] $records
+</span><span class="sd"> * @return array
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">groupByPeriod</span><span class="p">(</span><span class="nv">$records</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$records</span><span class="p">))</span> <span class="k">return</span> <span class="p">[];</span>
+    <span class="nv">$groups</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$records</span> <span class="k">as</span> <span class="nv">$item</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="na">record_date</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="nv">$recordDate</span> <span class="o">=</span> <span class="nx">Carbon</span><span class="o">::</span><span class="na">parse</span><span class="p">(</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="na">record_date</span><span class="p">);</span>
+        <span class="nv">$year</span> <span class="o">=</span> <span class="nv">$recordDate</span><span class="o">-&gt;</span><span class="na">year</span><span class="p">;</span>
+        <span class="nv">$month</span> <span class="o">=</span> <span class="nv">$recordDate</span><span class="o">-&gt;</span><span class="na">month</span><span class="p">;</span>
+        <span class="nv">$groups</span><span class="p">[</span><span class="nv">$year</span> <span class="o">.</span> <span class="s1">&#39;-&#39;</span> <span class="o">.</span> <span class="nv">$month</span><span class="p">][</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="na">record_date</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$item</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88/">数组指针</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2020-04-06-product-do-task/" class="prev" rel="prev" title="大话业务场景与解决方案：做任务"><i class="fas fa-angle-left fa-fw"></i>大话业务场景与解决方案：做任务</a>
+            <a href="/posts/2020-05-27-liqi-paicuo/" class="next" rel="next" title="大话一次离奇的问题排查经历">大话一次离奇的问题排查经历<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

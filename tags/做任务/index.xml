@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>做任务 - 标签 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/tags/%E5%81%9A%E4%BB%BB%E5%8A%A1/</link>
+        <description>做任务 - 标签 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 06 Apr 2020 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E5%81%9A%E4%BB%BB%E5%8A%A1/" rel="self" type="application/rss+xml" /><item>
+    <title>大话业务场景与解决方案：做任务</title>
+    <link>http://sflaqiu.github.io/posts/2020-04-06-product-do-task/</link>
+    <pubDate>Mon, 06 Apr 2020 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2020-04-06-product-do-task/</guid>
+    <description><![CDATA[背景 多数的移动端 APP 都会有做任务领取奖励的功能模块，这类需求的目的是培养用户使用习惯，提升用户活跃性，用户完成任务获得积分奖励，通过积分兑换商]]></description>
+</item></channel>
+</rss>

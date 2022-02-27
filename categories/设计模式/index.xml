@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>设计模式 - 分类 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <description>设计模式 - 分类 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 01 Jan 2022 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="self" type="application/rss+xml" /><item>
+    <title>今天你设计了吗？</title>
+    <link>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</link>
+    <pubDate>Sat, 01 Jan 2022 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</guid>
+    <description><![CDATA[背景 在开发过程中你是否有遇到过这样的苦恼？产品发来一个需求，没做过，但是看完需求感觉应该处理起来很简单，然后找到对应的业务代码，发现代码像打]]></description>
+</item></channel>
+</rss>

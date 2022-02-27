@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>RabbitMQ入门与使用篇 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="RabbitMQ入门与使用篇" />
+<meta property="og:description" content="介绍 RabbitMQ 是一个由 erlang 开发的基于 AMQP（Advanced Message Queue）协议的开源实现。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2017-08-03-rabbitmq-demo/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-08-03T08:00:00+08:00" />
+<meta property="article:modified_time" content="2017-08-03T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RabbitMQ入门与使用篇"/>
+<meta name="twitter:description" content="介绍 RabbitMQ 是一个由 erlang 开发的基于 AMQP（Advanced Message Queue）协议的开源实现。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2017-08-03-rabbitmq-demo/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2017-07-05-fore-end-optimize/" /><link rel="next" href="http://sflaqiu.github.io/posts/2017-09-25-spider/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "RabbitMQ入门与使用篇",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2017-08-03-rabbitmq-demo\/"
+        },"genre": "posts","keywords": "RabbitMQ","wordcount":  5259 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2017-08-03-rabbitmq-demo\/","datePublished": "2017-08-03T08:00:00+08:00","dateModified": "2017-08-03T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">RabbitMQ入门与使用篇</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/mq/"><i class="far fa-folder fa-fw"></i>MQ</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2017-08-03">2017-08-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5259 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 11 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#介绍">介绍</a></li>
+        <li><a href="#下载与安装">下载与安装</a></li>
+        <li><a href="#管理工具">管理工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#图片httpblogwaterstrongmeassetsrabbitmq-guideoverview_totalspng"><img src="http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png" alt="图片"></a>
+      <ul>
+        <li><a href="#其他配置">其他配置</a></li>
+        <li><a href="#基于net-使用">基于.net 使用</a></li>
+        <li><a href="#注意">注意</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h3 id="介绍">介绍</h3>
+<p>RabbitMQ 是一个由 erlang 开发的基于 AMQP（Advanced Message Queue）协议的开源实现。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面都非常的优秀。是当前最主流的消息中间件之一。</p>
+<p><a href="https://www.rabbitmq.com/" target="_blank" rel="noopener noreffer">RabbitMQ 的官方</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/306976-20160720104037044-1071063805.png"
+        data-srcset="http://blog.thankbabe.com/imgs/306976-20160720104037044-1071063805.png, http://blog.thankbabe.com/imgs/306976-20160720104037044-1071063805.png 1.5x, http://blog.thankbabe.com/imgs/306976-20160720104037044-1071063805.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/306976-20160720104037044-1071063805.png"
+        title="image" /></p>
+<ul>
+<li>概念：
+<ul>
+<li>Brocker：消息队列服务器实体。</li>
+<li>Exchange：消息交换机，指定消息按什么规则，路由到哪个队列。</li>
+<li>Queue：消息队列，每个消息都会被投入到一个或者多个队列里。</li>
+<li>Binding：绑定，它的作用是把 exchange 和 queue 按照路由规则 binding 起来。</li>
+<li>Routing Key：路由关键字，exchange 根据这个关键字进行消息投递。</li>
+<li>Vhost：虚拟主机，一个 broker 里可以开设多个 vhost，用作不用用户的权限分离。</li>
+<li>Producer：消息生产者，就是投递消息的程序。</li>
+<li>Consumer：消息消费者，就是接受消息的程序。</li>
+<li>Channel：消息通道，在客户端的每个连接里，可建立多个 channel，每个 channel 代表一个会话任务。</li>
+</ul>
+</li>
+<li>消息队列的使用过程大概如下：
+<ul>
+<li>消息接收
+<ul>
+<li>客户端连接到消息队列服务器，打开一个 channel。</li>
+<li>客户端声明一个 exchange，并设置相关属性。</li>
+<li>客户端声明一个 queue，并设置相关属性。</li>
+<li>客户端使用 routing key，在 exchange 和 queue 之间建立好绑定关系。</li>
+</ul>
+</li>
+<li>消息发布
+<ul>
+<li>客户端投递消息到 exchange。</li>
+<li>exchange 接收到消息后，就根据消息的 key 和已经设置的 binding，进行消息路由，将消息投递到一个或多个队列里。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AMQP 里主要要说两个组件：
+<ul>
+<li>Exchange 和 Queue</li>
+<li>绿色的 X 就是 Exchange ，红色的是 Queue ，这两者都在 Server 端，又称作 Broker</li>
+<li>这部分是 RabbitMQ 实现的，而蓝色的则是客户端，通常有 Producer 和 Consumer 两种类型。</li>
+</ul>
+</li>
+<li>Exchange 通常分为四种：
+<ul>
+<li>fanout：该类型路由规则非常简单，会把所有发送到该 Exchange 的消息路由到所有与它绑定的 Queue 中，相当于广播功能</li>
+<li>direct：该类型路由规则会将消息路由到 binding key 与 routing key 完全匹配的 Queue 中</li>
+<li>topic：与 direct 类型相似，只是规则没有那么严格，可以模糊匹配和多条件匹配</li>
+<li>headers：该类型不依赖于 routing key 与 binding key 的匹配规则来路由消息，而是根据发送的消息内容中的 headers 属性进行匹配</li>
+</ul>
+</li>
+<li>使用场景
+<ul>
+<li><a href="https://www.rabbitmq.com/getstarted.html" target="_blank" rel="noopener noreffer">官方介绍</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="下载与安装">下载与安装</h3>
+<ul>
+<li>下载
+<ul>
+<li><a href="http://www.rabbitmq.com/download.html" target="_blank" rel="noopener noreffer">rabbitmq </a></li>
+<li><a href="http://www.erlang.org/download.html" target="_blank" rel="noopener noreffer">erlang</a></li>
+</ul>
+</li>
+<li>安装
+<ul>
+<li>先安装 erlang</li>
+<li>然后再安装 rabbitmq</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="管理工具">管理工具</h3>
+<ul>
+<li>参考<a href="http://www.rabbitmq.com/management.html" target="_blank" rel="noopener noreffer">官方文档</a></li>
+</ul>
+<p>操作起来很简单，只需要在 DOS 下面，进入安装目录（<code>安装路径\RabbitMQ Server\rabbitmq_server-3.2.2\sbin</code>）执行如下命令就可以成功安装。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rabbitmq-plugins <span class="nb">enable</span> rabbitmq_management
+</code></pre></div><p>可以通过访问：<code>http://localhost:15672</code>进行测试，默认的登陆账号为：guest，密码为：guest。</p>
+<h2 id="图片httpblogwaterstrongmeassetsrabbitmq-guideoverview_totalspng"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png"
+        data-srcset="http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png, http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png 1.5x, http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png 2x"
+        data-sizes="auto"
+        alt="http://blog.waterstrong.me/assets/rabbitmq-guide/overview_totals.png"
+        title="图片" /></h2>
+<h3 id="其他配置">其他配置</h3>
+<p><strong>1. 安装完以后 erlang 需要手动设置 ERLANG_HOME 的系统变量。</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">set</span> <span class="nv">ERLANG_HOME</span><span class="o">=</span>F:<span class="se">\P</span>rogram Files<span class="se">\e</span>rl9.0
+<span class="c1">#环境变量`path`里加入：%ERLANG_HOME%\bin</span>
+<span class="c1">#环境变量`path`里加入: 安装路径\RabbitMQ Server\rabbitmq_server-3.6.10\sbin</span>
+
+</code></pre></div><p><strong>2．激活 Rabbit MQ&rsquo;s Management Plugin</strong></p>
+<p>使用 Rabbit MQ 管理插件，可以更好的可视化方式查看 Rabbit MQ 服务器实例的状态，你可以在命令行中使用下面的命令激活。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rabbitmq-plugins.bat  <span class="nb">enable</span>  rabbitmq_management
+</code></pre></div><p><strong>3．创建管理用户</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rabbitmqctl.bat add_user sa <span class="m">123456</span>
+</code></pre></div><p><strong>4. 设置管理员</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rabbitmqctl.bat set_user_tags sa administrator
+</code></pre></div><p><strong>5．设置权限</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rabbitmqctl.bat set_permissions -p / sa <span class="s2">&#34;.*&#34;</span> <span class="s2">&#34;.*&#34;</span> <span class="s2">&#34;.*&#34;</span>
+</code></pre></div><p><strong>6. 其他命令</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#查询用户：</span>
+    rabbitmqctl.bat list_users
+<span class="c1">#查询vhosts：</span>
+    rabbitmqctl.bat list_vhosts
+<span class="c1">#启动RabbitMQ服务:</span>
+    net stop RabbitMQ <span class="o">&amp;&amp;</span> net start RabbitMQ
+</code></pre></div><p>以上这些，账号、vhost、权限、作用域等基本就设置完了。</p>
+<hr>
+<h3 id="基于net-使用">基于.net 使用</h3>
+<p><a href="http://www.rabbitmq.com/dotnet.html" target="_blank" rel="noopener noreffer">RabbitMQ.Client</a> 是 RabbiMQ 官方提供的的客户端<br>
+<a href="http://easynetq.com/" target="_blank" rel="noopener noreffer">EasyNetQ</a> 是基于 RabbitMQ.Client 基础上封装的开源客户端,使用非常方便</p>
+<blockquote>
+<p>以下操作 RabbitMQ 的代码例子，都是基于 EasyNetQ 的使用和再封装，在文章底部有<strong>demo 例子的源码下载地址</strong></p>
+</blockquote>
+<hr>
+<p><strong>创建 IBus</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息服务器连接器
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">class</span> <span class="nc">BusBuilder</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="n">IBus</span> <span class="n">CreateMessageBus</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 消息服务器连接字符串
+</span><span class="c1"></span>        <span class="c1">// var connectionString = ConfigurationManager.ConnectionStrings[&#34;RabbitMQ&#34;];
+</span><span class="c1"></span>        <span class="kt">string</span> <span class="n">connString</span> <span class="p">=</span> <span class="s">&#34;host=127.0.0.1:5672;virtualHost=TestQueue;username=sa;password=123456&#34;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">connString</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">connString</span> <span class="p">==</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="p">(</span><span class="s">&#34;messageserver connection string is missing or empty&#34;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">RabbitHutch</span><span class="p">.</span><span class="n">CreateBus</span><span class="p">(</span><span class="n">connString</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p><strong>Fanout Exchange</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/306976-20160728104237622-1486261669.png"
+        data-srcset="http://blog.thankbabe.com/imgs/306976-20160728104237622-1486261669.png, http://blog.thankbabe.com/imgs/306976-20160728104237622-1486261669.png 1.5x, http://blog.thankbabe.com/imgs/306976-20160728104237622-1486261669.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/306976-20160728104237622-1486261669.png"
+        title="image" /></p>
+<p>所有发送到 Fanout Exchange 的消息都会被转发到与该 Exchange 绑定(Binding)的所有 Queue 上。<br>
+Fanout Exchange 不需要处理 RouteKey 。只需要简单的将队列绑定到 exchange 上。这样发送到 exchange 的消息都会被转发到与该交换机绑定的所有队列上。类似子网广播，每台子网内的主机都获得了一份复制的消息。
+所以，Fanout Exchange 转发消息是最快的。</p>
+<hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">///  消息消耗（fanout）
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;handler&#34;&gt;回调&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;exChangeName&#34;&gt;交换器名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;queueName&#34;&gt;队列名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;routingKey&#34;&gt;路由名&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">FanoutConsume</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">handler</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;fanout_mq&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">queueName</span> <span class="p">=</span> <span class="s">&#34;fanout_queue_default&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">routingKey</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Fanout</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">queue</span> <span class="p">=</span> <span class="n">CreateQueue</span><span class="p">(</span><span class="n">adbus</span><span class="p">,</span> <span class="n">queueName</span><span class="p">);</span>
+    <span class="n">adbus</span><span class="p">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">routingKey</span><span class="p">);</span>
+    <span class="n">adbus</span><span class="p">.</span><span class="n">Consume</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">registration</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="n">registration</span><span class="p">.</span><span class="n">Add</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;((</span><span class="n">message</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="n">handler</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">Body</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息上报（fanout）
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;topic&#34;&gt;主题名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;t&#34;&gt;消息命名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;msg&#34;&gt;错误信息&lt;/param&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">FanoutPush</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">t</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;fanout_mq&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">routingKey</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+            <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Fanout</span><span class="p">);</span>
+            <span class="n">adbus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">routingKey</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">new</span> <span class="n">Message</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">t</span><span class="p">));</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><hr>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/306976-20160728104255372-2049742072.png"
+        data-srcset="http://blog.thankbabe.com/imgs/306976-20160728104255372-2049742072.png, http://blog.thankbabe.com/imgs/306976-20160728104255372-2049742072.png 1.5x, http://blog.thankbabe.com/imgs/306976-20160728104255372-2049742072.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/306976-20160728104255372-2049742072.png"
+        title="image" /><br>
+所有发送到 Direct Exchange 的消息被转发到 RouteKey 中指定的 Queue。<br>
+Direct 模式，可以使用 RabbitMQ 自带的 Exchange：default Exchange 。所以不需要将 Exchange 进行任何绑定(binding)操作 。消息传递时，RouteKey 必须完全匹配，才会被队列接收，否则该消息会被抛弃。</p>
+<hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息发送（direct）
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;queue&#34;&gt;发送到的队列&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;message&#34;&gt;发送内容&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">DirectSend</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">string</span> <span class="n">queue</span><span class="p">,</span> <span class="n">T</span> <span class="n">message</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">bus</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息接收（direct）
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;queue&#34;&gt;接收的队列&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;callback&#34;&gt;回调操作&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;msg&#34;&gt;错误信息&lt;/param&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">DirectReceive</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">string</span> <span class="n">queue</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">callback</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">();</span>
+        <span class="n">bus</span><span class="p">.</span><span class="n">Receive</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">queue</span><span class="p">,</span> <span class="n">callback</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息发送
+</span><span class="c1">/// &lt;![CDATA[（direct EasyNetQ高级API）]]&gt;
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;t&#34;&gt;&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;msg&#34;&gt;&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;exChangeName&#34;&gt;&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;routingKey&#34;&gt;&lt;/param&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">DirectPush</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">t</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;direct_mq&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">routingKey</span> <span class="p">=</span> <span class="s">&#34;direct_rout_default&#34;</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+            <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">);</span>
+            <span class="n">adbus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">routingKey</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">new</span> <span class="n">Message</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">t</span><span class="p">));</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 消息接收
+</span><span class="c1">///  &lt;![CDATA[（direct EasyNetQ高级API）]]&gt;
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;handler&#34;&gt;回调&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;exChangeName&#34;&gt;交换器名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;queueName&#34;&gt;队列名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;routingKey&#34;&gt;路由名&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">DirectConsume</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">handler</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;direct_mq&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">queueName</span> <span class="p">=</span> <span class="s">&#34;direct_queue_default&#34;</span><span class="p">,</span> <span class="kt">string</span> <span class="n">routingKey</span> <span class="p">=</span> <span class="s">&#34;direct_rout_default&#34;</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">();</span>
+        <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">queue</span> <span class="p">=</span> <span class="n">CreateQueue</span><span class="p">(</span><span class="n">adbus</span><span class="p">,</span> <span class="n">queueName</span><span class="p">);</span>
+        <span class="n">adbus</span><span class="p">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">routingKey</span><span class="p">);</span>
+        <span class="n">adbus</span><span class="p">.</span><span class="n">Consume</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">registration</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="n">registration</span><span class="p">.</span><span class="n">Add</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;((</span><span class="n">message</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="n">handler</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">Body</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><hr>
+<p><strong>Topic Exchange</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/306976-20160728104309934-1385658660.png"
+        data-srcset="http://blog.thankbabe.com/imgs/306976-20160728104309934-1385658660.png, http://blog.thankbabe.com/imgs/306976-20160728104309934-1385658660.png 1.5x, http://blog.thankbabe.com/imgs/306976-20160728104309934-1385658660.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/306976-20160728104309934-1385658660.png"
+        title="image" /></p>
+<ul>
+<li>消息发布（Publish）</li>
+</ul>
+<p>要使用主题发布，只需使用带有主题的重载的 Publish 方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">RabbitHutch</span><span class="p">.</span><span class="n">CreateBus</span><span class="p">(...);</span>
+<span class="n">bus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s">&#34;X.A&#34;</span><span class="p">);</span>
+
+</code></pre></div><p>订阅者可以通过指定要匹配的主题来过滤邮件。</p>
+<ul>
+<li>这些可以包括通配符：
+<ul>
+<li>*=&gt;匹配一个字。</li>
+<li>＃=&gt;匹配到零个或多个单词。</li>
+</ul>
+</li>
+</ul>
+<p>所以发布的主题为“X.A.2”的消息将匹配“＃”，“X.＃”，“_ .A._”，而不是“X.B. *”或“A”。</p>
+<p>警告，Publish 只顾发送消息到队列，但是不管有没有消费端订阅，所以，发布之后，如果没有消费者，该消息将不会被消费甚至丢失。</p>
+<ul>
+<li>消息订阅（Subscribe）</li>
+</ul>
+<p>EasyNetQ 提供了消息订阅，当调用 Subscribe 方法时候，EasyNetQ 会创建一个用于接收消息的队列，不过与消息发布不同的是，消息订阅增加了一个参数，subscribe_id.代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="s">&#34;my_id&#34;</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="s">&#34;X.*&#34;</span><span class="p">));</span>
+</code></pre></div><p>警告： 具有相同订阅者但不同主题字符串的两个单独订阅可能不会产生您期望的效果。 subscriberId 有效地标识个体 AMQP 队列。 具有相同 subscriptionId 的两个订阅者将连接到相同的队列，并且两者都将添加自己的主题绑定。 所以，例如，如果你这样做：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="s">&#34;my_id&#34;</span><span class="p">,</span> <span class="n">handlerOfXDotStar</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="s">&#34;X.*&#34;</span><span class="p">));</span>
+<span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="s">&#34;my_id&#34;</span><span class="p">,</span> <span class="n">handlerOfStarDotB</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="s">&#34;*.B&#34;</span><span class="p">));</span>
+</code></pre></div><p>匹配“x.<em>”或“</em> .B”的所有消息将被传递到“XXX_my_id”队列。 然后，RabbitMQ 将向两个消费者传递消息，其中 handlerOfXDotStar 和 handlerOfStarDotB 轮流获取每条消息。</p>
+<p>现在，如果你想要匹配多个主题（“X. <em>”OR“</em> .B”），你可以使用另一个重载的订阅方法，它采用多个主题，如下所示：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="s">&#34;my_id&#34;</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="s">&#34;X.*&#34;</span><span class="p">).</span><span class="n">WithTopic</span><span class="p">(</span><span class="s">&#34;*.B&#34;</span><span class="p">));</span>
+</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 获取主题
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;主题内容类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;subscriptionId&#34;&gt;订阅者ID&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;callback&#34;&gt;消息接收响应回调&lt;/param&gt;
+</span><span class="c1">///  &lt;param name=&#34;topics&#34;&gt;订阅主题集合&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">TopicSubscribe</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">string</span> <span class="n">subscriptionId</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">callback</span><span class="p">,</span> <span class="k">params</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">topics</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">();</span>
+    <span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">subscriptionId</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">topics</span><span class="p">)</span> <span class="n">config</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 发布主题
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;主题内容类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;topic&#34;&gt;主题名称&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;message&#34;&gt;主题内容&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;msg&#34;&gt;错误信息&lt;/param&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">TopicPublish</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">string</span> <span class="n">topic</span><span class="p">,</span> <span class="n">T</span> <span class="n">message</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">bus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">topic</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 发布主题
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;![CDATA[（topic EasyNetQ高级API）]]&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;t&#34;&gt;消息内容&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;topic&#34;&gt;主题名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;msg&#34;&gt;错误信息&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;exChangeName&#34;&gt;交换器名&lt;/param&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">TopicSub</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">t</span><span class="p">,</span> <span class="kt">string</span> <span class="n">topic</span><span class="p">,</span> <span class="k">out</span> <span class="kt">string</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;topic_mq&#34;</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">topic</span><span class="p">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="p">(</span><span class="s">&#34;推送主题不能为空&#34;</span><span class="p">);</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+            <span class="c1">//var queue = adbus.QueueDeclare(&#34;user.notice.zhangsan&#34;);
+</span><span class="c1"></span>            <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">);</span>
+            <span class="n">adbus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">new</span> <span class="n">Message</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">t</span><span class="p">));</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">msg</span> <span class="p">=</span> <span class="n">ex</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 获取主题
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;![CDATA[（topic EasyNetQ高级API）]]&gt;
+</span><span class="c1">/// &lt;typeparam name=&#34;T&#34;&gt;消息类型&lt;/typeparam&gt;
+</span><span class="c1">/// &lt;param name=&#34;subscriptionId&#34;&gt;订阅者ID&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;callback&#34;&gt;回调&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;exChangeName&#34;&gt;交换器名&lt;/param&gt;
+</span><span class="c1">/// &lt;param name=&#34;topics&#34;&gt;主题名&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">TopicConsume</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">callback</span><span class="p">,</span> <span class="kt">string</span> <span class="n">exChangeName</span> <span class="p">=</span> <span class="s">&#34;topic_mq&#34;</span><span class="p">,</span><span class="kt">string</span> <span class="n">subscriptionId</span> <span class="p">=</span> <span class="s">&#34;topic_subid&#34;</span><span class="p">,</span> <span class="k">params</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">topics</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">adbus</span> <span class="p">=</span> <span class="n">bus</span><span class="p">.</span><span class="n">Advanced</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">exchange</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span><span class="n">exChangeName</span><span class="p">,</span> <span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">queue</span> <span class="p">=</span> <span class="n">adbus</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span><span class="n">subscriptionId</span><span class="p">);</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">topics</span><span class="p">)</span> <span class="n">adbus</span><span class="p">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span>
+    <span class="n">adbus</span><span class="p">.</span><span class="n">Consume</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">registration</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="n">registration</span><span class="p">.</span><span class="n">Add</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;((</span><span class="n">message</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="n">callback</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">Body</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div><hr>
+<p>具体发布/订阅消息的 Demo 和相关测试看源码 Demo
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/rabbit_demo.jpg"
+        data-srcset="http://blog.thankbabe.com/imgs/rabbit_demo.jpg, http://blog.thankbabe.com/imgs/rabbit_demo.jpg 1.5x, http://blog.thankbabe.com/imgs/rabbit_demo.jpg 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/rabbit_demo.jpg"
+        title="image" />
+为了方便使用，demo 改进版本：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/rabbit_demo_2.jpg"
+        data-srcset="http://blog.thankbabe.com/imgs/rabbit_demo_2.jpg, http://blog.thankbabe.com/imgs/rabbit_demo_2.jpg 1.5x, http://blog.thankbabe.com/imgs/rabbit_demo_2.jpg 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/rabbit_demo_2.jpg"
+        title="image" /></p>
+<hr>
+<h3 id="注意">注意</h3>
+<p><strong>当在创建订阅者去消费队列的时候</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// 获取主题
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;param name=&#34;topic&#34;&gt;&lt;/param&gt;
+</span><span class="c1"></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">GetSub</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">topic</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">callback</span><span class="p">)</span> <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">bus</span> <span class="p">=</span> <span class="n">BusBuilder</span><span class="p">.</span><span class="n">CreateMessageBus</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">bus</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">topic</span><span class="p">.</span><span class="n">ToString</span><span class="p">(),</span> <span class="n">callback</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">WithTopic</span><span class="p">(</span><span class="n">topic</span><span class="p">.</span><span class="n">ToString</span><span class="p">()));</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div><p>using 里的对象在执行完成后被回收了，导致刚连接上去就又断开了(刚开始写的时候，习惯性加 using，排查了好久才发现，欲哭无泪)</p>
+<p><strong>源码项目运行前的准备与确认：</strong></p>
+<p>到 RabbitMQ 管理后台添加<code>TestQueue</code>VHost，并且分配用户权限，然后到<code>RabbitMQHelper.BusBuilder</code>类里配置 RabbitMQ 连接服务的相关信息
+<code>host=127.0.0.1:5672;virtualHost=TestQueue;username=sa;password=123456</code>，（根据配置的内容和用户修改）</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/rabbitmq-ht.png"
+        data-srcset="http://blog.thankbabe.com/imgs/rabbitmq-ht.png, http://blog.thankbabe.com/imgs/rabbitmq-ht.png 1.5x, http://blog.thankbabe.com/imgs/rabbitmq-ht.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/rabbitmq-ht.png"
+        title="image" /></p>
+<hr>
+<p><strong>参考资料(鸣谢)：</strong></p>
+<ul>
+<li><a href="http://www.cnblogs.com/zd1994/p/7169123.html" target="_blank" rel="noopener noreffer">EasyNetQ-基于 Topic 的路由</a></li>
+<li><a href="http://www.cnblogs.com/panzi/p/6337568.html" target="_blank" rel="noopener noreffer">.NET 操作 RabbitMQ 组件 EasyNetQ 使用中文简版文档。</a></li>
+<li><a href="http://blog.waterstrong.me/rabbitmq-start-guide/" target="_blank" rel="noopener noreffer">RabbitMQ 入门指南</a></li>
+</ul>
+<hr>
+<p><strong>附：</strong><a href="https://github.com/SFLAQiu/RabbitMQDemo" target="_blank" rel="noopener noreffer">Demo 源码</a>GitHub 地址 <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->Star<!-- raw HTML omitted --></p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2017-08-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rabbitmq/">RabbitMQ</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2017-07-05-fore-end-optimize/" class="prev" rel="prev" title="大话WEB前端性能优化基本套路"><i class="fas fa-angle-left fa-fw"></i>大话WEB前端性能优化基本套路</a>
+            <a href="/posts/2017-09-25-spider/" class="next" rel="next" title="大话爬虫的基本套路">大话爬虫的基本套路<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

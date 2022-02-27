@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话一次离奇的问题排查经历 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话一次离奇的问题排查经历" />
+<meta property="og:description" content="这里记录一次莫名其妙的问题排查的经历，一天快下班之际，测试反馈说测试环境出现了调度脚本报错，输出错误日志，如下： #日志输出时间：[2020-" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2020-05-27-liqi-paicuo/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-27T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-05-27T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话一次离奇的问题排查经历"/>
+<meta name="twitter:description" content="这里记录一次莫名其妙的问题排查的经历，一天快下班之际，测试反馈说测试环境出现了调度脚本报错，输出错误日志，如下： #日志输出时间：[2020-"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2020-05-27-liqi-paicuo/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2020-05-01-array-pointer/" /><link rel="next" href="http://sflaqiu.github.io/posts/2020-12-01-shared-experience-2/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话一次离奇的问题排查经历",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2020-05-27-liqi-paicuo\/"
+        },"genre": "posts","keywords": "问题排查","wordcount":  4056 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2020-05-27-liqi-paicuo\/","datePublished": "2020-05-27T08:00:00+08:00","dateModified": "2020-05-27T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话一次离奇的问题排查经历</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"><i class="far fa-folder fa-fw"></i>问题排查</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-27">2020-05-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4056 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>这里记录一次莫名其妙的问题排查的经历，一天快下班之际，测试反馈说测试环境出现了调度脚本报错，输出错误日志，如下：</p>
+<hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">日志输出时间：</span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">00</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">SQLSTATE</span><span class="p">[</span><span class="n">HY000</span><span class="p">]:</span><span class="w"> </span><span class="k">General</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="mi">1205</span><span class="w"> </span><span class="k">Lock</span><span class="w"> </span><span class="n">wait</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="n">exceeded</span><span class="p">;</span><span class="w"> </span><span class="n">try</span><span class="w"> </span><span class="n">restarting</span><span class="w"> </span><span class="k">transaction</span><span class="p">[</span><span class="k">SQL</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><p>并且后面无法重现问题，时间：18:10 左右我开始排查问题</p>
+<p>定位错误问题：</p>
+<p>就是执行的事物没提交 COMMIT/ROLLBACK，然后其他执行语句对锁住的数据进行 UPDATE 操作，等待锁释放，最终导致锁等待超时</p>
+<p>问题就是这么一个问题，就是不知道哪里触发了事物，而且没提交</p>
+<p>于是开始了后面的排查的故事 &hellip; &hellip;</p>
+<p>首先排查了业务相关表操作的代码，并没有发现有启用事物的操作，然后就一脸闷逼，这是啥操作，不应该啊，没有启动事物，怎么就数据被锁住导致超时了呢？</p>
+<p>排查了一轮代码后还是没定位到问题，并且这个调度的脚本线上也一直再跑，并没有出现过类似的问题</p>
+<p>因为时间有晚了，就先回家了</p>
+<p>在回家的路上，左思右想，开始怀疑是不是代码里其他的业务数据执行，操作了事物没有提交，然后导致后面执行的语句也在事物中执行</p>
+<p>晚饭休息了会儿，因为有件事情在心头没解决，就很不舒服，开始继续排查问题</p>
+<p>又排查了一轮代码，还是依然没有思绪</p>
+<p>在排查问题到开始怀疑人生的时候，突然灵光一现，有没可能除了业务代码之外对表进行了事物操作，然后没提交</p>
+<p>回想到测试也会经常使用 NAVICAT 去操作表，去构建测试数据，不会是测试操作数据，使用了事物，然后没提交吧，这个也是有可能的</p>
+<p>隔天在公司，一大早等测试到了工位，马上就杀到测试的 PC 上查看了下，NAVICAT 的执行日志</p>
+<p>看了日志后，真相大白，此时心中一万只羊驼狂奔而过~</p>
+<p>日志如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">BEGIN</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">id</span><span class="o">`=</span><span class="s1">&#39;691&#39;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">27</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">27</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">27</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">28</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">29</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">29</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">29</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">29</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">31</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">31</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">31</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">31</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="k">database</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">23</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">baby_id</span><span class="o">`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;1269&#39;</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">23</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">columns</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">24</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">24</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">`</span><span class="n">xxxxx</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">table_xxx</span><span class="o">`</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">[</span><span class="mi">2020</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">14</span><span class="w"> </span><span class="mi">18</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mi">00</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">7370770</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">MYSQL</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="k">ROLLBACK</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><h4 id="梳理整个事件">梳理整个事件</h4>
+<p>看日志，还原整个事件</p>
+<p>时间：17:36:26<br>
+测试使用 NAVICAT 工具，在操作语句的时候无意间起用了事物，并且事物没提交</p>
+<p>时间：17:37:00<br>
+测试反馈到我这里</p>
+<p>时间：18:10:00<br>
+我开始排查问题，并且无法重现（看日志，事物已经回滚）</p>
+<p>时间：18:10:00-隔天<br>
+排查了 N 次代码，一脸闷逼，怀疑人生，最后相信自己，开始怀疑外部，最终找到问题</p>
+<p>就此结束，全剧终</p>
+<p>记录下一次莫名其妙，看上去还有点荒唐的错误排查的经历</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-27</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">问题排查</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2020-05-01-array-pointer/" class="prev" rel="prev" title="大话业务场景与解决方案：数据分散周期筛选"><i class="fas fa-angle-left fa-fw"></i>大话业务场景与解决方案：数据分散周期筛选</a>
+            <a href="/posts/2020-12-01-shared-experience-2/" class="next" rel="next" title="大话后端开发的奇淫技巧-2">大话后端开发的奇淫技巧-2<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

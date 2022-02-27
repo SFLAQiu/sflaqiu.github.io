@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>程序员 - 标签 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/</link>
+        <description>程序员 - 标签 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 22 Feb 2018 15:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="self" type="application/rss+xml" /><item>
+    <title>大话来自一个程序员的反思</title>
+    <link>http://sflaqiu.github.io/posts/2018-02-22-dh-cxy/</link>
+    <pubDate>Thu, 22 Feb 2018 15:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2018-02-22-dh-cxy/</guid>
+    <description><![CDATA[程序员大军鱼龙混杂，水平的高低无法简单的从一个功能完成情况来评定，同样一个需求，功能都可以完成，但是不同程序员完成质量会不一样，完成质量的好]]></description>
+</item><item>
+    <title>大话程序猿VS产品狗</title>
+    <link>http://sflaqiu.github.io/posts/2016-06-28-cpgandcxy/</link>
+    <pubDate>Sun, 26 Jun 2016 14:35:05 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2016-06-28-cpgandcxy/</guid>
+    <description><![CDATA[content {:toc} 一个好的互联网公司都离不开好的产品经理，对产品有着充分理解、有强大的分析判断和执行的能力、有良好的沟通和表达能力，对未来自市场、用户等各]]></description>
+</item></channel>
+</rss>

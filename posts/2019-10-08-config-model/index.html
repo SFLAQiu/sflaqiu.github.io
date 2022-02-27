@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话APP配置功能的设计和落地 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话APP配置功能的设计和落地" />
+<meta property="og:description" content="在参与各种 app 业务开发的过程中，大部分都会遇到需要对某些功能/界面/数据可以灵活的管理后台控制，客户端根据配置变化而变化，不需要发版本就可以解" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2019-10-08-config-model/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-10-08T08:00:00+08:00" />
+<meta property="article:modified_time" content="2019-10-08T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话APP配置功能的设计和落地"/>
+<meta name="twitter:description" content="在参与各种 app 业务开发的过程中，大部分都会遇到需要对某些功能/界面/数据可以灵活的管理后台控制，客户端根据配置变化而变化，不需要发版本就可以解"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2019-10-08-config-model/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2019-08-08-yield-task/" /><link rel="next" href="http://sflaqiu.github.io/posts/2020-04-06-product-do-task/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话APP配置功能的设计和落地",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2019-10-08-config-model\/"
+        },"genre": "posts","keywords": "APP配置功能","wordcount":  3709 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2019-10-08-config-model\/","datePublished": "2019-10-08T08:00:00+08:00","dateModified": "2019-10-08T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话APP配置功能的设计和落地</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>业务设计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-10-08">2019-10-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3709 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>在参与各种 app 业务开发的过程中，大部分都会遇到需要对某些功能/界面/数据可以灵活的管理后台控制，客户端根据配置变化而变化，不需要发版本就可以解决这些需求，大致功能需求就是需要提供一个后台功能，能够给产品/运营童鞋进行配置管理，然后通过服务端接口输出给客户端进行逻辑/渲染使用，这里针对这种场景，分享一个相对通用的解决方案</p>
+<h4 id="项目背景">项目背景</h4>
+<p>当前项目中针对这种配置的需求，每次都需要开发人员重新开发后台表单，然后修改配置接口针对配置进行输出，因为这个功能的开发要归宿到很早以前，也不知道当初为啥要这么做，现在存在的问题就是不容易维护和拓展，以及重复开发的成本</p>
+<h4 id="整理需求">整理需求</h4>
+<ul>
+<li>配置管理后台
+<ul>
+<li>支持版本控制</li>
+<li>支持客户端类型（安卓/IOS/所有）</li>
+<li>表单可配置</li>
+</ul>
+</li>
+<li>配置输出接口
+<ul>
+<li>增量下发</li>
+<li>保证高可用，高稳定，高性能</li>
+</ul>
+</li>
+<li>客户端
+<ul>
+<li>接口下发配置数据进行缓存</li>
+</ul>
+</li>
+</ul>
+<h4 id="技术背景">技术背景</h4>
+<ul>
+<li>管理后台：php 服务端+jquery+bootstrap</li>
+<li>接口项目：php 服务端</li>
+</ul>
+<h4 id="技术过程">技术过程</h4>
+<ul>
+<li>
+<p>前端技术选型：</p>
+<ul>
+<li>vuejs</li>
+<li>element ui</li>
+</ul>
+</li>
+<li>
+<p>核心问题，如何后台配置生成表单（开发人员来配置）？</p>
+</li>
+</ul>
+<p>初步计划是通过配置表单的 JSON 生成 element ui 的表单，进行了一些调研，也找到可以通过配置 JSON 生成 element ui 表单的 js 库，感觉灵活性差了些，而且当时还不支持富文本，感觉后续拓展也是大问题，所以弃用，后面尝试自己来实现，通过 vuejs+element ui 组件相对简单的方式实现了这个配置表单的功能，能够支持基本需求，具体看后面代码（简单粗暴）</p>
+<ul>
+<li>接口数据增量下发，以及客户端获取配置时机和缓存策略</li>
+</ul>
+<p>客户端每次启动的时候去获取一次配置，缓存【配置数据】，新增配置添加到缓存，已经存在进行替换<br>
+接口输出【配置数据】的同时在响应头上【timestamp】= 带上当前请求的服务器时间戳<br>
+客户端获取数据，缓存【配置数据】&amp;【timestamp】<br>
+客户端下次请求的头上带上【timestamp】= 缓存的时间戳，第一次请求可以不用<br>
+服务端接收到请求的时候获取客户端的【timestamp】，过滤配置的时候校验最后更新时间&gt;=【timestamp】进行输出【配置数据】</p>
+<ul>
+<li>保障高可用，高稳定，高性能，容错</li>
+</ul>
+<p>配置数据进行多级缓存，第一级缓存【redis】，第二级缓存【服务器内存】（php apcu）<br>
+接口优先从【服务器内存】中获取，如果不存在从【redis】 并同步到【服务器内存】，不存在从【mysql】 并同步到【redis】，正常后台编辑完就同步到 redis，【服务器内存】就进行短暂性的缓存（3s），保障在高并发的情况下可以快速下发，弊端就是数据变化的时候会延迟 N/s 后更新</p>
+<p>客户端在获取缓存配置的时候如果不存在需要自己有个默认配置，极端情况下无法获取配置的容错机制，保障功能的正常运行</p>
+<h4 id="解决方案">解决方案</h4>
+<p>配置管理列表界面：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/config_center_manage.png?v=222"
+        data-srcset="http://blog.thankbabe.com/imgs/config_center_manage.png?v=222, http://blog.thankbabe.com/imgs/config_center_manage.png?v=222 1.5x, http://blog.thankbabe.com/imgs/config_center_manage.png?v=222 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/config_center_manage.png?v=222"
+        title="配置管理" /></p>
+<p>配置添加和表单 JSON 配置界面（开发人员操作）：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/config_center_add.png?v=222"
+        data-srcset="http://blog.thankbabe.com/imgs/config_center_add.png?v=222, http://blog.thankbabe.com/imgs/config_center_add.png?v=222 1.5x, http://blog.thankbabe.com/imgs/config_center_add.png?v=222 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/config_center_add.png?v=222"
+        title="配置管理" /></p>
+<p>配置数据表单界面（产品/运营童鞋操作）：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/config_center_data_edit.png?v=222"
+        data-srcset="http://blog.thankbabe.com/imgs/config_center_data_edit.png?v=222, http://blog.thankbabe.com/imgs/config_center_data_edit.png?v=222 1.5x, http://blog.thankbabe.com/imgs/config_center_data_edit.png?v=222 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/config_center_data_edit.png?v=222"
+        title="配置管理" /></p>
+<p>前端框架/库：</p>
+<ul>
+<li><a href="https://cn.vuejs.org/" target="_blank" rel="noopener noreffer">vuejs</a></li>
+<li><a href="https://element.eleme.cn/#/zh-CN" target="_blank" rel="noopener noreffer">element ui</a> 饿了么 UI</li>
+<li><a href="https://github.com/josdejong/jsoneditor" target="_blank" rel="noopener noreffer">jsoneditor</a> json 编辑组件</li>
+<li><a href="https://github.com/surmon-china/vue-quill-editor" target="_blank" rel="noopener noreffer">VueQuillEditor</a> vuejs 富文本组件</li>
+</ul>
+<p>主要的代码内容，如下：</p>
+<p>表设计：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 配置中心表
+</span><span class="c1"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">config_center</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;自增ID&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">title</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;标题&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">code</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;标识&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">platform</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;0=所有，1=IOS，2=安卓&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="k">template</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;模板标识&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">form_json</span><span class="o">`</span><span class="w"> </span><span class="nb">text</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;表单JSON&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">form_data</span><span class="o">`</span><span class="w"> </span><span class="nb">text</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;表单数据&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">description</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;描述&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">app_version</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;app版本&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">app_version_compare</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;app版本比较符号&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="k">operator</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;编辑人&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">create_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">update_at</span><span class="o">`</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;更新时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;状态，1=有效，-1=删除&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">index_code</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">code</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">index_update_at_platform</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">update_at</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">platform</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><p>表单配置 JOSN 内容：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;input&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;textarea&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;名字&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;name&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;6666&#34;</span><span class="p">,</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;请输入活动名称&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;input-number&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;数字&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;number&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">min</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">max</span><span class="o">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;数字&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;input&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;text&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;描述&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;desc&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;请输入活动名称&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;editor&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;富文本&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;editor&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;请输入内容&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;date&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;datetimerange&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;日期范围&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;datetime&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;2019-01-01 10:00:00&#34;</span><span class="p">,</span> <span class="s2">&#34;2019-03-01 08:00:00&#34;</span><span class="p">],</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;必须&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;switch&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;开关&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;open&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">rule</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;必须&#34;</span><span class="p">,</span>
+        <span class="nx">trigger</span><span class="o">:</span> <span class="s2">&#34;blur&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;date&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;datetime&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;活动时间&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;datet&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;2019-01-01&#34;</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;slider&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;范围&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;fw&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">max</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;color&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;颜色&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;color&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;radio&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;类型&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;type&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;类型1&#34;</span><span class="p">,</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;类型2&#34;</span><span class="p">,</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;类型3&#34;</span><span class="p">,</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;select&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;食品&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;foods&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&#34;黄金糕&#34;</span><span class="p">,</span>
+    <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;黄金糕&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;双皮奶&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;蚵仔煎&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;龙须面&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;北京烤鸭&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;checkbox&#34;</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;城市&#34;</span><span class="p">,</span>
+    <span class="nx">field</span><span class="o">:</span> <span class="s2">&#34;city&#34;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;上海&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;深圳&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s2">&#34;北京&#34;</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+<span class="p">];</span>
+</code></pre></div><p>vuejs + element ui 表单模板主要代码（简单粗暴）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">el-form</span>
+  <span class="na">size</span><span class="o">=</span><span class="s">&#34;small&#34;</span>
+  <span class="na">:rules</span><span class="o">=</span><span class="s">&#34;rules&#34;</span>
+  <span class="na">ref</span><span class="o">=</span><span class="s">&#34;form&#34;</span>
+  <span class="na">:model</span><span class="o">=</span><span class="s">&#34;form&#34;</span>
+  <span class="na">label-width</span><span class="o">=</span><span class="s">&#34;80px&#34;</span>
+<span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">el-form-item</span>
+    <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;(item,index) in formData&#34;</span>
+    <span class="na">:key</span><span class="o">=</span><span class="s">&#34;item.key&#34;</span>
+    <span class="na">:label</span><span class="o">=</span><span class="s">&#34;item.name&#34;</span>
+    <span class="na">:prop</span><span class="o">=</span><span class="s">&#34;item.field&#34;</span>
+  <span class="p">&gt;</span>
+    <span class="c">&lt;!--input 输入框--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-input</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;input&#39;&#34;</span>
+      <span class="na">:type</span><span class="o">=</span><span class="s">&#34;item.type&#34;</span>
+      <span class="na">style</span><span class="o">=</span><span class="s">&#34;width:400px&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+    <span class="p">&gt;&lt;/</span><span class="nt">el-input</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--input 数字输入框--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-input-number</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;input-number&#39;&#34;</span>
+      <span class="na">:min</span><span class="o">=</span><span class="s">&#34;item.min&#34;</span>
+      <span class="na">:max</span><span class="o">=</span><span class="s">&#34;item.max&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+    <span class="p">&gt;&lt;/</span><span class="nt">el-input-number</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--datetime 时间--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-date-picker</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;date&#39;&#34;</span>
+      <span class="na">:type</span><span class="o">=</span><span class="s">&#34;item.type&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+      <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;选择日期时间&#34;</span>
+    <span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">el-date-picker</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--switch 开关--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-switch</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;switch&#39;&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+      <span class="na">active-text</span><span class="o">=</span><span class="s">&#34;&#34;</span>
+      <span class="na">inactive-text</span><span class="o">=</span><span class="s">&#34;&#34;</span>
+    <span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">el-switch</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--滑块--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-slider</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;slider&#39;&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+      <span class="na">:max</span><span class="o">=</span><span class="s">&#34;item.max?item.max:100&#34;</span>
+    <span class="p">&gt;&lt;/</span><span class="nt">el-slider</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--颜色选择--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-color-picker</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;color&#39;&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+    <span class="p">&gt;&lt;/</span><span class="nt">el-color-picker</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--单选--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-radio</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;radio&#39;&#34;</span>
+      <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;(option,index) in item.options&#34;</span>
+      <span class="na">:key</span><span class="o">=</span><span class="s">&#34;option.key&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+      <span class="na">:label</span><span class="o">=</span><span class="s">&#34;option.value&#34;</span>
+    <span class="p">&gt;</span>
+      {{ option.label }}
+    <span class="p">&lt;/</span><span class="nt">el-radio</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--多选--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-checkbox-group</span> <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;checkbox&#39;&#34;</span> <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">el-checkbox</span>
+        <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;(option,index) in item.options&#34;</span>
+        <span class="na">:key</span><span class="o">=</span><span class="s">&#34;option.value&#34;</span>
+        <span class="na">:label</span><span class="o">=</span><span class="s">&#34;option.value&#34;</span>
+      <span class="p">&gt;</span>
+        {{ option.label }}
+      <span class="p">&lt;/</span><span class="nt">el-checkbox</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">el-checkbox-group</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!--选择器--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">el-select</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;select&#39;&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+      <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;请选择&#34;</span>
+    <span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">el-option</span>
+        <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;option in item.options&#34;</span>
+        <span class="na">:key</span><span class="o">=</span><span class="s">&#34;option.value&#34;</span>
+        <span class="na">:label</span><span class="o">=</span><span class="s">&#34;option.label&#34;</span>
+        <span class="na">:value</span><span class="o">=</span><span class="s">&#34;option.value&#34;</span>
+      <span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">el-option</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">el-select</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!-- 富文本--&gt;</span>
+    <span class="p">&lt;</span><span class="nt">quill-editor</span>
+      <span class="na">v-if</span><span class="o">=</span><span class="s">&#34;item.el===&#39;editor&#39;&#34;</span>
+      <span class="na">v-model</span><span class="o">=</span><span class="s">&#34;form[item.field]&#34;</span>
+    <span class="p">&gt;&lt;/</span><span class="nt">quill-editor</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">el-form-item</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">el-form</span><span class="p">&gt;</span>
+</code></pre></div><p>js 代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="c1">//富文本组件
+</span><span class="c1"></span><span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">VueQuillEditor</span><span class="p">);</span>
+<span class="nx">$vm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">el</span><span class="o">:</span> <span class="s2">&#34;#app&#34;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">template</span><span class="o">:</span> <span class="s2">&#34;1&#34;</span><span class="p">,</span>
+    <span class="nx">form</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="nx">rules</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="nx">formData</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="p">},</span>
+  <span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">useTemplate</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="k">switch</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="s2">&#34;1&#34;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">formJson</span> <span class="o">=</span> <span class="p">[];</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">config</span><span class="p">[</span><span class="s2">&#34;form_json&#34;</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nx">formJson</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">config</span><span class="p">[</span><span class="s2">&#34;form_json&#34;</span><span class="p">];</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">templateOneJson</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">formJson</span> <span class="o">=</span> <span class="nx">templateOneJson</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="nx">editorJson</span><span class="p">(</span><span class="nx">formJson</span><span class="p">);</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">(</span><span class="nx">formJson</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">//预览
+</span><span class="c1"></span>    <span class="nx">review</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">jsonData</span> <span class="o">=</span> <span class="nx">editor</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">(</span><span class="nx">jsonData</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="c1">//根据配置的JSON，解析出构造表单需要的Vue数据
+</span><span class="c1"></span>    <span class="nx">getData</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1">//表单数据
+</span><span class="c1"></span>        <span class="nx">form</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="c1">//表单验证规则
+</span><span class="c1"></span>        <span class="nx">rules</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="c1">//表单控件配置
+</span><span class="c1"></span>        <span class="nx">formData</span><span class="o">:</span> <span class="p">{},</span>
+      <span class="p">};</span>
+      <span class="c1">//构造数据
+</span><span class="c1"></span>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">json</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">form</span><span class="p">[</span><span class="nx">item</span><span class="p">.</span><span class="nx">field</span><span class="p">]</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">rule</span><span class="p">)</span> <span class="nx">data</span><span class="p">.</span><span class="nx">rules</span><span class="p">[</span><span class="nx">item</span><span class="p">.</span><span class="nx">field</span><span class="p">]</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">rule</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">formData</span> <span class="o">=</span> <span class="nx">json</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="c1">//创建表单Vue对象
+</span><span class="c1"></span>    <span class="nx">formVue</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Vue</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">$vm</span><span class="p">,</span> <span class="s2">&#34;form&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">form</span><span class="p">);</span>
+      <span class="nx">Vue</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">$vm</span><span class="p">,</span> <span class="s2">&#34;rules&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">rules</span><span class="p">);</span>
+      <span class="nx">Vue</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">$vm</span><span class="p">,</span> <span class="s2">&#34;formData&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">formData</span><span class="p">);</span>
+      <span class="c1">// $vm.$forceUpdate();
+</span><span class="c1"></span>    <span class="p">},</span>
+    <span class="c1">//根据配置JSON生成Form表单
+</span><span class="c1"></span>    <span class="nx">createForm</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getData</span><span class="p">(</span><span class="nx">json</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">formVue</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+</code></pre></div><p>前端部分因为基于原有项目技术背景拓展，用最原始的 link 引入方式，而且没有拉到前端同学参与，前端部分如果可以把后台功能进行前后端分离，然后基于组件化封装那就最好不过了，存后端童鞋折腾想想就好，low 了点，能用哈，不过不影响基本实现思路可借鉴参考</p>
+<h4 id="总结">总结</h4>
+<p>当你在开发产品需求时候，除了要解决眼前的问题，是否有思考过之前或者将来也会遇到很多类似的问题。把你的解决方案从解决一个问题扩展到解决一类问题是一项非常重要的能力，也往往是区分新人与资深技术人员的一条分界线</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-10-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/app%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/">APP配置功能</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2019-08-08-yield-task/" class="prev" rel="prev" title="Redis实战之实现定时执行任务"><i class="fas fa-angle-left fa-fw"></i>Redis实战之实现定时执行任务</a>
+            <a href="/posts/2020-04-06-product-do-task/" class="next" rel="next" title="大话业务场景与解决方案：做任务">大话业务场景与解决方案：做任务<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,28 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>业务设计 - 分类 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/</link>
+        <description>业务设计 - 分类 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 01 May 2020 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/" rel="self" type="application/rss+xml" /><item>
+    <title>大话业务场景与解决方案：数据分散周期筛选</title>
+    <link>http://sflaqiu.github.io/posts/2020-05-01-array-pointer/</link>
+    <pubDate>Fri, 01 May 2020 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2020-05-01-array-pointer/</guid>
+    <description><![CDATA[背景： 用户上传的宝宝相册记录，一个记录可以包含 N 个照片，产品期望给用户输出影集，如：一周/宝宝百天/宝宝生日的影集 用户同一天可能会有多个记录]]></description>
+</item><item>
+    <title>大话业务场景与解决方案：做任务</title>
+    <link>http://sflaqiu.github.io/posts/2020-04-06-product-do-task/</link>
+    <pubDate>Mon, 06 Apr 2020 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2020-04-06-product-do-task/</guid>
+    <description><![CDATA[背景 多数的移动端 APP 都会有做任务领取奖励的功能模块，这类需求的目的是培养用户使用习惯，提升用户活跃性，用户完成任务获得积分奖励，通过积分兑换商]]></description>
+</item><item>
+    <title>大话APP配置功能的设计和落地</title>
+    <link>http://sflaqiu.github.io/posts/2019-10-08-config-model/</link>
+    <pubDate>Tue, 08 Oct 2019 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2019-10-08-config-model/</guid>
+    <description><![CDATA[在参与各种 app 业务开发的过程中，大部分都会遇到需要对某些功能/界面/数据可以灵活的管理后台控制，客户端根据配置变化而变化，不需要发版本就可以解]]></description>
+</item></channel>
+</rss>

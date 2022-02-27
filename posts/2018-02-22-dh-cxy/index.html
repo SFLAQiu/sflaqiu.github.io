@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话来自一个程序员的反思 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话来自一个程序员的反思" />
+<meta property="og:description" content="程序员大军鱼龙混杂，水平的高低无法简单的从一个功能完成情况来评定，同样一个需求，功能都可以完成，但是不同程序员完成质量会不一样，完成质量的好" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2018-02-22-dh-cxy/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-02-22T15:00:00+08:00" />
+<meta property="article:modified_time" content="2018-02-22T15:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话来自一个程序员的反思"/>
+<meta name="twitter:description" content="程序员大军鱼龙混杂，水平的高低无法简单的从一个功能完成情况来评定，同样一个需求，功能都可以完成，但是不同程序员完成质量会不一样，完成质量的好"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2018-02-22-dh-cxy/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2017-09-25-spider/" /><link rel="next" href="http://sflaqiu.github.io/posts/2018-02-27-spider-practice/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话来自一个程序员的反思",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2018-02-22-dh-cxy\/"
+        },"genre": "posts","keywords": "程序员","wordcount":  1416 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2018-02-22-dh-cxy\/","datePublished": "2018-02-22T15:00:00+08:00","dateModified": "2018-02-22T15:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话来自一个程序员的反思</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-02-22">2018-02-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1416 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/cxy.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/cxy.jpg?v=1, http://blog.thankbabe.com/imgs/cxy.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/cxy.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/cxy.jpg?v=1"
+        title="图片" /></p>
+<p>程序员大军鱼龙混杂，水平的高低无法简单的从一个功能完成情况来评定，同样一个需求，功能都可以完成，但是不同程序员完成质量会不一样，完成质量的好坏需要从多方面评定，可以参考这些条件：<strong>易维护，易拓展，高可用，高稳定，高性能，安全性，容错，风控</strong></p>
+<hr>
+<p><strong>洞察身边的程序猿，可以归类出这几种类型：</strong></p>
+<ul>
+<li><strong>理论型</strong>，理论能力很强，对前沿技术略有了解，性格比较强势，需求分析和方案设计头头是道，对自己的设计的内容比较自信固执，反观代码，质量差的一匹，逻辑乱，难维护难拓展，但是往往这种在公司评级还都挺高</li>
+<li><strong>潜力型</strong>，业务能力强，开发设计和问题排查思路清晰，可以提出优化/改进方案，能对业务适当抽象，自我技术要求比较高，代码质量好，平时会调研前沿技术</li>
+<li><strong>表面型</strong>，业务需求基本都可以完成，但是代码质量比较差，bug多，问题排查效率低，难维护难拓展，很少了解前沿技术，空闲时间就刷刷微博，看新闻，聊天</li>
+<li><strong>老实型</strong>，做事勤勤恳恳，代码质量一般，平时表现比较不起眼，与同事沟通少，业余时间也不清楚具体在做什么</li>
+<li><strong>大神型</strong>，总结就是各方面都很NB，问啥都能给予建议或者解决方案，但是这种人很少</li>
+</ul>
+<hr>
+<p><strong>服务端开发工程师应该具有哪些能力？</strong></p>
+<blockquote>
+<p>身处互联网公司的后端开发，所以用一个后端开发者角度出发</p>
+</blockquote>
+<ul>
+<li>
+<p>基础能力</p>
+<ul>
+<li>代码规范</li>
+<li>分层清晰</li>
+<li>逻辑清晰</li>
+<li>数据库操作</li>
+<li>了解http，能抓包工具和模拟请求工具</li>
+<li>了解前端/js，能使用浏览器控制台工具调试</li>
+<li>安全预防
+<ul>
+<li>sql 注入</li>
+<li>xss 跨站脚本攻击</li>
+<li>csrf 跨站请求伪造</li>
+<li>http 劫持</li>
+<li>ddos 攻击</li>
+<li>&hellip; &hellip;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>高级能力</p>
+<ul>
+<li>面向抽象编程</li>
+<li>适当使用设计模式</li>
+<li>模块封装</li>
+<li>异步编程</li>
+<li>多线程编程</li>
+<li>经验
+<ul>
+<li>高并发处理/优化</li>
+<li>性能优化(加载速度、提高接口tps 、&hellip; &hellip;</li>
+<li>解析需求，能给予合理的建议和解决方案</li>
+</ul>
+</li>
+<li>能灵活使用缓存：redis，memcache 等</li>
+<li>能灵活使用消息队列中间件：rabbitmq，activemq，zeromq，kafka，等</li>
+</ul>
+</li>
+<li>
+<p>辅助能力</p>
+<ul>
+<li>爬虫
+<ul>
+<li>能开发爬虫功能就代表对web这块已经掌握比较好</li>
+</ul>
+</li>
+<li>攻击别人业务(适可而止，自行把握)
+<ul>
+<li>手段
+<ul>
+<li>模拟请求，寻找突破口，如：修改参数</li>
+<li>并发请求，导致并发逻辑问题。如：获得多签到积分（多数据操作接口可能会压垮服务器）</li>
+<li>尝试攻击，sql注入，跨站脚本攻击，等 &hellip;</li>
+<li>&hellip;</li>
+</ul>
+</li>
+<li>懂得攻击别人，自己就知道如何防御</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>沟通能力</p>
+<ul>
+<li>成员沟通，讨论设计方案，分享思路，技术点</li>
+<li>协作沟通，主动性很重要</li>
+</ul>
+</li>
+<li>
+<p>排错能力</p>
+<ul>
+<li>问题反馈快速响应</li>
+<li>根据问题现象快速定位问题</li>
+<li>快速给出解决方案并上线，告知客服，反馈给用户</li>
+</ul>
+</li>
+<li>
+<p>学习能力</p>
+<ul>
+<li>调研前沿技术并且最好是可以运用到项目业务中</li>
+<li>多语言开发：python，java，nodejs，php &hellip; &hellip;
+<ul>
+<li>开发语言只是完成业务开发的工具，学习并在项目实践，这样才能从中学到东西</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>预知能力</p>
+<ul>
+<li>代码未来，方便业务拓展</li>
+<li>架构未来，方便架构拓展支撑业务增长</li>
+</ul>
+</li>
+<li>
+<p>架构能力</p>
+<ul>
+<li>分层</li>
+<li>分割</li>
+<li>分布式</li>
+<li>缓存</li>
+<li>集群</li>
+<li>异步</li>
+<li>沉余</li>
+<li>自动化</li>
+<li>安全</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>坏代码味道</strong></p>
+<p>列出曾经遇到的比较典型的坏代码味道截图，引以为戒，BGM（&ldquo;多么痛的领悟&rdquo;），醒醒吧，别把自己想的多牛逼，先从代码质量开始，拿着高薪，写着学生水平的代码人到处都是，遇到这样的代码请问要怎么拓展？</p>
+<ul>
+<li>
+<p>坏味道1 (分层不清，在控制层拼接sql) <br>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/hwd1.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/hwd1.jpg?v=1, http://blog.thankbabe.com/imgs/hwd1.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/hwd1.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/hwd1.jpg?v=1"
+        title="图片" /></p>
+</li>
+<li>
+<p>坏味道2 (函数参数过多)   <br>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/hwd2.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/hwd2.jpg?v=1, http://blog.thankbabe.com/imgs/hwd2.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/hwd2.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/hwd2.jpg?v=1"
+        title="图片" /></p>
+</li>
+<li>
+<p>坏味道3 (过分深层)    <br>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/hwd3.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/hwd3.jpg?v=1, http://blog.thankbabe.com/imgs/hwd3.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/hwd3.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/hwd3.jpg?v=1"
+        title="图片" /></p>
+</li>
+<li>
+<p>坏味道4 (相同功能需要提取函数+过分深层)     <br>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/hwd4.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/hwd4.jpg?v=1, http://blog.thankbabe.com/imgs/hwd4.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/hwd4.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/hwd4.jpg?v=1"
+        title="图片" /></p>
+</li>
+</ul>
+<hr>
+<p><strong>总结：</strong></p>
+<ul>
+<li>无论你是什么类型的程序员，期望你能够对得住自己在岗位的这份责任</li>
+<li>多反思自省，反观以前的代码，肯定也是有些不合理的设计，总结并且沉淀</li>
+</ul>
+<blockquote>
+<p>2018 新的一年，上班第一天，比较空闲，重新整理了下心情，拾起待写的博文，把它完成，期望新一年我可以有更多的沉淀</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-02-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/">程序员</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2017-09-25-spider/" class="prev" rel="prev" title="大话爬虫的基本套路"><i class="fas fa-angle-left fa-fw"></i>大话爬虫的基本套路</a>
+            <a href="/posts/2018-02-27-spider-practice/" class="next" rel="next" title="大话爬虫的实践技巧">大话爬虫的实践技巧<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

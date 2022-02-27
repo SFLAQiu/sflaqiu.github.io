@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话接口隐私与安全 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话接口隐私与安全" />
+<meta property="og:description" content="content {:toc} 作为后端程序猿自己写的接口就像自己的孩子一样，尽然制造出来了，那就要对他以后的人生负责到底； 随着业务的壮大，需要支撑业务接口也越来越多，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2016-06-06-donot-touch-my-url/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-06-05T14:35:05+08:00" />
+<meta property="article:modified_time" content="2016-06-05T14:35:05+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话接口隐私与安全"/>
+<meta name="twitter:description" content="content {:toc} 作为后端程序猿自己写的接口就像自己的孩子一样，尽然制造出来了，那就要对他以后的人生负责到底； 随着业务的壮大，需要支撑业务接口也越来越多，"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2016-06-06-donot-touch-my-url/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2016-04-04-safe/" /><link rel="next" href="http://sflaqiu.github.io/posts/2016-06-28-cpgandcxy/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话接口隐私与安全",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2016-06-06-donot-touch-my-url\/"
+        },"genre": "posts","keywords": "安全, 签名, 接口, 抓包","wordcount":  2148 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2016-06-06-donot-touch-my-url\/","datePublished": "2016-06-05T14:35:05+08:00","dateModified": "2016-06-05T14:35:05+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话接口隐私与安全</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2016-06-05">2016-06-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2148 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#场景">场景</a></li>
+    <li><a href="#例子">例子：</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><ul>
+<li>content
+{:toc}</li>
+</ul>
+<p>作为后端程序猿自己写的<code>接口</code>就像自己的<code>孩子</code>一样，尽然制造出来了，那就要对他以后的人生负责到底；<br>
+随着业务的壮大，需要支撑业务接口也越来越多，使用的用户量变大，虎视眈眈的黑客们视机而动，总是在业务中寻找着可以窃取他人利益的入口，所以我们应该多考虑安全性问题，防范于未然。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/images/anquan1.jpg"
+        data-srcset="http://blog.thankbabe.com/images/anquan1.jpg, http://blog.thankbabe.com/images/anquan1.jpg 1.5x, http://blog.thankbabe.com/images/anquan1.jpg 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/images/anquan1.jpg"
+        title="安全" /></p>
+<hr>
+<h2 id="场景">场景</h2>
+<p>服务端程序猿根据需求开发出业务相关的接口，用来满足需求中用户和服务器交互的功能，提供给前端或者客户端（PC 端软件，APP 端应用）使用，
+大部分程序猿在开发接口的时候就仅仅去考虑如何实现业务上的逻辑功能，而往往很少会去考虑接口的安全性问题，
+一般服务端提供的接口都是 http/https 协议的，通过 Fiddler，Wireshark，Charles 等抓包工具，可以抓取到请求，然后进行分析，模拟请求，进行并发请求，或者修改信息的攻击。</p>
+<hr>
+<h2 id="例子">例子：</h2>
+<h4 id="问题-1-接口暴露用户隐私信息就相当于在光天化日下裸奔被看光了">问题 1. 接口暴露用户隐私信息就相当于在光天化日下裸奔，被看光了</h4>
+<blockquote>
+<p>描述：程序猿在做业务接口的时候往往没有保护用户隐私的意识，把用户的隐私信息暴露在外面，一旦被人利用起来会给用户带来麻烦，同时被发现会降低平台的信任度；</p>
+</blockquote>
+<h4 id="防">防：</h4>
+<ol start="0">
+<li>用户隐私数据加密，加*号，如用户的相关数据的 JSON 中有用户手机号，用户邮箱，支付账号，邮寄地址等隐私数据；</li>
+<li>用户请求接口时需要对其隐私参数加密：如用户登陆请求登陆接口，需要将用户密码进行可逆加密，以免接口被恶意代理捕捉请求后获取明文密码；</li>
+<li>分享出去的地址中不要用明文的用户 ID，或者用户登录的 token</li>
+</ol>
+<hr>
+<h4 id="问题-2-接口暴露敏感信息就像把钥匙插在钥匙口没拔掉一样只要你会开门就能进去">问题 2. 接口暴露敏感信息，就像把钥匙插在钥匙口没拔掉一样，只要你会开门就能进去</h4>
+<blockquote>
+<p>用户参与活动的数据 JSON 集合中不要有活动相关业务逻辑的决定性的数据,如：竞拍出价活动，出价唯一最低者拿奖品，结果获取出价的接口暴露了所有出价的价格统计结果。</p>
+</blockquote>
+<h4 id="防-1">防：</h4>
+<ol start="0">
+<li>数据中需要将敏感字段,或者对业务有着决定性作用的字段中的部分字符串加*;</li>
+</ol>
+<hr>
+<h4 id="问题-3数据被人顺手带走主业务接口相关-json-数据-如首页商品列表数据">问题 3.数据被人顺手带走(主业务接口相关 JSON 数据 如：首页商品列表数据)</h4>
+<blockquote>
+<p>描述：接口中的 JSON 数据会被其他人拿去做自己的相关的功能；这样就造成了服务器的额外支出</p>
+</blockquote>
+<h4 id="防-2">防：</h4>
+<ol start="0">
+<li>IP 请求量限制，时间范围内请求量限制，等各种限制 IP 请求的规则，<br>
+如：统计记录(可以记录到 mongdb 中)，定时监控记录发现请求量大于限制的数量就进行 IP 封杀;</li>
+<li>请求头的校验，如：User-Agent 校验请求头是不是 APP 客服端发起，Referer 是不是有来源，来源域名是不是自己的域名地址等(这种方式只能是多一个门槛)；</li>
+</ol>
+<hr>
+<h4 id="问题-4移花接木恶意修改请求信息修改参数cookie请求头信息">问题 4.移花接木，恶意修改请求信息(修改参数，COOKIE，请求头信息)</h4>
+<blockquote>
+<p>描述：通过修改请求中的参数来发起的请求，如：登陆接口修改用户名和用户密码，进行密码库碰撞等。</p>
+</blockquote>
+<blockquote>
+<p>温馨提示：<br>
+修改请求参数可能会导致很多安全性问题，如：SQL 注入，XSS 跨站脚本攻击等，传送门我的【<a href="http://blog.thankbabe.com/2016/04/03/Safe/" target="_blank" rel="noopener noreffer">大话程序猿眼里的 WEB 安全</a>】有相关的介绍和解决方案<br>
+以下方案都针对客户端，如 PC 软件和 APP，WEB 端 JS 去做加密的话不是很推荐，JS 代码是暴露出来的，所以如果用 JS 做加密一定要混淆 JS 代码</p>
+</blockquote>
+<h4 id="防-3">防：</h4>
+<ol start="0">
+<li>
+<p>增加一个签名参数，将参数名进行逻辑的排序组合拼接+秘钥 MD5，然后服务端接受到请求的时候也用同样的逻辑得到签名与签名参数进行对比是否相同，这样可以使参数无法被修改，修改了就提示非法请求。
+如：
+接口http://www.test.com/go/?actid=1&amp;userid=123 我们可以加一个 sign 参数= MD5(actid=1&amp;userid=123&amp;【secret】)【secret】=秘钥，自己定义。
+服务端用一样的逻辑得到密文和 sign 签名进行对比是否一样，不一样就提示非法请求。</p>
+</li>
+<li>
+<p>整个参数内容进行可逆的加密</p>
+</li>
+<li>
+<p>限制参数范围，如：支持分页接口，很多人会为了方便使用，加了参数就是 pagesize(一页的数据量)，当没有去限制页码最大值得时候，如果表数据量很大，然后攻击者修改 pagesize 参数为 N 万，然后数据库就奔溃了,相关业务就挂了。</p>
+</li>
+</ol>
+<hr>
+<h4 id="问题-5影分身术模拟请求发起并发请求">问题 5.影分身术，模拟请求，发起并发请求</h4>
+<blockquote>
+<p>描述：通过抓包工具抓到请求后模拟请求，如：模拟每日签到请求，或者直接发起每日签到的并发请求。<br>
+温馨提示：当请求并发后如何保证数据的完整性，一致性问题，这也是平时开发很需要注意的问题，传送门我的【<a href="http://blog.thankbabe.com/2016/04/01/high-concurrency/" target="_blank" rel="noopener noreffer">大话程序员眼里的高并发</a>】有相关的介绍和解决方案。</p>
+</blockquote>
+<h4 id="防-4">防:</h4>
+<ol start="0">
+<li>模拟并发请求，IP 限制同上问题 2 的解决方案。</li>
+<li>请求信息带上时间(可逆加密的时间)，服务端获取时间，超过限定时间的返回请求超时(目的使抓取到的请求不是一直有效的)。</li>
+<li>用户 token,等标识用户重要的信息数据，保存 COOKIE 需要设置过期时间，或者加密的明文里要有创建的时间，服务端做对应的时间失效的限制，这样即使 COOKIE 被别人盗取，模拟请求也会随着时间而失效;</li>
+</ol>
+<hr>
+<h2 id="总结">总结</h2>
+<p>我们需要提高自己的安全意识，防范于未然，要多站在攻击者的角度来看自己的接口;(让自己有一种被害妄想症的感觉，你就离精神病近了一步，&lt;(￣︶￣)↗ )
+不要做开发需求的机器人，我们是有思想有创造力的开发者;</p>
+<hr>
+<h4 id="附加个人开发流程">附加个人开发流程</h4>
+<blockquote>
+<p>在评审需求的时候要把业务逻辑问题提出来，并给予解决方案的选择;<br>
+确定需求后将整个业务逻辑的梳理清楚，复杂的可以画出流程图;<br>
+根据需求设计实现方案，需要考虑性能问题[数据库压力，服务器压力]，安全问题，用文档的形式记录下自己的设计方案。（可以深入到代码层面如何去实现）;<br>
+列出需求中功能点，评估出自己的时间，得到总工时;<br>
+开始开发，开干;</p>
+</blockquote>
+<hr>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/images/ms.jpg"
+        data-srcset="http://blog.thankbabe.com/images/ms.jpg, http://blog.thankbabe.com/images/ms.jpg 1.5x, http://blog.thankbabe.com/images/ms.jpg 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/images/ms.jpg"
+        title="哈哈" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2016-06-05</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%AE%89%E5%85%A8/">安全</a>,&nbsp;<a href="/tags/%E7%AD%BE%E5%90%8D/">签名</a>,&nbsp;<a href="/tags/%E6%8E%A5%E5%8F%A3/">接口</a>,&nbsp;<a href="/tags/%E6%8A%93%E5%8C%85/">抓包</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2016-04-04-safe/" class="prev" rel="prev" title="大话WEB安全"><i class="fas fa-angle-left fa-fw"></i>大话WEB安全</a>
+            <a href="/posts/2016-06-28-cpgandcxy/" class="next" rel="next" title="大话程序猿VS产品狗">大话程序猿VS产品狗<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

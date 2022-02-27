@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话GraphQL新手上车 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话GraphQL新手上车" />
+<meta property="og:description" content="GraphQL 是什么？ GraphQL 既是一种用于 API 的查询语言也是一个满足你数据查询的运行时（来自：官方解释） 理解起来就是，GraphQL 有自己查询语法，发起的 API 请求" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2018-04-20-graphql/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-04-20T21:00:00+08:00" />
+<meta property="article:modified_time" content="2018-04-20T21:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话GraphQL新手上车"/>
+<meta name="twitter:description" content="GraphQL 是什么？ GraphQL 既是一种用于 API 的查询语言也是一个满足你数据查询的运行时（来自：官方解释） 理解起来就是，GraphQL 有自己查询语法，发起的 API 请求"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2018-04-20-graphql/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2018-02-27-spider-practice/" /><link rel="next" href="http://sflaqiu.github.io/posts/2018-05-23-shared-experience/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话GraphQL新手上车",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2018-04-20-graphql\/"
+        },"genre": "posts","keywords": "GraphQL","wordcount":  2880 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2018-04-20-graphql\/","datePublished": "2018-04-20T21:00:00+08:00","dateModified": "2018-04-20T21:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话GraphQL新手上车</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/graphql/"><i class="far fa-folder fa-fw"></i>GraphQL</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-04-20">2018-04-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2880 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#graphql-是什么">GraphQL 是什么？</a></li>
+        <li><a href="#graphql-的优势">GraphQL 的优势</a></li>
+        <li><a href="#net-下的入门教程">.NET 下的入门教程</a></li>
+        <li><a href="#总结">总结</a></li>
+        <li><a href="#资源">资源</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/graphql.png?v=2"
+        data-srcset="http://blog.thankbabe.com/imgs/graphql.png?v=2, http://blog.thankbabe.com/imgs/graphql.png?v=2 1.5x, http://blog.thankbabe.com/imgs/graphql.png?v=2 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/graphql.png?v=2"
+        title="graphql" /></p>
+<h3 id="graphql-是什么">GraphQL 是什么？</h3>
+<p>GraphQL 既是一种用于 API 的查询语言也是一个满足你数据查询的运行时（来自：<a href="http://graphql.cn/learn/" target="_blank" rel="noopener noreffer">官方解释</a>）</p>
+<p>理解起来就是，GraphQL 有自己查询语法，发起的 API 请求中通过传递查询语句来告诉服务端需要哪些操作和具体数据字段，GraphQL 定义了实现规范，各种的语言分别实现了 GraphQL 功能框架，通过框架可以对查询语法进行解释执行，然后返回数据输出给客户端</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/graphql-server.png?v=2"
+        data-srcset="http://blog.thankbabe.com/imgs/graphql-server.png?v=2, http://blog.thankbabe.com/imgs/graphql-server.png?v=2 1.5x, http://blog.thankbabe.com/imgs/graphql-server.png?v=2 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/graphql-server.png?v=2"
+        title="graphql" /></p>
+<hr>
+<h3 id="graphql-的优势">GraphQL 的优势</h3>
+<blockquote>
+<p>以下所有查询和输出都是来自我的 DEMO，DEMO 的实现和源码 Github 地址下面会提到</p>
+</blockquote>
+<p><strong>语法特性满足各种需求</strong></p>
+<ul>
+<li>支持多操作：query-&gt;查询，mutation-&gt;修改，规范是写在查询语句前，默认不写就是 query</li>
+<li>支持参数，实现各种功能，比如：查询数据，排序，分页，&hellip; &hellip;等</li>
+<li>语法其他特性，别名，片段，定义变量，指令，&hellip; &hellip;等</li>
+</ul>
+<pre tabindex="0"><code># 查询语句-有参数
+query{
+  student(id:86){
+    id
+    name
+    sclass{
+      id
+      num
+      level
+      heads
+    }
+  }
+}
+</code></pre><pre tabindex="0"><code># 输出
+{
+  &quot;data&quot;: {
+    &quot;student&quot;: {
+      &quot;id&quot;: 86,
+      &quot;name&quot;: &quot;Emma&quot;,
+      &quot;sclass&quot;: {
+        &quot;id&quot;: 9,
+        &quot;num&quot;: 8,
+        &quot;level&quot;: 3,
+        &quot;heads&quot;: 68
+      }
+    }
+  }
+}
+</code></pre><pre tabindex="0"><code># 修改
+mutation {
+  update(id: 86, name: &quot;66666&quot;) {
+    rt
+    msg
+  }
+}
+
+</code></pre><pre tabindex="0"><code># 输出
+{
+  &quot;data&quot;: {
+    &quot;update&quot;: {
+      &quot;rt&quot;: 1,
+      &quot;msg&quot;: &quot;bingo&quot;
+    }
+  }
+}
+</code></pre><hr>
+<p><strong>查询友好性，查询和输出关联</strong></p>
+<p>看查询语句是不是感觉有点儿 JSON 的味道？查询语法类 JSON 格式，前后端都可以很容易上手，查询语句和输出数据有紧密的关联性，通过分析查询语句就知道输出的数据内容字段有哪些</p>
+<hr>
+<p><strong>灵活性，请求你所要的数据，不多不少</strong></p>
+<p>可以自定义查询语句来获取需要使用的字段，避免无用字段的输出，减少不必要数据块/数据字段查询逻辑</p>
+<blockquote>
+<p>多字段</p>
+</blockquote>
+<pre tabindex="0"><code># 查询语句
+query{
+  students{
+    id
+    name
+    classid
+    sclass{
+      id
+      num
+      level
+      heads
+    }
+  }
+}
+</code></pre><pre tabindex="0"><code># 输出
+{
+  &quot;data&quot;: {
+    &quot;students&quot;: [
+       {
+        &quot;id&quot;: 19,
+        &quot;name&quot;: &quot;Savannah&quot;,
+        &quot;classid&quot;:22,
+        &quot;sclass&quot;: {
+          &quot;id&quot;: 22,
+          &quot;num&quot;: 6,
+          &quot;level&quot;: 4,
+          &quot;heads&quot;: 57
+        }
+      },
+      {
+        &quot;id&quot;: 34,
+        &quot;name&quot;: &quot;Ariana&quot;,
+        &quot;classid&quot;:33,
+        &quot;sclass&quot;: {
+          &quot;id&quot;: 33,
+          &quot;num&quot;: 3,
+          &quot;level&quot;: 4,
+          &quot;heads&quot;: 57
+        }
+      }
+    ]
+  }
+}
+</code></pre><blockquote>
+<p>去掉了不使用的字段输出，少了字段 sclass，就可以不进行 sclass 数据查询</p>
+</blockquote>
+<pre tabindex="0"><code># 查询语句
+query{
+  students{
+    id
+    name
+  }
+}
+</code></pre><pre tabindex="0"><code># 输出
+{
+  &quot;data&quot;: {
+    &quot;students&quot;: [
+      {
+        &quot;id&quot;: 19,
+        &quot;name&quot;: &quot;Savannah&quot;
+      },
+      {
+        &quot;id&quot;: 34,
+        &quot;name&quot;: &quot;Ariana&quot;
+      }
+    ]
+  }
+}
+</code></pre><hr>
+<p><strong>API 演进，无需划分版本</strong></p>
+<p>API 版本迭代无需要进行版本号区分，添加字段不影响现有查询，请求发起者可以自己定义想要的查询信息</p>
+<pre tabindex="0"><code># Say No
+http://api.xxx.com/student/v1/
+http://api.xxx.com/student/v2/
+# ...
+</code></pre><hr>
+<p><strong>自检性，可查询输出所有定义</strong></p>
+<p>这个是 GraphQL 一个很 Nice 的特性，就是 GraphQL 服务 API 可以通过语句查询出它所支持的类型，开发可以不需要花时间写 API 文档，GraphQL 直接帮助开发者快速了解 API。</p>
+<pre tabindex="0"><code># 查询语句
+{
+  __type(name: &quot;MStudentType&quot;) {
+    kind
+    name
+    fields {
+      name
+      description
+      type {
+        name
+      }
+    }
+  }
+}
+
+
+</code></pre><pre tabindex="0"><code># 输出
+{
+  &quot;data&quot;: {
+    &quot;__type&quot;: {
+      &quot;kind&quot;: &quot;OBJECT&quot;,
+      &quot;name&quot;: &quot;MStudentType&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;description&quot;: &quot;学号&quot;,
+          &quot;type&quot;: {
+            &quot;name&quot;: null
+          }
+        },
+        {
+          &quot;name&quot;: &quot;name&quot;,
+          &quot;description&quot;: &quot;学生名&quot;,
+          &quot;type&quot;: {
+            &quot;name&quot;: null
+          }
+        },
+        {
+          &quot;name&quot;: &quot;age&quot;,
+          &quot;description&quot;: &quot;年龄&quot;,
+          &quot;type&quot;: {
+            &quot;name&quot;: null
+          }
+        },
+        {
+          &quot;name&quot;: &quot;birthdate&quot;,
+          &quot;description&quot;: &quot;生日&quot;,
+          &quot;type&quot;: {
+            &quot;name&quot;: null
+          }
+        },
+        {
+          &quot;name&quot;: &quot;sclass&quot;,
+          &quot;description&quot;: &quot;班级信息&quot;,
+          &quot;type&quot;: {
+            &quot;name&quot;: &quot;MClassType&quot;
+          }
+        }
+      ]
+    }
+  }
+}
+
+</code></pre><p>基于自检性，GraphQL 开源了辅助工具 GraphiQL，方便 GraphQL 接口调试和自动生成接口文档</p>
+<ul>
+<li>GraphQL 辅助工具：GraphiQL，可以调试查询语句，并对接口定义的 schema 进行文档可视化展示
+<ul>
+<li>查询语句进行感知</li>
+<li>错误提示</li>
+<li>语句格式化</li>
+<li>执行查询</li>
+<li>查看接口定义的 schema 文档信息</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>graphql-dotnet 开源项目里的 GraphiQL 要接入自己开发 GraphQL 接口，还需要进行简单的修改调整，后面会说到</p>
+</blockquote>
+<hr>
+<h3 id="net-下的入门教程">.NET 下的入门教程</h3>
+<ul>
+<li>构建 ASP.NET MVC5 WebAPI 项目</li>
+<li>NutGet 引入程序包
+<ul>
+<li><a href="https://github.com/graphql-dotnet/graphql-dotnet/" target="_blank" rel="noopener noreffer">GraphQL</a></li>
+<li><a href="https://github.com/MisterJames/GenFu" target="_blank" rel="noopener noreffer">GenFu</a>，用于初始化测试数据</li>
+</ul>
+</li>
+<li>基于 GraphQL 简单实现一个学生查询 API
+<ul>
+<li>支持查询学生信息列表</li>
+<li>支持查询学生的班级信息</li>
+<li>支持查询学号对应的学生信息</li>
+<li>支持修改学生名字</li>
+</ul>
+</li>
+</ul>
+<p>定义【数据类】MStudent.cs(学生类)，MClass.cs(班级类)，MResult.cs(执行结果类)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp">
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MStudent</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 学号
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 名字
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 年龄
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">Age</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 所在班级编号
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">ClassId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 生日
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">Birthdate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 班级
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="n">MClass</span> <span class="n">SClass</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 年级
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">Level</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 第几班
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">Num</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 总人数
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">Heads</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MResult</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 输出结果,0=失败，1=成功
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">rt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>    <span class="c1">/// 说明信息
+</span><span class="c1"></span>    <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">string</span> <span class="n">msg</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div><p>定义 GraphType 类 MStudentType,MClassType,MResultType 继承 ObjectGraphType<!-- raw HTML omitted --> ，TSourceType 泛型对应到【数据类】<br>
+构造函数里通过 Field 去添加可以被查询的数据字段，包括：描述以及字段内容获取的处理方法，等</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp">
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MStudentType</span> <span class="p">:</span> <span class="n">ObjectGraphType</span><span class="p">&lt;</span><span class="n">MStudent</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="n">BStudent</span> <span class="m">_</span><span class="n">bll</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">MStudentType</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="m">_</span><span class="n">bll</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="m">_</span><span class="n">bll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BStudent</span><span class="p">();</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;学号&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Name</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;学生名&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Age</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;年龄&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Birthdate</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;生日&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">&lt;</span><span class="n">MClassType</span><span class="p">&gt;(</span><span class="s">&#34;sclass&#34;</span><span class="p">,</span> <span class="n">resolve</span><span class="p">:</span> <span class="n">d</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="c1">//缓存中已经存在就直接返回
+</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">SClass</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span> <span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">SClass</span><span class="p">;</span>
+            <span class="c1">//从DB/缓存中获取数据
+</span><span class="c1"></span>            <span class="kt">var</span> <span class="n">classId</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">?.</span><span class="n">ClassId</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">classId</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">SClass</span> <span class="p">=</span> <span class="m">_</span><span class="n">bll</span><span class="p">.</span><span class="n">GetClass</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">ClassId</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">d</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">SClass</span><span class="p">;</span>
+        <span class="p">},</span><span class="n">description</span><span class="p">:</span><span class="s">&#34;班级信息&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MClassType</span> <span class="p">:</span> <span class="n">ObjectGraphType</span><span class="p">&lt;</span><span class="n">MClass</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">MClassType</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Level</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;年级&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Heads</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;人数&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;编号&#34;</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">Num</span><span class="p">).</span><span class="n">Description</span><span class="p">(</span><span class="s">&#34;班级&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MResultType</span> <span class="p">:</span> <span class="n">ObjectGraphType</span><span class="p">&lt;</span><span class="n">MResult</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">MResultType</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">rt</span><span class="p">);</span>
+        <span class="n">Field</span><span class="p">(</span><span class="n">d</span> <span class="p">=&gt;</span> <span class="n">d</span><span class="p">.</span><span class="n">msg</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div><p>定义 Schema 的操作类(query/mutation)，继承 ObjectGraphType，有：StudentQuery，StudentMutation</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp">
+<span class="k">public</span> <span class="k">class</span> <span class="nc">StudentQuery</span> <span class="p">:</span> <span class="n">ObjectGraphType</span> <span class="p">{</span>
+        <span class="k">public</span> <span class="n">StudentQuery</span><span class="p">(</span><span class="n">BStudent</span> <span class="n">bll</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//查询-有参数id
+</span><span class="c1"></span>            <span class="n">Field</span><span class="p">&lt;</span><span class="n">MStudentType</span><span class="p">&gt;(</span><span class="s">&#34;student&#34;</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="k">new</span> <span class="n">QueryArguments</span><span class="p">(</span><span class="k">new</span> <span class="n">QueryArgument</span><span class="p">&lt;</span><span class="n">IntGraphType</span><span class="p">&gt;()</span> <span class="p">{</span>
+                <span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;id&#34;</span>
+            <span class="p">}),</span> <span class="n">resolve</span><span class="p">:</span> <span class="n">d</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Arguments</span><span class="p">[</span><span class="s">&#34;id&#34;</span><span class="p">].</span><span class="n">GetInt</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">bll</span><span class="p">.</span><span class="n">GetModel</span><span class="p">(</span><span class="n">id</span><span class="p">);</span> <span class="p">;</span>
+            <span class="p">});</span>
+            <span class="c1">//查询-列表
+</span><span class="c1"></span>            <span class="n">Field</span><span class="p">&lt;</span><span class="n">ListGraphType</span><span class="p">&lt;</span><span class="n">MStudentType</span><span class="p">&gt;&gt;(</span><span class="s">&#34;students&#34;</span><span class="p">,</span> <span class="n">resolve</span><span class="p">:</span> <span class="n">d</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">bll</span><span class="p">.</span><span class="n">GetStudents</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">StudentMutation</span> <span class="p">:</span> <span class="n">ObjectGraphType</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">StudentMutation</span><span class="p">(</span><span class="n">BStudent</span> <span class="n">bll</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Field</span><span class="p">&lt;</span><span class="n">MResultType</span><span class="p">&gt;(</span><span class="s">&#34;update&#34;</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="k">new</span> <span class="n">QueryArguments</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">QueryArgument</span><span class="p">&lt;</span><span class="n">IntGraphType</span><span class="p">&gt;</span> <span class="p">{</span>
+                <span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;id&#34;</span>
+            <span class="p">},</span>
+            <span class="k">new</span> <span class="n">QueryArgument</span><span class="p">&lt;</span><span class="n">StringGraphType</span><span class="p">&gt;</span> <span class="p">{</span>
+                <span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;name&#34;</span>
+            <span class="p">}</span>
+        <span class="p">),</span> <span class="n">resolve</span><span class="p">:</span> <span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Arguments</span><span class="p">[</span><span class="s">&#34;id&#34;</span><span class="p">].</span><span class="n">GetInt</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+            <span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">d</span><span class="p">.</span><span class="n">Arguments</span><span class="p">[</span><span class="s">&#34;name&#34;</span><span class="p">].</span><span class="n">GetString</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span> <span class="k">new</span> <span class="n">MResult</span> <span class="p">{</span>
+                <span class="n">rt</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">&#34;非法学号&#34;</span>
+            <span class="p">};</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">())</span> <span class="k">return</span> <span class="k">new</span> <span class="n">MResult</span> <span class="p">{</span>
+                <span class="n">rt</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">&#34;非法名字&#34;</span>
+            <span class="p">};</span>
+            <span class="kt">var</span> <span class="n">isSc</span> <span class="p">=</span> <span class="n">bll</span><span class="p">.</span><span class="n">UpdateName</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">isSc</span><span class="p">)</span> <span class="k">return</span> <span class="k">new</span> <span class="n">MResult</span> <span class="p">{</span>
+                <span class="n">rt</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">&#34;更新失败&#34;</span>
+            <span class="p">};</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">MResult</span> <span class="p">{</span>
+                <span class="n">rt</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">&#34;bingo&#34;</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div><p>在控制器里添加接口，构造 Schema 对象，根据查询条件解析执行返回结果输出<br>
+Query = StudentQuery，Mutation = StudentMutation</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+</span><span class="c1">/// graphql demo 接口
+</span><span class="c1">/// &lt;/summary&gt;
+</span><span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
+</span><span class="c1"></span><span class="na">[HttpPost]</span>
+<span class="na">[Route(&#34;query&#34;)]</span>
+<span class="k">public</span> <span class="kt">object</span> <span class="n">Test_Query</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">r</span> <span class="p">=</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Request</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">GetF</span><span class="p">(</span><span class="s">&#34;query&#34;</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">bll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BStudent</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">schema</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Schema</span> <span class="p">{</span> <span class="n">Query</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StudentQuery</span><span class="p">(</span><span class="n">bll</span><span class="p">),</span> <span class="n">Mutation</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StudentMutation</span><span class="p">(</span><span class="n">bll</span><span class="p">)</span> <span class="p">};</span>
+    <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DocumentExecuter</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">(</span><span class="n">options</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="n">options</span><span class="p">.</span><span class="n">Schema</span> <span class="p">=</span> <span class="n">schema</span><span class="p">;</span>
+            <span class="n">options</span><span class="p">.</span><span class="n">Query</span> <span class="p">=</span> <span class="n">query</span><span class="p">;</span>
+        <span class="p">}).</span><span class="n">GetAwaiter</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">json</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DocumentWriter</span><span class="p">(</span><span class="n">indent</span><span class="p">:</span> <span class="k">true</span><span class="p">).</span><span class="n">Write</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">GetResult</span><span class="p">();</span>
+<span class="p">}</span>
+
+</code></pre></div><hr>
+<p><strong>GraphiQL 工具的接入</strong></p>
+<ul>
+<li>Git Clone <a href="https://github.com/graphql-dotnet/graphql-dotnet" target="_blank" rel="noopener noreffer">graphql-dotnet</a></li>
+<li>安装 NodeJS 环境</li>
+<li>命令工具 CMD 打开 graphql-dotnet/src/GraphQL.GraphiQL/ 执行下面命令
+<ul>
+<li>npm install -g yarn</li>
+<li>yarn install</li>
+<li>yarn start</li>
+</ul>
+</li>
+<li>运行 graphql-dotnet/src/GraphQL.GraphiQL 就可以启动：http://localhost:47080/</li>
+<li>根据自己的情况调整：graphql-dotnet/src/GraphQL.GraphiQL/app/app.js 脚本，如下面贴出的代码
+<ul>
+<li>url=graphql 接口地址</li>
+<li>如果需要投入生产使用，可以把接口地址进行 url 传入，或者支持输入框输入地址，不固定接口地址</li>
+</ul>
+</li>
+<li>每次调整完需要重新执行 yarn start，前端会使用 webpack 进行打包操作，执行完成后刷新页面即可</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//调整如下
+</span><span class="c1"></span><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s2">&#34;react&#34;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">ReactDOM</span> <span class="nx">from</span> <span class="s2">&#34;react-dom&#34;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">GraphiQL</span> <span class="nx">from</span> <span class="s2">&#34;graphiql&#34;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">axios</span> <span class="nx">from</span> <span class="s2">&#34;axios&#34;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s2">&#34;graphiql/graphiql.css&#34;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s2">&#34;./app.css&#34;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">graphQLFetcher</span><span class="p">(</span><span class="nx">graphQLParams</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">graphQLParams</span><span class="p">[</span><span class="s2">&#34;query&#34;</span><span class="p">]);</span>
+  <span class="k">return</span> <span class="nx">axios</span><span class="p">({</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s2">&#34;post&#34;</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;http://127.0.0.1:5656/query&#34;</span><span class="p">,</span> <span class="c1">//window.location.origin + &#39;/api/graphql&#39;,
+</span><span class="c1"></span>    <span class="nx">data</span><span class="o">:</span> <span class="s2">&#34;query=&#34;</span> <span class="o">+</span> <span class="nx">graphQLParams</span><span class="p">[</span><span class="s2">&#34;query&#34;</span><span class="p">],</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&#34;Content-Type&#34;</span><span class="o">:</span> <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span> <span class="p">},</span>
+  <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">GraphiQL</span> <span class="nx">fetcher</span><span class="o">=</span><span class="p">{</span><span class="nx">graphQLFetcher</span><span class="p">}</span> <span class="o">/&gt;</span><span class="p">,</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/graphiql.jpg?v=1"
+        data-srcset="http://blog.thankbabe.com/imgs/graphiql.jpg?v=1, http://blog.thankbabe.com/imgs/graphiql.jpg?v=1 1.5x, http://blog.thankbabe.com/imgs/graphiql.jpg?v=1 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/graphiql.jpg?v=1"
+        title="graphql" /></p>
+<h3 id="总结">总结</h3>
+<ul>
+<li>对于应用我觉得可以尝试使用到新项目需求中，或者现有合适应用场景进行重构，等服务运行稳定，并且开发上手后即可进行大范围的使用</li>
+<li>对于 RestFul 和 GraphQL 的比较，我觉得没有最好的协议，只有最合适的场景</li>
+</ul>
+<hr>
+<h3 id="资源">资源</h3>
+<ul>
+<li>Demo 源码：
+<ul>
+<li>Demo 代码到我的 Gtihub 项目（<a href="https://github.com/SFLAQiu/GraphQLDemo" target="_blank" rel="noopener noreffer">GraphQLDemo</a>）</li>
+</ul>
+</li>
+<li>学习资料
+<ul>
+<li><a href="https://www.zhihu.com/question/264629587" target="_blank" rel="noopener noreffer">知乎-什么是 GraphQL</a></li>
+<li><a href="http://graphql.cn/learn/" target="_blank" rel="noopener noreffer">GraphQL 语法入门</a></li>
+<li><a href="http://graphql.cn" target="_blank" rel="noopener noreffer">GraphQL 中文官网</a></li>
+<li><a href="http://howtographql.cn/" target="_blank" rel="noopener noreffer">How To GraphQL</a></li>
+<li><a href="https://juejin.im/post/5a49e5ccf265da430d585cfd" target="_blank" rel="noopener noreffer">GraphQL 搭配 Koa 最佳入门实践</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2018-04-20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/graphql/">GraphQL</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2018-02-27-spider-practice/" class="prev" rel="prev" title="大话爬虫的实践技巧"><i class="fas fa-angle-left fa-fw"></i>大话爬虫的实践技巧</a>
+            <a href="/posts/2018-05-23-shared-experience/" class="next" rel="next" title="大话后端开发的奇淫技巧大集合">大话后端开发的奇淫技巧大集合<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

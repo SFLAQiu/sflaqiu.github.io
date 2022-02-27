@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话Redis基础 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话Redis基础" />
+<meta property="og:description" content="content {:toc} 前期多做功课，摆对正确姿势去使用 redis 可以加快请求数据的响应时间，然而噬无忌惮的使用会让你为内存问题而烦恼，从长远的角度看这个不仅仅是只要加" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2016-04-02-redis/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-04-01T23:06:10+08:00" />
+<meta property="article:modified_time" content="2016-04-01T23:06:10+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话Redis基础"/>
+<meta name="twitter:description" content="content {:toc} 前期多做功课，摆对正确姿势去使用 redis 可以加快请求数据的响应时间，然而噬无忌惮的使用会让你为内存问题而烦恼，从长远的角度看这个不仅仅是只要加"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2016-04-02-redis/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2016-04-01-high-concurrency/" /><link rel="next" href="http://sflaqiu.github.io/posts/2016-04-04-safe/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话Redis基础",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2016-04-02-redis\/"
+        },"genre": "posts","keywords": "Redis","wordcount":  1203 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2016-04-02-redis\/","datePublished": "2016-04-01T23:06:10+08:00","dateModified": "2016-04-01T23:06:10+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话Redis基础</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/redis/"><i class="far fa-folder fa-fw"></i>Redis</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2016-04-01">2016-04-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1203 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#radis-有五种的数据类型">radis 有五种的数据类型：</a></li>
+    <li><a href="#注意">注意：</a></li>
+    <li><a href="#内存控制与优化">内存控制与优化：</a></li>
+    <li><a href="#redis-其他辅助">redis 其他辅助：</a></li>
+    <li><a href="#net-类库">.NET 类库：</a></li>
+    <li><a href="#当前我们的应用场景">当前我们的应用场景：</a></li>
+    <li><a href="#总结">总结：</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><ul>
+<li>content
+{:toc}</li>
+</ul>
+<p>前期多做功课，摆对正确姿势去使用 redis 可以加快请求数据的响应时间，然而噬无忌惮的使用会让你为内存问题而烦恼，从长远的角度看这个不仅仅是只要加几条内存就能解决的问题</p>
+<h1 id="redis">redis：</h1>
+<ul>
+<li>redis 是 Key Value nosql 数据库，数据存储在内存中，单进程，自己实现了一套异步事件处理，虽然单进程但是数据库处理很快，异步持久化；</li>
+<li>持久化方式：RDB(数据快照)，AOF(日志追加的方式)进行异步持久化</li>
+<li>支持集群</li>
+</ul>
+<hr>
+<h2 id="radis-有五种的数据类型">radis 有五种的数据类型：</h2>
+<ul>
+<li>string 字符串类型
+<ul>
+<li>字符串类型是 redis 中的最基本的数据类型，也是其他 4 种数据类型的基础，它能存储任何形式的字符串，包括二进制数据</li>
+</ul>
+</li>
+<li>hash 哈希表类型
+<ul>
+<li>哈希类型是一个字符串类型的字段和字段值的映射表。哈希类型适合存储对象。相较于将对象每一个字段存成当个字符串类型，将一个对象存成在 hash 类型会占用更少的内存，并且可以更方便的存取整个对象</li>
+</ul>
+</li>
+<li>list 链表类型
+<ul>
+<li>链表类型可以存储一个有序的字符串列表，内部是使用双向链表实现的。所以我们通常用链表类型的 LPUSH 和 LPOP 或者 RPUSH 和 RPOP 实现栈的功能，用 LPUSH 和 RPOP 或者 RPUSH 和 LPOP 实现队列的功能</li>
+</ul>
+</li>
+<li>set 无序集合类型
+<ul>
+<li>集合类型和数学中集合概念相似，比如集合中的元素是唯一的，无序的，集合与集合之间可以进行交并差等操作</li>
+</ul>
+</li>
+<li>zset 有序集合类型
+<ul>
+<li>有序集合类型和集合类型一样，只不过多了一个“有序”，有序集合中每一个元素都关联了一个分数，虽然集合中每一个元素都不同的，但是他们的分数却可以相同</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="注意">注意：</h2>
+<ul>
+<li>redis 的数据都是存储在内存里的；</li>
+<li>2.0 以上好像是可以开启 VM 虚拟内存(把磁盘分配部分作为虚拟内存)的功能，通过内部机制把冷数据放到虚拟内存里，常用的数据还是在内存中；</li>
+<li>redis 只能是作为热数据(经常被并发查询的)的缓存，不能把 redis 当成数据库去使用</li>
+</ul>
+<hr>
+<h2 id="内存控制与优化">内存控制与优化：</h2>
+<ul>
+<li>存储的数据的控制：
+<ul>
+<li>控制数据字段(序列化对象的时候不用的字段不要读到 redis，减少存储数据量)</li>
+<li>设置过期时间</li>
+<li>热数据存储(冷数据过滤移除，或者不存)</li>
+<li>不存储长期累加增长的数据，尤其是可能成为大数据的，(可以考虑使用 mongodb)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="redis-其他辅助">redis 其他辅助：</h2>
+<ol start="0">
+<li>查看配置：config get *
+<blockquote>
+<p><a href="http://blog.csdn.net/lengzijian/article/details/8593656" target="_blank" rel="noopener noreffer">http://blog.csdn.net/lengzijian/article/details/8593656</a></p>
+</blockquote>
+</li>
+<li>查看信息：info
+<blockquote>
+<p><a href="http://www.runoob.com/redis/server-info.html" target="_blank" rel="noopener noreffer">http://www.runoob.com/redis/server-info.html</a></p>
+</blockquote>
+</li>
+<li>其他命令：
+<blockquote>
+<p><a href="http://www.runoob.com/redis/redis-commands.html" target="_blank" rel="noopener noreffer">http://www.runoob.com/redis/redis-commands.html</a></p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="net-类库">.NET 类库：</h2>
+<ol start="0">
+<li>正在使用版本：ServiceStack.Redis 3.9.71.0，&gt;=4.0 版本有限制连接池的数量，需要收费</li>
+<li>StackExchange.Redis
+<blockquote>
+<p>下载：http://download.csdn.net/detail/shi1984/8916095#comment<br>
+博客： <a href="http://www.cnblogs.com/bnbqian/p/4962855.html" target="_blank" rel="noopener noreffer">http://www.cnblogs.com/bnbqian/p/4962855.html</a><br>
+github： <a href="https://github.com/StackExchange/StackExchange.Redis" target="_blank" rel="noopener noreffer">https://github.com/StackExchange/StackExchange.Redis</a></p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="当前我们的应用场景">当前我们的应用场景：</h2>
+<ol start="0">
+<li>STRING
+<blockquote>
+<p>存储信息对象序列化 JSON 格式</p>
+</blockquote>
+</li>
+<li>HASH：
+<blockquote>
+<p>经常被并发请求的小数据查询，如：最近五日的超高返商品数据，存储在 Hash 中，field=商品 ID，value=商品信息(对象序列化 JSON 格式)</p>
+</blockquote>
+</li>
+<li>LIST：
+<blockquote>
+<p>作为信息队列使用，不断的 Lpush 数据到 List 中，rpop 数据出来入库，或者处理。</p>
+</blockquote>
+</li>
+<li>ZSET：
+<blockquote>
+<p>排序列表，如搜索关键字排名</p>
+</blockquote>
+</li>
+<li>SET 相对比较少去使用</li>
+</ol>
+<hr>
+<h2 id="总结">总结：</h2>
+<ul>
+<li>前期多做功课，摆对正确姿势去使用 redis 可以加快请求数据的响应时间，然而噬无忌惮的使用会让你为内存问题而烦恼，从长远的角度看这个不仅仅是只要加几条内存就能解决的问题</li>
+</ul>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2016-04-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/redis/">Redis</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2016-04-01-high-concurrency/" class="prev" rel="prev" title="大话程序猿眼里的高并发"><i class="fas fa-angle-left fa-fw"></i>大话程序猿眼里的高并发</a>
+            <a href="/posts/2016-04-04-safe/" class="next" rel="next" title="大话WEB安全">大话WEB安全<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

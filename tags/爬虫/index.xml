@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>爬虫 - 标签 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/tags/%E7%88%AC%E8%99%AB/</link>
+        <description>爬虫 - 标签 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 27 Feb 2018 16:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E7%88%AC%E8%99%AB/" rel="self" type="application/rss+xml" /><item>
+    <title>大话爬虫的实践技巧</title>
+    <link>http://sflaqiu.github.io/posts/2018-02-27-spider-practice/</link>
+    <pubDate>Tue, 27 Feb 2018 16:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2018-02-27-spider-practice/</guid>
+    <description><![CDATA[图1-意淫爬虫与反爬虫间的对决 数据的重要性 如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像]]></description>
+</item><item>
+    <title>大话爬虫的基本套路</title>
+    <link>http://sflaqiu.github.io/posts/2017-09-25-spider/</link>
+    <pubDate>Mon, 25 Sep 2017 18:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2017-09-25-spider/</guid>
+    <description><![CDATA[什么是爬虫？ 网络爬虫也叫网络蜘蛛，如果把互联网比喻成一个蜘蛛网，那么蜘蛛就是在网上爬来爬去的蜘蛛，爬虫程序通过请求 url 地址，根据响应的内容进行]]></description>
+</item></channel>
+</rss>

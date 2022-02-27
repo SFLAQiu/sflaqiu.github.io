@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>高并发业务接口开发思路(实战) - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="高并发业务接口开发思路(实战)" />
+<meta property="og:description" content="高并发业务除了需要有支撑高并发的服务器架构，还需要根据业务需求和架构体系，设计出合理的开发方案， 这里根据一个实践过业务场景分析开发思路，罗列" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2017-05-21-api-design/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-05-21T12:00:05+08:00" />
+<meta property="article:modified_time" content="2017-05-21T12:00:05+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="高并发业务接口开发思路(实战)"/>
+<meta name="twitter:description" content="高并发业务除了需要有支撑高并发的服务器架构，还需要根据业务需求和架构体系，设计出合理的开发方案， 这里根据一个实践过业务场景分析开发思路，罗列"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2017-05-21-api-design/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2017-02-27-high-concurrency-scheme-xp/" /><link rel="next" href="http://sflaqiu.github.io/posts/2017-07-05-fore-end-optimize/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "高并发业务接口开发思路(实战)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2017-05-21-api-design\/"
+        },"genre": "posts","keywords": "高并发","wordcount":  2075 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2017-05-21-api-design\/","datePublished": "2017-05-21T12:00:05+08:00","dateModified": "2017-05-21T12:00:05+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">高并发业务接口开发思路(实战)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"><i class="far fa-folder fa-fw"></i>高并发</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2017-05-21">2017-05-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2075 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#业务场景">业务场景</a></li>
+    <li><a href="#设计思路">设计思路</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>高并发业务除了需要有支撑高并发的服务器架构，还需要根据业务需求和架构体系，设计出合理的开发方案，
+这里根据一个实践过业务场景分析开发思路，罗列出高并发接口需要注意的点，以及设计上的巧思，共勉之，望共鸣</p>
+<hr>
+<h2 id="业务场景">业务场景</h2>
+<ul>
+<li>业务：
+<ul>
+<li>今日好货</li>
+</ul>
+</li>
+<li>交互端：
+<ul>
+<li>IOS/Andorid</li>
+</ul>
+</li>
+<li>需求点：（实际业务会复杂些，为了容易理解，这里简化需求点）
+<ul>
+<li>提供最新的好货商品信息列表，支持分页</li>
+<li>需要时时获取最新的商品数据列表，以下情况商品信息会发生变化
+<ul>
+<li>商品数据字段更新(人为编辑，热度字段更新，等)</li>
+<li>商品不定时上新，在固定时段会有大量商品更新(目前 10 点/20 点上新量大)</li>
+<li>商品在会在规律时间里重新排序(根据：销量，曝光量，点击量 等计算排序)</li>
+</ul>
+</li>
+<li>商品加载过程中不能出现重复商品</li>
+<li>客户端和服务端需要考虑加载商品的交互体验</li>
+</ul>
+</li>
+<li>终极目标：
+<ul>
+<li>支持高并发下业务稳定</li>
+</ul>
+</li>
+</ul>
+<h2 id="设计思路">设计思路</h2>
+<h4 id="前提">前提：</h4>
+<ul>
+<li><code>【商品服务API】</code>：通过商品服务提供的 API 获取商品数据，当商品有上新、字段更新、排序有更新时，通过 API 都可以获取到最新的数据(db 查询，支持获取未来时间里的商品数据)</li>
+<li>缓存使用 <code>Redis</code></li>
+</ul>
+<hr>
+<h4 id="缓存更新分析">缓存更新分析：</h4>
+<ul>
+<li>商品数据缓存到 Redis：支撑高并发的查询业务，数据需要进行缓存</li>
+<li>提供商品缓存刷新接口：商品显示需要即时性，需要时时展示最新数据，当商品发生变化的时候，我们需要刷新商品缓存数据</li>
+<li>支持未来时间缓存提前更新：为了更好支撑即时性，尤其在固定时段商品的大量上新，缓存更新会比较慢，所以我们需要提前备好未来时间的缓存数据</li>
+<li>缓存刷新需要注意点：缓存更新的过程中不能出现前台无数据展示的情况</li>
+<li>商品缓存支持版本号区分：每次缓存更新都要生成一个新的数据版本号缓存 Key，数据存储在对应的缓存版本 Key 里</li>
+<li>缓存版本 Key 存储到列表 ：列表可以用来筛选出当前时间可以使用的最新版本号</li>
+</ul>
+<hr>
+<h4 id="商品缓存更新设计">商品缓存更新设计：</h4>
+<ul>
+<li>接口参数：updatetime<code>【更新时间】</code>(可空)，默认等于当前时间，可以传未来时间</li>
+<li>每次刷新缓存都会生成新的数据版本号作为<code>【商品缓存Key名】</code>，将数据存到版本号对应的缓存 Key 中，所以需要生成一个唯一字符串，这里我们把<code>【更新时间】</code>的时间戳作为缓存的 Key 名，为何这么设计，后面会介绍到</li>
+<li>首先请求<code>【商品服务API】</code>获取<code>【更新时间】</code>对应的商品数据，接着对数据进行字段处理、排序，最后把最终商品数据更新到<code>【商品缓存Key名】</code>的 Redis SortedSet 中</li>
+<li>商品缓存成功后，把<code>【商品缓存Key名】</code>存到<code>【版本号集合】</code>Redis SortedSet 中，同时把<code>【更新时间】</code>的时间戳作为排序的值</li>
+<li><code>【商品缓存Key名】</code>=<code>【更新时间】</code>的时间戳，这个设计的目的是可以支持未来时间版本数据的提前更新，并且可以通过 SortedSet 排序，过滤出当前时间最新的版本号</li>
+</ul>
+<hr>
+<h4 id="缓存结构图">缓存结构图</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/haohuo_datas.png"
+        data-srcset="http://blog.thankbabe.com/imgs/haohuo_datas.png, http://blog.thankbabe.com/imgs/haohuo_datas.png 1.5x, http://blog.thankbabe.com/imgs/haohuo_datas.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/haohuo_datas.png"
+        title="image" /></p>
+<hr>
+<h4 id="今日好货-api-设计">今日好货 API 设计：</h4>
+<ul>
+<li>接口参数：version：数据版本号(可空)，pageindex：页码</li>
+<li>响应 JSON 数据：Datas：商品数据集合，CurrentVersion：当前数据版本号</li>
+<li><code>【当前最新版本号】</code>：<code>【版本号集合】</code>通过 SortedSet 机制，获取当前时间能够使用的数据版本号，
+如：取[当前时间戳]-[(当前时间-1h)时间戳]区间的版本号，排序后获取离当前时间最近的版本号作为最新版本号 &lt;这里为何取区间，而不是直接取最新版本号，会有个容错处理，后面会说到&gt;</li>
+<li>用户在浏览商品的时候客户端请求<code>【今日好货API】</code>需要上传版本号和页数，如果是第一次(pageindex=1，首页)，会获取<code>【当前最新版本号】</code>，然后返回最新商品数据</li>
+<li>客户端本地缓存首页数据返回的版本号，后续翻页需要客户端上报缓存的版本号，API 返回版本号对应的商品分页数据，这样设计的目的是当用户继续加载后面页数数据的时候不会出现重复的数据(数据会不定时更新，避免用户加载到重复的数据，如：商品 A 原来是第一页数据，数据更新后变成第二页数据)</li>
+<li>当请求首页数据，客户端上报的版本号=<code>【当前最新版本号】</code>，就不进行数据缓存查询，直接返回空数据（数据不变），客服端无需重新渲染商品列表，同时可以避免无限下拉刷新带来的服务器压力</li>
+<li>如果 version 参数没有上传，获取<code>【当前最新版本号】</code>和当前最新数据返回，数据版本号参数有上传，就获取对应版本号的分页数据</li>
+</ul>
+<hr>
+<h4 id="其他注意点">其他注意点：</h4>
+<ul>
+<li>版本号无限累加
+<ul>
+<li><code>【版本号集合】</code>随着时间增长，版本号数据会不断累加，需要在每次更新的时候删除掉最近一天的版本，操作 SortedSet 过滤掉比(当前时间-1 天)的时间戳小的版本号</li>
+</ul>
+</li>
+<li>容错处理
+<ul>
+<li>获取<code>【当前最新版本号】</code>的时候，操作 <code>【版本号集合】</code>集合，获取最近一个小时的，即操作 SortedSet[当前时间戳]至[(当前时间-1h)时间戳]范围内的版本号，然后从大到小排序版本号，过滤出版本号，并且有版本号相对于的商品数据，如果不存在商品数据，就往下遍历，直到有符合规则的版本号返回</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="双-11-模式">双 11 模式：</h4>
+<ul>
+<li>一级缓存
+<ul>
+<li>将商品数据短暂的缓存到站点服务区 Cache 中</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="降级方案">降级方案：</h4>
+<ul>
+<li>资源监控，自动降级</li>
+<li>开启降级方案后，客服端会从 cdn 中拉取商品数据</li>
+<li>商品分页数据生成 JSON 数据文件存储到 cdn 中</li>
+</ul>
+<hr>
+<h4 id="架构图">架构图</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="http://blog.thankbabe.com/imgs/haohuo.png"
+        data-srcset="http://blog.thankbabe.com/imgs/haohuo.png, http://blog.thankbabe.com/imgs/haohuo.png 1.5x, http://blog.thankbabe.com/imgs/haohuo.png 2x"
+        data-sizes="auto"
+        alt="http://blog.thankbabe.com/imgs/haohuo.png"
+        title="image" /></p>
+<hr>
+<h2 id="总结">总结</h2>
+<ul>
+<li>以上举例的高并发接口设计的实践方案，有些设计可能比较针对此业务场景，但是思路是有共性的，重点在于理解设计上的思路</li>
+<li>高并发接口的开发需要考虑因素:
+<ul>
+<li>接口性能</li>
+<li>接口的稳定</li>
+<li>容错机制</li>
+<li>服务端压力：竟可能减少服务端压力，可以与客户端交互配合</li>
+<li>服务降级：资源高压力的情况下进行降级</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2017-05-21</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/">高并发</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2017-02-27-high-concurrency-scheme-xp/" class="prev" rel="prev" title="大话程序猿眼里的高并发之续篇"><i class="fas fa-angle-left fa-fw"></i>大话程序猿眼里的高并发之续篇</a>
+            <a href="/posts/2017-07-05-fore-end-optimize/" class="next" rel="next" title="大话WEB前端性能优化基本套路">大话WEB前端性能优化基本套路<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
