@@ -3,7 +3,8 @@
         <title>业务设计 - 分类 - SFLYQ的博客</title>
         <link>http://sflaqiu.github.io/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/</link>
         <description>业务设计 - 分类 - SFLYQ的博客</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 01 May 2020 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Fri, 01 May 2020 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1/" rel="self" type="application/rss+xml" /><item>
     <title>大话业务场景与解决方案：数据分散周期筛选</title>
     <link>http://sflaqiu.github.io/posts/2020-05-01-array-pointer/</link>
     <pubDate>Fri, 01 May 2020 08:00:00 &#43;0800</pubDate>

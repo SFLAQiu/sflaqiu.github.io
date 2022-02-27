@@ -3,7 +3,8 @@
         <title>安全 - 分类 - SFLYQ的博客</title>
         <link>http://sflaqiu.github.io/categories/%E5%AE%89%E5%85%A8/</link>
         <description>安全 - 分类 - SFLYQ的博客</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
     <title>记一次站点被挂马问题排查</title>
     <link>http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/</link>
     <pubDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</pubDate>

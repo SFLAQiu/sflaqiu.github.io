@@ -6,7 +6,7 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>大话爬虫的实践技巧 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话爬虫的实践技巧" />
-<meta property="og:description" content="图1-意淫爬虫与反爬虫间的对决 数据的重要性 如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像" />
+<meta property="og:description" content="图 1-意淫爬虫与反爬虫间的对决 数据的重要性 如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://sflaqiu.github.io/posts/2018-02-27-spider-practice/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2018-02-27T16:00:00+08:00" />
@@ -14,7 +14,7 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="大话爬虫的实践技巧"/>
-<meta name="twitter:description" content="图1-意淫爬虫与反爬虫间的对决 数据的重要性 如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像"/>
+<meta name="twitter:description" content="图 1-意淫爬虫与反爬虫间的对决 数据的重要性 如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像"/>
 <meta name="application-name" content="SFLYQ的博客">
 <meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/sflaqiu.github.io\/posts\/2018-02-27-spider-practice\/"
-        },"genre": "posts","keywords": "爬虫","wordcount":  3685 ,
+        },"genre": "posts","keywords": "爬虫","wordcount":  3463 ,
         "url": "http:\/\/sflaqiu.github.io\/posts\/2018-02-27-spider-practice\/","datePublished": "2018-02-27T16:00:00+08:00","dateModified": "2018-02-27T16:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": "SFLYQ"},"author": {
@@ -36,15 +36,33 @@
             },"description": ""
     }
     </script></head>
-    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
-            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                     <i class="fas fa-adjust fa-fw"></i>
                 </a>
             </div>
@@ -54,13 +72,36 @@
     <div class="header-container">
         <div class="header-wrapper">
             <div class="header-title">
-                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
             </div>
         </div>
-        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -76,9 +117,9 @@
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">大话爬虫的实践技巧</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E7%88%AC%E8%99%AB/"><i class="far fa-folder fa-fw"></i>爬虫</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-02-27">2018-02-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3685 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E7%88%AC%E8%99%AB/"><i class="far fa-folder fa-fw"></i>爬虫</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-02-27">2018-02-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3463 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -102,28 +143,28 @@
         alt="http://blog.thankbabe.com/imgs/spider-2.jpg?v=1"
         title="爬虫与反爬虫间的对决" /></p>
 <blockquote>
-<p>图1-意淫爬虫与反爬虫间的对决</p>
+<p>图 1-意淫爬虫与反爬虫间的对决</p>
 </blockquote>
 <h4 id="数据的重要性"><strong>数据的重要性</strong></h4>
-<p>如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像，个性化定制，数据可以指明方案设计和决策优化方向，所以互联网产品的开发都是离不开对数据的收集和分析，数据收集的一种是方式是通过上报API进行自身平台用户交互情况的捕获，还有一种手段是通过开发爬虫程序，爬取竞品平台的数据，后面就重点说下爬虫的应用场景和实践中会遇到的问题和反反爬虫的一些套路与技巧。</p>
+<p>如今已然是大数据时代，数据正在驱动着业务开发，驱动着运营手段，有了数据的支撑可以对用户进行用户画像，个性化定制，数据可以指明方案设计和决策优化方向，所以互联网产品的开发都是离不开对数据的收集和分析，数据收集的一种是方式是通过上报 API 进行自身平台用户交互情况的捕获，还有一种手段是通过开发爬虫程序，爬取竞品平台的数据，后面就重点说下爬虫的应用场景和实践中会遇到的问题和反反爬虫的一些套路与技巧。</p>
 <hr>
 <h4 id="应用场景"><strong>应用场景</strong></h4>
 <ul>
 <li>互联网平台，偏向销售公司，客户信息的爬取
 <ul>
 <li>客户信息的爬取可以释放销售人员寻找客户资源的时间，提高销售对市场开发的效率</li>
-<li>爬取相关平台上的客户信息，上报到CRM管理系统，提供给销售人员进行开发</li>
+<li>爬取相关平台上的客户信息，上报到 CRM 管理系统，提供给销售人员进行开发</li>
 </ul>
 </li>
 <li>资讯爬取并应用到平台业务中
 <ul>
 <li>经常浏览资讯的时候会发现其实很多平台的热门资讯内容都很相似，尊重版权的平台，会标明来源出处</li>
-<li>爬取资讯信息，应用到资讯业务中，可以减轻资讯内容编辑人员的压力，如果不需要创造自己的内容，也可全部托管给程序AI运营</li>
+<li>爬取资讯信息，应用到资讯业务中，可以减轻资讯内容编辑人员的压力，如果不需要创造自己的内容，也可全部托管给程序 AI 运营</li>
 </ul>
 </li>
 <li>竞品公司重要数据挖掘分析与应用
 <ul>
-<li>竞品平台重要业务数据，如：汽车X家的车型信息，X哪儿的酒店信息，返X网的商品信息，&hellip; &hellip;</li>
+<li>竞品平台重要业务数据，如：汽车 X 家的车型信息，X 哪儿的酒店信息，返 X 网的商品信息，&hellip; &hellip;</li>
 <li>爬取竞品重要数据，对数据进行筛选和处理，然后投入业务中展示，增加这块业务数据量，减轻这块资源的运营编辑的压力</li>
 </ul>
 </li>
@@ -132,7 +173,7 @@
 <hr>
 <h4 id="爬虫开发"><strong>爬虫开发</strong></h4>
 <ul>
-<li>python开发爬虫(推荐)
+<li>python 开发爬虫(推荐)
 <ul>
 <li>入门也比较简单，代码短小精干，各种便于爬虫开发的模块和框架</li>
 </ul>
@@ -146,30 +187,30 @@
 <hr>
 <h4 id="爬虫必备技巧"><strong>爬虫必备技巧</strong></h4>
 <blockquote>
-<p>做爬虫开发，需要对WEB这块有相对全面深入的理解，这样后面遇到反爬虫才能得心应手，见招拆招</p>
+<p>做爬虫开发，需要对 WEB 这块有相对全面深入的理解，这样后面遇到反爬虫才能得心应手，见招拆招</p>
 </blockquote>
 <ul>
-<li>了解HTML
+<li>了解 HTML
 <ul>
-<li>会使用HTML标签构造页面，知道如何解析出DOM里标签，提取想要的数据内容</li>
+<li>会使用 HTML 标签构造页面，知道如何解析出 DOM 里标签，提取想要的数据内容</li>
 </ul>
 </li>
-<li>了解CSS
+<li>了解 CSS
 <ul>
-<li>了解CSS，会解析出样式里的数据内容</li>
+<li>了解 CSS，会解析出样式里的数据内容</li>
 </ul>
 </li>
-<li>了解JS
+<li>了解 JS
 <ul>
-<li>基本JS语法，能写能读懂，并了解JS库：Jquery，Vue 等，可以对使用开发者工具调试JS</li>
+<li>基本 JS 语法，能写能读懂，并了解 JS 库：Jquery，Vue 等，可以对使用开发者工具调试 JS</li>
 </ul>
 </li>
-<li>了解JSON
+<li>了解 JSON
 <ul>
-<li>了解JSON数据，会序列化和反序列化数据，通过解析JSON对象获取数据内容</li>
+<li>了解 JSON 数据，会序列化和反序列化数据，通过解析 JSON 对象获取数据内容</li>
 </ul>
 </li>
-<li>了解HTTP/HTTPS
+<li>了解 HTTP/HTTPS
 <ul>
 <li>能够分析请求信息和响应信息，可以通过代码构造请求</li>
 </ul>
@@ -181,20 +222,20 @@
 </li>
 <li>会数据库操作
 <ul>
-<li>通过数据库操作对爬取数据进行存储，如：MYSQL语法</li>
+<li>通过数据库操作对爬取数据进行存储，如：MYSQL 语法</li>
 </ul>
 </li>
 <li>会使用抓包工具
 <ul>
-<li>浏览器F12开发者调试工具(推荐：谷歌),Network(网络)栏目可以获取抓包信息</li>
-<li>工具：Charles，Fiddler (可抓包HTTPS，抓包APP)</li>
-<li>通过抓包工具可以过滤出数据接口或者地址，并且分析请求信息和响应信息，定位数据所在的字段或者HTML标签</li>
+<li>浏览器 F12 开发者调试工具(推荐：谷歌),Network(网络)栏目可以获取抓包信息</li>
+<li>工具：Charles，Fiddler (可抓包 HTTPS，抓包 APP)</li>
+<li>通过抓包工具可以过滤出数据接口或者地址，并且分析请求信息和响应信息，定位数据所在的字段或者 HTML 标签</li>
 </ul>
 </li>
 <li>会使用开发者工具
 <ul>
-<li>浏览器F12开启开发者工具</li>
-<li>需要会使用开发者工具调试HTML，CSS，JS</li>
+<li>浏览器 F12 开启开发者工具</li>
+<li>需要会使用开发者工具调试 HTML，CSS，JS</li>
 </ul>
 </li>
 <li>会模拟请求
@@ -205,14 +246,14 @@
 </li>
 <li>能定位数据
 <ul>
-<li>数据在API中：前端/原生APP请求数据API，API返回数据大部分是JSON格式，然后渲染展示</li>
-<li>数据在HTML中：查看页面HTML源代码，如果源代码里有想要获取的数据，就说明在服务端已经绑定好数据在HTML里</li>
-<li>数据在JS代码中：查看页面HTML源代码，如果获取数据不在HTML里，又没有请求数据API，可以看下数据是不是绑定到JS变量里</li>
+<li>数据在 API 中：前端/原生 APP 请求数据 API，API 返回数据大部分是 JSON 格式，然后渲染展示</li>
+<li>数据在 HTML 中：查看页面 HTML 源代码，如果源代码里有想要获取的数据，就说明在服务端已经绑定好数据在 HTML 里</li>
+<li>数据在 JS 代码中：查看页面 HTML 源代码，如果获取数据不在 HTML 里，又没有请求数据 API，可以看下数据是不是绑定到 JS 变量里</li>
 </ul>
 </li>
 <li>会部署
 <ul>
-<li>可以部署到Windows或者Linux服务器，使用工具进行爬虫进程监控，然后进行定时轮训爬取</li>
+<li>可以部署到 Windows 或者 Linux 服务器，使用工具进行爬虫进程监控，然后进行定时轮训爬取</li>
 </ul>
 </li>
 </ul>
@@ -221,7 +262,7 @@
 <blockquote>
 <p>反爬虫可以分为<code>服务端限制</code>和<code>前端限制</code><br>
 <code>服务端限制</code>：服务器端行请求限制，防止爬虫进行数据请求<br>
-<code>前端限制</code>：前端通过CSS和HTML标签进行干扰混淆关键数据，防止爬虫轻易获取数据</p>
+<code>前端限制</code>：前端通过 CSS 和 HTML 标签进行干扰混淆关键数据，防止爬虫轻易获取数据</p>
 </blockquote>
 <p><strong>设置请求头（<code>服务端限制</code>）</strong></p>
 <ul>
@@ -231,43 +272,53 @@
 </ul>
 <p><strong>签名规则（<code>服务端限制</code>）</strong></p>
 <ul>
-<li>如果是JS发起的请求，签名规则可以在JS函数中找到，然后再根据规则去构造签名</li>
-<li>如果是APP发起的请求，可能是前端调用原生封装的方法，或者原生发起的，这个就比较无解，需要反编译APP包，也不一定能成功</li>
+<li>如果是 JS 发起的请求，签名规则可以在 JS 函数中找到，然后再根据规则去构造签名</li>
+<li>如果是 APP 发起的请求，可能是前端调用原生封装的方法，或者原生发起的，这个就比较无解，需要反编译 APP 包，也不一定能成功</li>
 </ul>
 <p><strong>延迟，或者随机延迟（<code>服务端限制</code>）</strong></p>
 <ul>
-<li>如果请求被限制，建议可以试试请求延迟，具体延迟xxx毫秒/x秒，根据实际情况设定合适的时间</li>
+<li>如果请求被限制，建议可以试试请求延迟，具体延迟 xxx 毫秒/x 秒，根据实际情况设定合适的时间</li>
 </ul>
-<p><strong>代理IP（<code>服务端限制</code>）</strong></p>
+<p><strong>代理 IP（<code>服务端限制</code>）</strong></p>
 <ul>
-<li>如果延迟请求还是被限制，或者需要延迟很长时间才不会被限制，那就可以考虑使用代理IP，根据实际场景与限制的规律去运用，一般只要被限制的时候就切换请求的代理IP，这样就基本可以绕过限制</li>
-<li>目前有很多收费的代理IP服务平台，有各种服务方式，具体可以搜索了解下，费用一般都在可以接受的范围</li>
+<li>如果延迟请求还是被限制，或者需要延迟很长时间才不会被限制，那就可以考虑使用代理 IP，根据实际场景与限制的规律去运用，一般只要被限制的时候就切换请求的代理 IP，这样就基本可以绕过限制</li>
+<li>目前有很多收费的代理 IP 服务平台，有各种服务方式，具体可以搜索了解下，费用一般都在可以接受的范围</li>
 </ul>
 <p><strong>登录限制（<code>服务端限制</code>）</strong></p>
 <ul>
-<li>请求带上登录用户的COOKIE信息</li>
-<li>如果登录用户COOKIE信息会在固定周期内失效，那就要找到登录接口，模拟登录，存储COOKIE，然后再发起数据请求，COOKIE失效后重新这个步骤</li>
+<li>请求带上登录用户的 COOKIE 信息</li>
+<li>如果登录用户 COOKIE 信息会在固定周期内失效，那就要找到登录接口，模拟登录，存储 COOKIE，然后再发起数据请求，COOKIE 失效后重新这个步骤</li>
 </ul>
 <p><strong>验证码限制（<code>服务端限制</code>）</strong></p>
 <ul>
 <li>简单验证码，对图片里的字母或者数字进行识别读取，使用识图的模块包可以实现</li>
 <li>复杂验证码，无法通过识图识别，可以考虑使用第三方收费服务</li>
 </ul>
-<p><strong>CSS/HTML混淆干扰限制（<code>前端限制</code>）</strong></p>
+<p><strong>CSS/HTML 混淆干扰限制（<code>前端限制</code>）</strong></p>
 <blockquote>
-<p>前端通过CSS或者HTML标签进行干扰混淆关键数据，破解需要抽样分析，找到规则，然后替换成正确的数据</p>
+<p>前端通过 CSS 或者 HTML 标签进行干扰混淆关键数据，破解需要抽样分析，找到规则，然后替换成正确的数据</p>
 </blockquote>
-<p><strong>1 .</strong>  font-face，自定义字体干扰</p>
-<p>如列子：<a href="https://club.autohome.com.cn/bbs/thread/f79816f3918a7577/52582709-1.html" target="_blank" rel="noopener noreffer">汽车X家论帖子</a>，<a href="http://maoyan.com/films/1182552" target="_blank" rel="noopener noreffer">猫X电影电影评分</a></p>
+<p><strong>1 .</strong> font-face，自定义字体干扰</p>
+<p>如列子：<a href="https://club.autohome.com.cn/bbs/thread/f79816f3918a7577/52582709-1.html" target="_blank" rel="noopener noreffer">汽车 X 家论帖子</a>，<a href="http://maoyan.com/films/1182552" target="_blank" rel="noopener noreffer">猫 X 电影电影评分</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!--css--&gt;</span>
-<span class="c">&lt;!--找到：//k3.autoimg.cn/g13/M05/D3/23/wKjByloAOg6AXB-hAADOwImCtp047..ttf--&gt;</span> 
+<span class="c">&lt;!--找到：//k3.autoimg.cn/g13/M05/D3/23/wKjByloAOg6AXB-hAADOwImCtp047..ttf--&gt;</span>
 <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-    <span class="p">@</span><span class="k">font-face</span> <span class="p">{</span><span class="nt">font-family</span><span class="o">:</span> <span class="s1">&#39;myfont&#39;</span><span class="o">;</span><span class="nt">src</span><span class="o">:</span> <span class="nt">url</span><span class="o">(</span><span class="s1">&#39;//k2.autoimg.cn/g13/M08/D5/DD/wKgH41oAOg6AMyIvAADPhhJcHCg43..eot&#39;</span><span class="o">);</span><span class="nt">src</span><span class="o">:</span> <span class="nt">url</span><span class="o">(</span><span class="s1">&#39;//k3.autoimg.cn/g13/M08/D5/DD/wKgH41oAOg6AMyIvAADPhhJcHCg43..eot?#iefix&#39;</span><span class="o">)</span> <span class="nt">format</span><span class="o">(</span><span class="s1">&#39;embedded-opentype&#39;</span><span class="o">),</span><span class="nt">url</span><span class="o">(</span><span class="s1">&#39;//k3.autoimg.cn/g13/M05/D3/23/wKjByloAOg6AXB-hAADOwImCtp047..ttf&#39;</span><span class="o">)</span> <span class="nt">format</span><span class="o">(</span><span class="s1">&#39;woff&#39;</span><span class="o">);</span><span class="p">}</span>
+  <span class="p">@</span><span class="k">font-face</span> <span class="p">{</span>
+    <span class="nt">font-family</span><span class="o">:</span> <span class="s2">&#34;myfont&#34;</span><span class="o">;</span>
+    <span class="nt">src</span><span class="o">:</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&#34;//k2.autoimg.cn/g13/M08/D5/DD/wKgH41oAOg6AMyIvAADPhhJcHCg43..eot&#34;</span><span class="o">);</span>
+    <span class="nt">src</span><span class="o">:</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&#34;//k3.autoimg.cn/g13/M08/D5/DD/wKgH41oAOg6AMyIvAADPhhJcHCg43..eot?#iefix&#34;</span><span class="o">)</span>
+        <span class="nt">format</span><span class="o">(</span><span class="s2">&#34;embedded-opentype&#34;</span><span class="o">),</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&#34;//k3.autoimg.cn/g13/M05/D3/23/wKjByloAOg6AXB-hAADOwImCtp047..ttf&#34;</span><span class="o">)</span>
+        <span class="nt">format</span><span class="o">(</span><span class="s2">&#34;woff&#34;</span><span class="o">);</span>
+  <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 
 <span class="c">&lt;!--html--&gt;</span>
 <span class="c">&lt;!--会员招募中--&gt;</span>
-<span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="ni">&amp;nbsp;</span>Mercedes<span class="ni">&amp;nbsp;</span>C+<span class="ni">&amp;nbsp;</span>会员招募<span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;font-family: myfont;&#39;</span><span class="p">&gt;</span><span class="ni">&amp;#xf159;</span><span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="ni">&amp;nbsp;</span>Mercedes<span class="ni">&amp;nbsp;</span>C+<span class="ni">&amp;nbsp;</span>会员招募<span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;font-family: myfont;&#34;</span>
+    <span class="p">&gt;</span><span class="ni">&amp;#xf159;</span><span class="p">&lt;/</span><span class="nt">span</span>
+  <span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
 <span class="c">&lt;!--
 </span><span class="c">    从html中获取【html中文编码】=&amp;#xf159
@@ -275,82 +326,81 @@
 </span><span class="c">    匹配发现【ttf中文编码】=uniF159可以与【html中文编码】=&amp;#xf159匹配，在第7个，第7个中文就是&#34;中&#34;
 </span><span class="c">    （抽样分析会发现ttf中中文位置是固定的，中文编码是动态变化的，所以只要映射出【ttf中文编码】索引就可以知道中文字符了）
 </span><span class="c">--&gt;</span>
-
-</code></pre></div><p>破解思路：   <br>
-找到ttf字体文件地址，然后下载下来，使用font解析模块包对ttf文件进行解析，可以解析出一个字体编码的集合，与dom里的文字编码进行映射，然后根据编码在ttf里的序号进行映射出中文</p>
+</code></pre></div><p>破解思路：<br>
+找到 ttf 字体文件地址，然后下载下来，使用 font 解析模块包对 ttf 文件进行解析，可以解析出一个字体编码的集合，与 dom 里的文字编码进行映射，然后根据编码在 ttf 里的序号进行映射出中文</p>
 <blockquote>
-<p>可以使用FontForge/FontCreator工具打开ttf文件进行分析</p>
+<p>可以使用 FontForge/FontCreator 工具打开 ttf 文件进行分析</p>
 </blockquote>
 <hr>
-<p><strong>2 .</strong>  伪元素隐藏式</p>
+<p><strong>2 .</strong> 伪元素隐藏式</p>
 <p>通过伪元素来显示重要数据内容<br>
-如例子：<a href="https://car.autohome.com.cn/config/series/3170.html" target="_blank" rel="noopener noreffer">汽车X家</a></p>
+如例子：<a href="https://car.autohome.com.cn/config/series/3170.html" target="_blank" rel="noopener noreffer">汽车 X 家</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!--css--&gt;</span>
 <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-<span class="p">.</span><span class="nc">hs_kw60_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nc">hs_kw60_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
     <span class="k">content</span><span class="p">:</span> <span class="s2">&#34;一汽&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">hs_kw23_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="p">}</span>
+  <span class="p">.</span><span class="nc">hs_kw23_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
     <span class="k">content</span><span class="p">:</span> <span class="s2">&#34;大众&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">hs_kw26_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="p">}</span>
+  <span class="p">.</span><span class="nc">hs_kw26_configod</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
     <span class="k">content</span><span class="p">:</span> <span class="s2">&#34;奥迪&#34;</span><span class="p">;</span>
-<span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 
 <span class="c">&lt;!--html--&gt;</span>
 <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw60_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    -
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw23_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw26_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span> 
-
-</code></pre></div><p>破解思路：   <br>
-找到样式文件，然后根据HTML标签里class名称，匹配出CSS里对应class中content的内容进行替换</p>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw60_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  -
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw23_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;hs_kw26_configod&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div><p>破解思路：<br>
+找到样式文件，然后根据 HTML 标签里 class 名称，匹配出 CSS 里对应 class 中 content 的内容进行替换</p>
 <hr>
-<p><strong>3 .</strong>  backgroud-image</p>
-<p>通过背景图片的position位置偏移量，显示数字/符号，如：价格，评分等 <br>
-根据backgroud-postion值和图片数字进行映射</p>
+<p><strong>3 .</strong> backgroud-image</p>
+<p>通过背景图片的 position 位置偏移量，显示数字/符号，如：价格，评分等<br>
+根据 backgroud-postion 值和图片数字进行映射</p>
 <hr>
-<p><strong>4 .</strong>  html标签干扰</p>
+<p><strong>4 .</strong> html 标签干扰</p>
 <p>通过在重要数据的标签里加入一些有的没的隐藏内容的标签，干扰数据的获取<br>
-如例子：<a href="http://www.goubanjia.com" target="_blank" rel="noopener noreffer">xxIP代理平台</a></p>
+如例子：<a href="http://www.goubanjia.com" target="_blank" rel="noopener noreffer">xxIP 代理平台</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!--html--&gt;</span>
 <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;ip&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>02<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>.1<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>.1<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;</span>09<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;</span>23<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>5<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>:
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;port GEA&#34;</span><span class="p">&gt;</span>80<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>02<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>.1<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>.1<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;</span>09<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:inline-block;&#34;</span><span class="p">&gt;</span>23<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none;&#34;</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display: inline-block;&#34;</span><span class="p">&gt;</span>5<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  :
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;port GEA&#34;</span><span class="p">&gt;</span>80<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
 <span class="c">&lt;!--js--&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;.ip:eq(0)&gt;*:hidden&#34;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;.ip:eq(0)&#34;</span><span class="p">).</span><span class="nx">text</span><span class="p">()</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;.ip:eq(0)&gt;*:hidden&#34;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&#34;.ip:eq(0)&#34;</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="c">&lt;!--
 </span><span class="c">    输出：202.109.237.35:80
 </span><span class="c">    通过移除干扰标签里有display:none隐藏标签，然后再获取text就不会有干扰的内容了
 </span><span class="c">--&gt;</span>
-</code></pre></div><p>破解思路：   <br>
-过滤掉干扰混淆的HTML标签，或者只读取有效数据的HTML标签的内容</p>
+</code></pre></div><p>破解思路：<br>
+过滤掉干扰混淆的 HTML 标签，或者只读取有效数据的 HTML 标签的内容</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -387,7 +437,7 @@
 <hr>
 <h4 id="供参考代码"><strong>供参考代码</strong></h4>
 <blockquote>
-<p>font解析 C#和Python实现</p>
+<p>font 解析 C#和 Python 实现</p>
 </blockquote>
 <ul>
 <li>C#</li>
@@ -395,7 +445,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="c1">/// 需要引入PresentationCore.dll
 </span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">Test</span><span class="p">()</span> <span class="p">{</span>
             <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">@&#34;F:\font.ttf&#34;</span><span class="p">;</span>
-            <span class="c1">//读取字体文件             
+            <span class="c1">//读取字体文件
 </span><span class="c1"></span>            <span class="n">PrivateFontCollection</span> <span class="n">pfc</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PrivateFontCollection</span><span class="p">();</span>
             <span class="n">pfc</span><span class="p">.</span><span class="n">AddFontFile</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
             <span class="c1">//实例化字体
@@ -439,7 +489,7 @@
 <h4 id="自我推荐"><strong>自我推荐</strong></h4>
 <ul>
 <li>爬虫入门可以参考我的另一篇文章：<a href="http://blog.thankbabe.com/2017/09/25/spider/" target="_blank" rel="noopener noreffer">（大话爬虫的基本套路）</a></li>
-<li>爬虫入门代码可以参考我的Gtihub项目<a href="https://github.com/SFLAQiu/SpiderDemo" target="_blank" rel="noopener noreffer">（SpiderDemo）</a></li>
+<li>爬虫入门代码可以参考我的 Gtihub 项目<a href="https://github.com/SFLAQiu/SpiderDemo" target="_blank" rel="noopener noreffer">（SpiderDemo）</a></li>
 </ul>
 <hr>
 <h4 id="供参考资料"><strong>供参考资料</strong></h4>
@@ -473,10 +523,12 @@
     <div class="post-nav"><a href="/posts/2018-02-22-dh-cxy/" class="prev" rel="prev" title="大话来自一个程序员的反思"><i class="fas fa-angle-left fa-fw"></i>大话来自一个程序员的反思</a>
             <a href="/posts/2018-04-20-graphql/" class="next" rel="next" title="大话GraphQL新手上车">大话GraphQL新手上车<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-</article></div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 
@@ -485,5 +537,5 @@
             </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["SFLYQ"],"clientID":"9362b8fa44f6da7970ff","clientSecret":"0de91223798a99867e642d4338a0768e3cc4a28e","id":"2018-02-27T16:00:00+08:00","owner":"SFLYQ","repo":"sflaqiu.github.com","title":"大话爬虫的实践技巧"}},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/sflaqiu.github.io\/posts\/2018-05-23-shared-experience\/"
-        },"genre": "posts","keywords": "经验沉淀","wordcount":  4597 ,
+        },"genre": "posts","keywords": "经验沉淀","wordcount":  4423 ,
         "url": "http:\/\/sflaqiu.github.io\/posts\/2018-05-23-shared-experience\/","datePublished": "2018-05-23T08:00:00+08:00","dateModified": "2018-05-23T08:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": "SFLYQ"},"author": {
@@ -36,15 +36,33 @@
             },"description": ""
     }
     </script></head>
-    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
-            <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                     <i class="fas fa-adjust fa-fw"></i>
                 </a>
             </div>
@@ -54,13 +72,36 @@
     <div class="header-container">
         <div class="header-wrapper">
             <div class="header-title">
-                <a href="/" title="SFLYQ的博客">SFLYQ的博客</a>
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
             </div>
         </div>
-        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -76,9 +117,9 @@
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">大话后端开发的奇淫技巧大集合</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%80%BB%E7%BB%93/"><i class="far fa-folder fa-fw"></i>总结</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-05-23">2018-05-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4597 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%80%BB%E7%BB%93/"><i class="far fa-folder fa-fw"></i>总结</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2018-05-23">2018-05-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4423 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -116,7 +157,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <p>根据业务场景，将业务抽离成独立模块，对外通过接口提供服务，减少系统复杂度和耦合度，实现可复用，易维护，易拓展</p>
 <p><strong>项目中实践例子：</strong></p>
 <p><strong>Before：</strong></p>
-<p>在返还购APP里有个【我的红包】的功能，用户的红包数据来自多个业务，如：邀请新用户注册领取100元红包，大促活动双倍红包，等各种活动红包，多个活动业务都实现了一套不同规则的红包领取和红包奖励发放的机制，导致红包不可管理，不能复用，难维护难拓展</p>
+<p>在返还购 APP 里有个【我的红包】的功能，用户的红包数据来自多个业务，如：邀请新用户注册领取 100 元红包，大促活动双倍红包，等各种活动红包，多个活动业务都实现了一套不同规则的红包领取和红包奖励发放的机制，导致红包不可管理，不能复用，难维护难拓展</p>
 <p><strong>After：</strong></p>
 <ul>
 <li>重构红包业务</li>
@@ -158,7 +199,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <p>在项目开发中经常会遇到些类似的功能，但是不同的开发人员都各自实现，或者因为不能复用又重新开发一个，导致了类似功能的重复开发，所以我们需要对能够抽离独立服务的功能进行抽离，达到复用的效果，并且可以不断拓展完善，节约了后续开发成本，提高开发效率，易于维护和拓展</p>
 <p><strong>项目中实践例子：</strong></p>
 <p><strong>Before</strong></p>
-<p>在业务中经常需要对用户进行信息通知，如：短信定时通知，APP消息推送，微信通知，等</p>
+<p>在业务中经常需要对用户进行信息通知，如：短信定时通知，APP 消息推送，微信通知，等</p>
 <p>开发人员在接到需求中有通知功能的时候没有考虑后续拓展，就接入第三方信息通知平台，然后简单封装个信息通知方法，后续也有类似信息通知需求的时候，另一个开发人员发现当前这个通知方法无法满足自己的需求，然后又自己去了解第三方平台重新封装了通知方法，或者后续需求加了定时通知的功能，开发人员针对业务去实现了个定时通知功能，但是只能自己业务上使用，其他业务无法接入，没有人去做这块功能的抽离，久而久之就演变成功能重复开发，且不易于维护和拓展</p>
 <p><strong>After</strong></p>
 <p>接触到这种可以抽离通用服务需求的时候，就会与产品确认这种需求是否后续会存在类似的需要，然后建议这把块需求抽离成通用服务，方便后续维护和拓展</p>
@@ -186,20 +227,20 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
         title="通用服务" /></p>
 <hr>
 <h2 id="架构独立服务">架构独立服务</h2>
-<p>项目开发过程中有些需求是与所在项目业务无关，如：收集用户行为习惯，收集商品曝光点击，数据收集提供给BI进行统计报表输出，公用拉新促活业务（柚子街和返还公用），类似这种需求，我们结合应用场景，考虑服务的独立性，以及未来的拓展需要，架构独立项目进行维护，在服务器上独立分布式部署不影响现有主业务服务器资源</p>
+<p>项目开发过程中有些需求是与所在项目业务无关，如：收集用户行为习惯，收集商品曝光点击，数据收集提供给 BI 进行统计报表输出，公用拉新促活业务（柚子街和返还公用），类似这种需求，我们结合应用场景，考虑服务的独立性，以及未来的拓展需要，架构独立项目进行维护，在服务器上独立分布式部署不影响现有主业务服务器资源</p>
 <p><strong>项目中实践例子：</strong></p>
 <p>架构用户行为跟踪独立服务，在开发前预估了下这个服务的请求量，并会有相对大量的并发请求</p>
 <p>架构方案：</p>
 <ul>
-<li>项目搭建选择用nodejs来做服务端
+<li>项目搭建选择用 nodejs 来做服务端
 <ul>
-<li>单进程，基于事件驱动和无阻塞I/O，所以非常适合处理并发请求</li>
-<li>负载均衡：cluster模块/PM2</li>
+<li>单进程，基于事件驱动和无阻塞 I/O，所以非常适合处理并发请求</li>
+<li>负载均衡：cluster 模块/PM2</li>
 </ul>
 </li>
-<li>架构nodejs独立服务</li>
+<li>架构 nodejs 独立服务</li>
 <li>提供服务接口给客户端</li>
-<li>接口不直接DB操作，保证并发下的稳定性</li>
+<li>接口不直接 DB 操作，保证并发下的稳定性</li>
 <li>数据异步入库
 <ul>
 <li>通过程序把数据从：消息队列=&gt;mysql</li>
@@ -235,7 +276,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>优先缓存
 <ul>
-<li>穿透DB问题</li>
+<li>穿透 DB 问题</li>
 </ul>
 </li>
 <li>只读缓存
@@ -290,7 +331,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <li>方式：
 <ul>
 <li>多线程编程</li>
-<li>nodejs异步编程</li>
+<li>nodejs 异步编程</li>
 </ul>
 </li>
 <li>场景：
@@ -304,7 +345,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>方式
 <ul>
-<li>业务接口将客户端上报的数据PUSH到消息队列（MQ中间件），然后就响应结果给用户</li>
+<li>业务接口将客户端上报的数据 PUSH 到消息队列（MQ 中间件），然后就响应结果给用户</li>
 <li>编写独立程序去订阅消息队列，异步处理业务</li>
 </ul>
 </li>
@@ -312,7 +353,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>大促活动整点抢限量红包
 <ul>
-<li>参与成功后委婉提示：预计X天后进行红包发放</li>
+<li>参与成功后委婉提示：预计 X 天后进行红包发放</li>
 </ul>
 </li>
 <li>并发量比较大的业务，且没有其他更好的优化方案，业务允许异步处理</li>
@@ -346,7 +387,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 </blockquote>
 <hr>
 <h4 id="限流">限流</h4>
-<p>在类秒杀的活动中通过限制请求量，可以避免超卖，超领等问题 <br>
+<p>在类秒杀的活动中通过限制请求量，可以避免超卖，超领等问题<br>
 高并发的活动业务，通过前端控流，分散请求，减少并发量</p>
 <ul>
 <li>服务端限流
@@ -372,10 +413,10 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <li>从动态交互，变成静态页面</li>
 </ul>
 </li>
-<li>分流到CDN
+<li>分流到 CDN
 <ul>
-<li>从CDN拉取提前备好的JSON数据</li>
-<li>引导到CDN静态页面</li>
+<li>从 CDN 拉取提前备好的 JSON 数据</li>
+<li>引导到 CDN 静态页面</li>
 </ul>
 </li>
 <li>停止服务
@@ -400,7 +441,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <h2 id="防刷防羊毛党">防刷/防羊毛党</h2>
 <p>大多数公司的产品设计和程序猿对于推广活动业务的防刷意识不强，在活动业务设计和开发的过程中没有把防刷的功能加入业务中，给那些喜欢刷活动的人创造了很多的空子
 等到你发现自己被刷的时候，已经产生了不小的损失，少则几百几千，多则几万</p>
-<p>随着利益的诱惑，现在已经浮现了一个新的职业“刷客”，专业刷互联网活动为生，养了N台手机+N个手机号码+N个微信账号，刷到的奖励金进行提现，刷到活动商品进行低价转手处理，开辟了一条新的灰色产业链</p>
+<p>随着利益的诱惑，现在已经浮现了一个新的职业“刷客”，专业刷互联网活动为生，养了 N 台手机+N 个手机号码+N 个微信账号，刷到的奖励金进行提现，刷到活动商品进行低价转手处理，开辟了一条新的灰色产业链</p>
 <p>我们要拿起武器(代码)进行自我的防御，风控，加高门槛，通过校验和限制减少风险发生的各种可能性，减少风险发生时造成的损失</p>
 <p>这里列出常用套路（具体应用结合业务场景）：</p>
 <p><strong>校验请求合法性</strong></p>
@@ -419,8 +460,8 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 </ul>
 </li>
 <li>设备限制</li>
-<li>IP限制</li>
-<li>微信unionid/openid合法性判断</li>
+<li>IP 限制</li>
+<li>微信 unionid/openid 合法性判断</li>
 <li>验证码/手机短信验证码
 <ul>
 <li>牺牲体验</li>
@@ -458,7 +499,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
         title="防刷套路" /></p>
 <p><strong>附加</strong></p>
 <ul>
-<li>APP/H5中签名规则应该由客户端童鞋开发，然后拓展API给前端JS调用，在H5发起接口请求的时候调用客户端拓展的签名，这样可以避免前端JS里构造签名规则而被发现破解</li>
+<li>APP/H5 中签名规则应该由客户端童鞋开发，然后拓展 API 给前端 JS 调用，在 H5 发起接口请求的时候调用客户端拓展的签名，这样可以避免前端 JS 里构造签名规则而被发现破解</li>
 </ul>
 <hr>
 <h2 id="并发问题">并发问题</h2>
@@ -466,18 +507,18 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>场景：</li>
 </ul>
-<p>当==同用户==多次触发点击，或者通过模拟并发请求，就会出现多操作的问题，比如：签到功能，一天只能签到一次，可以获得1积分，但是并发的情况下会出现用户可以获得多积分的问题</p>
+<p>当==同用户==多次触发点击，或者通过模拟并发请求，就会出现多操作的问题，比如：签到功能，一天只能签到一次，可以获得 1 积分，但是并发的情况下会出现用户可以获得多积分的问题</p>
 <ul>
 <li>剖析：</li>
 </ul>
 <p>简化签到逻辑一般是这样的：</p>
 <p>查询是否有签到记录 &ndash;&gt; 否 &ndash;&gt; 添加今日签到记录 &ndash;&gt; 累加用户积分 &ndash;&gt; 签到成功<br>
 查询是否有签到记录 &ndash;&gt; 是 &ndash;&gt; 今日已经签到过</p>
-<p>假设这个时候用户A并发两个签到请求，这时会同时进入到 【查询是否有签到记录】，然后同时返回否，就会添加两条的签到记录，并且多累加积分</p>
+<p>假设这个时候用户 A 并发两个签到请求，这时会同时进入到 【查询是否有签到记录】，然后同时返回否，就会添加两条的签到记录，并且多累加积分</p>
 <ul>
 <li>解决方案：</li>
 </ul>
-<p>最理想简单的方案，只需要在签到记录表添加【签到日期】+【用户ID】的组合唯一索引，当并发的时候只有会一条可以添加成功，其他添加操作会因为唯一约束而失败</p>
+<p>最理想简单的方案，只需要在签到记录表添加【签到日期】+【用户 ID】的组合唯一索引，当并发的时候只有会一条可以添加成功，其他添加操作会因为唯一约束而失败</p>
 <p><strong>库存负数</strong></p>
 <ul>
 <li>场景：</li>
@@ -487,13 +528,13 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <li>剖析：</li>
 </ul>
 <p>有问题的逻辑流程一般是这样的：</p>
-<p>中奖 &ndash;&gt; 查询奖品库存 &ndash;&gt; 有 &ndash;&gt; 更新奖品库存 &ndash;&gt; 添加中奖纪录  &ndash;&gt; 告知中奖  <br>
+<p>中奖 &ndash;&gt; 查询奖品库存 &ndash;&gt; 有 &ndash;&gt; 更新奖品库存 &ndash;&gt; 添加中奖纪录 &ndash;&gt; 告知中奖<br>
 中奖 &ndash;&gt; 查询奖品库存 &ndash;&gt; 无 &ndash;&gt; 告知无中奖</p>
-<p>假设抽奖活动，当前奖品A只有最后一个库存，然后用户A、B、C，同时参与活动同时中奖奖品都是A，这个时候查询商品库存是存在1个，就会进行更新库存，添加中奖纪录，然后就同时中奖了</p>
+<p>假设抽奖活动，当前奖品 A 只有最后一个库存，然后用户 A、B、C，同时参与活动同时中奖奖品都是 A，这个时候查询商品库存是存在 1 个，就会进行更新库存，添加中奖纪录，然后就同时中奖了</p>
 <ul>
 <li>解决方案：</li>
 </ul>
-<p>最理想根本就不需要用多做一个库存的SELECT奖品库存操作，只需要UPDATE 奖品库存-1 WHERE 奖品库存&gt;=1，UPDATE成功后就说明是有库存的，然后再做后续操作，并发的时候只会有一个用户UPDATE成功</p>
+<p>最理想根本就不需要用多做一个库存的 SELECT 奖品库存操作，只需要 UPDATE 奖品库存-1 WHERE 奖品库存&gt;=1，UPDATE 成功后就说明是有库存的，然后再做后续操作，并发的时候只会有一个用户 UPDATE 成功</p>
 <p><strong>总结：</strong></p>
 <p>在开发业务接口的时候需要把==同用户==和==多用户==并发的场景考虑进去，这样就可以避免在并发的时候产生数据异常问题，导致成本多支出<br>
 可以使用下面的工具进行模拟并发测试：</p>
@@ -511,17 +552,17 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <li>数据解析过滤</li>
 <li>数据构造入库</li>
 </ul>
-<p><strong>使用selenium+Headless自动化测试框架</strong></p>
+<p><strong>使用 selenium+Headless 自动化测试框架</strong></p>
 <ul>
 <li>开发
 <ul>
-<li>推荐用python开发
+<li>推荐用 python 开发
 <ul>
 <li>python+selenium+headless</li>
 </ul>
 </li>
 <li>控制请求频率，避免被平台限制请求</li>
-<li>使用代理IP，绕过请求IP限制</li>
+<li>使用代理 IP，绕过请求 IP 限制</li>
 </ul>
 </li>
 <li>优点
@@ -534,7 +575,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 </li>
 <li>平台接口/页面版本变化，可以快速调整
 <ul>
-<li>只需要调整采集数据所在的HTML元素的位置(class/id)</li>
+<li>只需要调整采集数据所在的 HTML 元素的位置(class/id)</li>
 </ul>
 </li>
 <li>可以用户操作/选中/点击/模拟登陆，等
@@ -570,7 +611,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 </li>
 <li>前端限制
 <ul>
-<li>前端通过CSS和HTML标签进行干扰混淆关键数据，防止爬虫轻易获取数据</li>
+<li>前端通过 CSS 和 HTML 标签进行干扰混淆关键数据，防止爬虫轻易获取数据</li>
 </ul>
 </li>
 </ul>
@@ -590,7 +631,7 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>签名规则
 <ul>
-<li>在JS中找到签名规则</li>
+<li>在 JS 中找到签名规则</li>
 </ul>
 </li>
 </ul>
@@ -600,14 +641,14 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <li>调整请求时间，延迟请求</li>
 </ul>
 </li>
-<li>代理IP
+<li>代理 IP
 <ul>
-<li>切换请求的代理IP，自建/第三方</li>
+<li>切换请求的代理 IP，自建/第三方</li>
 </ul>
 </li>
 <li>登录限制
 <ul>
-<li>带上登录成功后的Cookie/Authorization</li>
+<li>带上登录成功后的 Cookie/Authorization</li>
 </ul>
 </li>
 <li>验证码限制
@@ -627,22 +668,22 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
 <ul>
 <li>font-face，自定义字体干扰
 <ul>
-<li>找到ttf字体文件地址，然后下载下来，使用font解析模块包对ttf文件进行解析，与文字编码进行映射出中文</li>
+<li>找到 ttf 字体文件地址，然后下载下来，使用 font 解析模块包对 ttf 文件进行解析，与文字编码进行映射出中文</li>
 </ul>
 </li>
 <li>伪元素隐藏式
 <ul>
-<li>在CSS里找到xxxx::before {content: &ldquo;中文&rdquo;;}对应的中文</li>
+<li>在 CSS 里找到 xxxx::before {content: &ldquo;中文&rdquo;;}对应的中文</li>
 </ul>
 </li>
-<li>backgroud-image移量
+<li>backgroud-image 移量
 <ul>
-<li>通过背景图片的position位置偏移量和图片中的内容进行映射</li>
+<li>通过背景图片的 position 位置偏移量和图片中的内容进行映射</li>
 </ul>
 </li>
-<li>html标签干扰
+<li>html 标签干扰
 <ul>
-<li>过滤掉干扰混淆的HTML标签，或者只读取有效数据的HTML标签的内容</li>
+<li>过滤掉干扰混淆的 HTML 标签，或者只读取有效数据的 HTML 标签的内容</li>
 </ul>
 </li>
 </ul>
@@ -693,10 +734,12 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
     <div class="post-nav"><a href="/posts/2018-04-20-graphql/" class="prev" rel="prev" title="大话GraphQL新手上车"><i class="fas fa-angle-left fa-fw"></i>大话GraphQL新手上车</a>
             <a href="/posts/2018-09-13-anquan-guama/" class="next" rel="next" title="记一次站点被挂马问题排查">记一次站点被挂马问题排查<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-</article></div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 
@@ -705,5 +748,5 @@ Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这
             </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["SFLYQ"],"clientID":"9362b8fa44f6da7970ff","clientSecret":"0de91223798a99867e642d4338a0768e3cc4a28e","id":"2018-05-23T08:00:00+08:00","owner":"SFLYQ","repo":"sflaqiu.github.com","title":"大话后端开发的奇淫技巧大集合"}},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>
