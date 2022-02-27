@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.88.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>今天你设计了吗？ &middot; My New Hugo Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="http://sflaqiu.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://sflaqiu.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://sflaqiu.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://sflaqiu.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://sflaqiu.github.io/"><h1>My New Hugo Site</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://sflaqiu.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2022. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>今天你设计了吗？</h1>
+  <time datetime=2022-01-01T08:00:00&#43;0800 class="post-date">Sat, Jan 1, 2022</time>
+  <h3 id="背景">背景</h3>
+<p>在开发过程中你是否有遇到过这样的苦恼？产品发来一个需求，没做过，但是看完需求感觉应该处理起来很简单，然后找到对应的业务代码，发现代码像打乱的毛线一样理不清楚，各种逻辑嵌套，各种特殊判断处理，想要拓展维护个内容却无从下手，一边看着代码，一边用手拨动着本就为数不多的秀发，然后口吐芬芳 。
+<img src="/imgs//design2.png" alt=""></p>
+<p>有没发现一个问题，为什么业务不复杂，但是随着产品迭代，经过不断拓展和维护，慢慢的代码就越做越乱，你可以说产品想法天马星空，人员流动大，多人参与慢慢的就被做乱了，这可能是个不错的借口，但是其中本质的问题还是前期思考的太少，没有进行合理的抽象设计，没有去前瞻性的去预埋一些未来可拓展性的内容，所以最终导致了后来的局面。</p>
+<p>经常听到有经验的开发者说开发前多思考，不要一拿到需求就习惯性的一顿操作，反手就定义一个function根据需求逻辑一条龙写到底。</p>
+<p>所以面对相对复杂的需求我们需要进行抽象思考，尽可能做到设计出来的东西是解决一类问题，而不是单单解决当前问题，然后在代码实现上也要面向抽象开发，这样才能做到真正的高质量代码，可维护性和可拓展性高，才能沉淀出可复用，健壮性强的系统。</p>
+<p>那么我们要如何去抽象呢？面对需求的抽象思维这个需要平时多锻炼，拿到需求多想多思考，不要急于求成，主要围绕着这几大要素：可维护性、可拓展性、可复用性，安全性去设计解决方案，至于代码上的抽象就可以使用下面的方式。</p>
+<p>不卖关子了，是时候请出今天的主角：《设计模式》，简单的说设计模式就是开发者们的经验沉淀，通过学习设计模式并在业务开发过程中加以使用，可以让代码的实现更容易拓展和维护，提高整体代码质量，也可以作为开发之间沟通的专业术语，提到某个模式，可以马上get到代码设计，减少沟通的成本。</p>
+<blockquote>
+<p>这里就不一一介绍23种设计模式和设计模式的6个原则，可以google回顾下</p>
+</blockquote>
+<blockquote>
+<p>推荐：<a href="https://refactoringguru.cn/design-patterns/catalog">学习设计模式地址</a></p>
+</blockquote>
+<p>下面就将结合当前项目的bad case，手把手的使用设计模式进行重构，其中会用到多种设计模式的使用，并且体现了设计模式的中的几个原则，做好准备，发车了。</p>
+<h3 id="举例">举例</h3>
+<p>需求背景概要：</p>
+<p>APP首页功能，用模块化的方式去管理配置，后台可以配置模块标识和模块排序，展示条件等，首页API接口获取当前用户的模块列表，并构造模块数据展示。</p>
+<p>API Response Data</p>
+<blockquote>
+<p>伪响应数据，忽略掉不重要或者重复的数据</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+	<span style="color:#f92672">&#34;code&#34;</span>: <span style="color:#ae81ff">0</span>,
+	<span style="color:#f92672">&#34;data&#34;</span>: {
+		<span style="color:#f92672">&#34;tools&#34;</span>: {
+			<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">--</span> <span style="color:#960050;background-color:#1e0010">模块信息</span> <span style="color:#960050;background-color:#1e0010">--</span>
+			<span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#ae81ff">744</span>,
+			<span style="color:#f92672">&#34;icon&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+			<span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+			<span style="color:#f92672">&#34;sub_title&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+			<span style="color:#f92672">&#34;module&#34;</span>: <span style="color:#e6db74">&#34;lm_tools&#34;</span>,
+			<span style="color:#f92672">&#34;sort&#34;</span>: <span style="color:#ae81ff">1</span>,
+			<span style="color:#f92672">&#34;is_lock&#34;</span>: <span style="color:#66d9ef">true</span>,
+			<span style="color:#f92672">&#34;is_show&#34;</span>: <span style="color:#66d9ef">true</span>,
+			<span style="color:#f92672">&#34;more_text&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+			<span style="color:#f92672">&#34;more_uri&#34;</span>: <span style="color:#e6db74">&#34;xxx:///tools/more&#34;</span>,
+			<span style="color:#f92672">&#34;list&#34;</span>: [
+				<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">--</span> <span style="color:#960050;background-color:#1e0010">模块展示数据</span> <span style="color:#960050;background-color:#1e0010">--</span>
+			]
+		},
+		<span style="color:#f92672">&#34;my_baby&#34;</span>: {
+			<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">...</span> <span style="color:#960050;background-color:#1e0010">...</span>
+		},
+		<span style="color:#f92672">&#34;knowledge_parenting&#34;</span>: {
+			<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">...</span> <span style="color:#960050;background-color:#1e0010">...</span>
+		},
+		<span style="color:#f92672">&#34;early_due&#34;</span>: {
+			<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">...</span> <span style="color:#960050;background-color:#1e0010">...</span>
+		},
+
+		<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">...</span> <span style="color:#960050;background-color:#1e0010">...</span>
+
+		<span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
+}
+</code></pre></div><p>Before Code</p>
+<blockquote>
+<p>伪代码，忽略掉一些不重要的code</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">hm</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">HomeModule</span>) <span style="color:#a6e22e">GetHomeData</span>() <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{} {
+  <span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
+	<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// 获取模块列表
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">module</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lm</span>.<span style="color:#a6e22e">GetHomeSortData</span>()
+
+	<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// 构造每个模块的数据
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">module</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">moduleList</span> {
+		<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">Module</span> {
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;my_baby&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;my_baby&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;lm_tools&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;lm_tools&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;weight&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;weight&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;diagnose&#34;</span>:
+				<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;diagnose&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;weather&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;weather&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;early_edu&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;early_edu&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;today_knowledge&#34;</span>:
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">data</span>[<span style="color:#e6db74">&#34;tips&#34;</span>]=<span style="color:#a6e22e">list</span>
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">data</span>[<span style="color:#e6db74">&#34;life_video&#34;</span>]=<span style="color:#a6e22e">lifeVideo</span>
+			<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">result</span>[<span style="color:#e6db74">&#34;today_knowledge&#34;</span>] = <span style="color:#a6e22e">data</span>
+		<span style="color:#66d9ef">default</span>:
+			<span style="color:#a6e22e">result</span>[<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">Module</span>] = <span style="color:#a6e22e">module</span>
+		}
+		<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>
+	}
+</code></pre></div><p>看完这个代码，是否有一种要坏起来的味道，随着模块不断增加，case会越来越多，而且每个case里面又有一些针对版本、针对AB、一些特殊处理等，让代码变得又臭又长，越来越难去拓展和维护，并且每次维护或者拓展都可能在<code>GetHomeData()</code> 方法里在不断往里面添油加醋，不小心就会对整个接口产生影响。</p>
+<p>那么我们要如何去重构呢，这就要抽象起来，这个业务本身就已经有模块相关抽象设计，这里就不进行调整，主要是针对代码上的抽象，结合设计模式进行改造。</p>
+<p>以下就是重构的过程。</p>
+<p>刚开始的时候，看到这种case 判断，然后做模块数据的聚合，我第一反应是，能否可以使用工厂模式，定义一个 <code>interface</code>，每个模块定义一个<code>struct</code> 实现接口<code>ExportData()</code> 方法，通过工厂方法去根据模块标识创建对象，然后调用导出数据方法进行数据上的聚合 。</p>
+<p>但是在评估的过程中，发现有些模块数据里又聚合了多个不同业务知识内容的数据，单纯的工厂模式又不太合适，最后决定使用组合模式，结构型设计模式，可以将对象进行组合，实现一个类似层级对象关系，如：</p>
+<pre tabindex="0"><code># 首页模块
+home
+	- my_baby
+	- weight
+	- early_edu
+	- today_knowledge
+		- tips
+		- life_video
+	- weather
+	- ... ...
+</code></pre><p>这里我重新定义了下名词，后台配置的是模块，在代码实现上我把每个模块里展示的数据定义成 组件，组件又可以分成 单一组件 和 复合组件，复合组件就是使用了多个单一组件组成。</p>
+<p>UML结构图：</p>
+<p><img src="/imgs//design1.png" alt=""></p>
+<p>Refactor After Code：</p>
+<p>定义组件接口 IElement ：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// IElement 组件接口
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IElement</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#75715e">// Add 添加组件，单一组件，可以不用实现具体方法内容
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">compUni</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">compo</span> <span style="color:#a6e22e">IElement</span>)
+	<span style="color:#75715e">// ExportData 输出组件数据
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>)
+}
+</code></pre></div><p>定义组件类型枚举</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// EElement 组件类型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">EElement</span> <span style="color:#66d9ef">string</span>
+
+<span style="color:#66d9ef">const</span> (
+	<span style="color:#a6e22e">EElementTips</span>             <span style="color:#a6e22e">EElement</span> = <span style="color:#e6db74">&#34;tips&#34;</span>            <span style="color:#75715e">// 贴士
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">EElementLifeVideo</span>        <span style="color:#a6e22e">EElement</span> = <span style="color:#e6db74">&#34;life_video&#34;</span>      <span style="color:#75715e">// 生命一千天
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">EElementEarlyEdu</span>         <span style="color:#a6e22e">EElement</span> = <span style="color:#e6db74">&#34;early_edu&#34;</span>       <span style="color:#75715e">// 早教
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">EElementBaby</span>              <span style="color:#a6e22e">EElement</span> = <span style="color:#e6db74">&#34;baby&#34;</span>             <span style="color:#75715e">// 宝宝
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ECompositeTodayKnowledge</span> <span style="color:#a6e22e">EElement</span> = <span style="color:#e6db74">&#34;today_knowledge&#34;</span> <span style="color:#75715e">// 今日知识
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// ....
+</span><span style="color:#75715e"></span>)
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ec</span> <span style="color:#a6e22e">EElement</span>) <span style="color:#a6e22e">ToStr</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> string(<span style="color:#a6e22e">ec</span>)
+}
+</code></pre></div><p>单一组件的实现</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// ElemTips 贴士组件
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ElemTips</span> <span style="color:#66d9ef">struct</span> {
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCompoTips</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">ElementTips</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ElementTips</span>{}
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ElementTips</span>) <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">compoUni</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">comp</span> <span style="color:#a6e22e">IElement</span>) {
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElementTips</span>) <span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">tips</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}{
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">1</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;贴士1&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">2</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;贴士2&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">3</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;贴士3&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">4</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;贴士4&#34;</span>,
+		},
+	}
+
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tips</span>, <span style="color:#66d9ef">nil</span>
+}
+
+<span style="color:#75715e">// ElemLifeVideo 生命一千天组件
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ElemLifeVideo</span> <span style="color:#66d9ef">struct</span> {
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCompoLifeVideo</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">ElementLifeVideo</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ElementLifeVideo</span>{}
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElementLifeVideo</span>) <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">compoUni</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">comp</span> <span style="color:#a6e22e">IElement</span>) {
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElementLifeVideo</span>) <span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">lifeVideos</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}{
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">1</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;生命一千天1&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">2</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;生命一千天2&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">3</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;生命一千天3&#34;</span>,
+		},
+		{
+			<span style="color:#e6db74">&#34;id&#34;</span>:    <span style="color:#ae81ff">4</span>,
+			<span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;生命一千天4&#34;</span>,
+		},
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lifeVideos</span>, <span style="color:#66d9ef">nil</span>
+}
+
+<span style="color:#75715e">// ... ...
+</span></code></pre></div><p>复合组件:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 今日知识，组合多个dan&#39;yi组件
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ElemTodayKnowledge</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">Composite</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#a6e22e">IElement</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCompoTodayKnowledge</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">ElemTodayKnowledge</span> {
+	<span style="color:#a6e22e">factory</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewElementFactory</span>()
+	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> new(<span style="color:#a6e22e">ElemTodayKnowledge</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">EElementTips</span>.<span style="color:#a6e22e">ToStr</span>(), <span style="color:#a6e22e">factory</span>.<span style="color:#a6e22e">CreateElement</span>(<span style="color:#a6e22e">EElementTips</span>.<span style="color:#a6e22e">ToStr</span>()))
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">EElementEarlyEdu</span>.<span style="color:#a6e22e">ToStr</span>(), <span style="color:#a6e22e">factory</span>.<span style="color:#a6e22e">CreateElement</span>(<span style="color:#a6e22e">EElementEarlyEdu</span>.<span style="color:#a6e22e">ToStr</span>()))
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ElemTodayKnowledge</span>) <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">compoUni</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">comp</span> <span style="color:#a6e22e">IElement</span>) {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Composite</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Composite</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#a6e22e">IElement</span>{}
+	}
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Composite</span>[<span style="color:#a6e22e">compoUni</span>] = <span style="color:#a6e22e">comp</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElemTodayKnowledge</span>) <span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}{}
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">uni</span>, <span style="color:#a6e22e">compo</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Composite</span> {
+		<span style="color:#a6e22e">data</span>[<span style="color:#a6e22e">uni</span>], <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">compo</span>.<span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span>)
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span>, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p>因为有些知识数据的内容已经有相关实现，并且可以构造对象进行调用，我们需要做的是根据组件需求适配成组件需要的数据结构进行输出，这里又引入了适配器模式，可以使用适配器模式，将其适配成当前组件需要的数据结构输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// ElemEarlyDduAdapter 早教组件 - 适配
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ElemEarlyDduAdapter</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">edu</span> <span style="color:#a6e22e">earlyEdu</span>.<span style="color:#a6e22e">ThemeManager</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewElementLifeVideoAdapter</span>(<span style="color:#a6e22e">edu</span> <span style="color:#a6e22e">earlyEdu</span>.<span style="color:#a6e22e">ThemeManager</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">ElemEarlyDduAdapter</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ElemEarlyDduAdapter</span>{<span style="color:#a6e22e">edu</span>: <span style="color:#a6e22e">edu</span>}
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElemEarlyDduAdapter</span>) <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">compoUni</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">comp</span> <span style="color:#a6e22e">IElement</span>) {
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">ElemEarlyDduAdapter</span>) <span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}) (<span style="color:#66d9ef">interface</span>{}, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">age</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parameter</span>[<span style="color:#e6db74">&#34;age&#34;</span>].(<span style="color:#66d9ef">uint32</span>)
+	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">ok</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;缺少age&#34;</span>)
+	}
+	<span style="color:#a6e22e">birthday</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parameter</span>[<span style="color:#e6db74">&#34;birthday&#34;</span>].(<span style="color:#66d9ef">string</span>)
+	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">ok</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;缺少birthday&#34;</span>)
+	}
+	<span style="color:#a6e22e">list</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">edu</span>.<span style="color:#a6e22e">GetList</span>(<span style="color:#a6e22e">age</span>, <span style="color:#a6e22e">birthday</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">list</span>, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p>对象的创建需要进行统一管理，便于后续的拓展和替换，这里引入工厂模式，封装组件的对象创建，通过工厂方法去创建组件对象。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// ElemFactory 组件工厂
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ElemFactory</span> <span style="color:#66d9ef">struct</span> {
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewElementFactory</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">ElemFactory</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ElemFactory</span>{}
+}
+
+<span style="color:#75715e">// CreateElement 内容组件对象工厂
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#a6e22e">ElemFactory</span>) <span style="color:#a6e22e">CreateElement</span>(<span style="color:#a6e22e">compType</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">IElement</span> {
+	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">compType</span> {
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">EElementBaby</span>.<span style="color:#a6e22e">ToStr</span>():
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">NewCompoBaby</span>()
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">EElementEarlyEdu</span>.<span style="color:#a6e22e">ToStr</span>():
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">NewElementLifeVideoAdapter</span>(<span style="color:#a6e22e">earlyEdu</span>.<span style="color:#a6e22e">ThemeManager</span>{})
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">EElementLifeVideo</span>.<span style="color:#a6e22e">ToStr</span>():
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">NewCompoLifeVideo</span>()
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">EElementTips</span>.<span style="color:#a6e22e">ToStr</span>():
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">NewCompoTips</span>()
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">ECompositeTodayKnowledge</span>.<span style="color:#a6e22e">ToStr</span>():
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">NewCompoTodayKnowledge</span>()
+	<span style="color:#66d9ef">default</span>:
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+	}
+}
+</code></pre></div><p>辣妈首页模块数据聚合：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">HomeModule</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">GCtx</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewHomeModule</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">HomeModule</span> {
+	<span style="color:#75715e">// 构建模块对象
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">lh</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">HomeModule</span>{
+		<span style="color:#a6e22e">GCtx</span>: <span style="color:#a6e22e">ctx</span>,
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lh</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lh</span> <span style="color:#a6e22e">HomeModule</span>) <span style="color:#a6e22e">GetHomeModules</span>() <span style="color:#66d9ef">interface</span>{} {
+
+	<span style="color:#75715e">// 请request context 上文获取请求参数
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">parameter</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}{
+		<span style="color:#e6db74">&#34;baby_id&#34;</span>:  <span style="color:#ae81ff">22000025</span>,
+		<span style="color:#e6db74">&#34;birthday&#34;</span>: <span style="color:#e6db74">&#34;2021-12-11&#34;</span>,
+		<span style="color:#e6db74">&#34;age&#34;</span>:      uint32(<span style="color:#ae81ff">10</span>),
+		<span style="color:#75715e">// ... ...
+</span><span style="color:#75715e"></span>	}
+
+	<span style="color:#75715e">// 从db获取模块列表
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">compos</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{
+		<span style="color:#e6db74">&#34;early_edu&#34;</span>,
+		<span style="color:#e6db74">&#34;baby&#34;</span>,
+		<span style="color:#e6db74">&#34;tips&#34;</span>,
+		<span style="color:#e6db74">&#34;today_knowledge&#34;</span>,
+	}
+
+	<span style="color:#75715e">// 组装组件
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">elements</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">IElement</span>{}
+	<span style="color:#a6e22e">elementFactory</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">NewElementFactory</span>()
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">compoUni</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">compos</span> {
+		<span style="color:#a6e22e">comp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">elementFactory</span>.<span style="color:#a6e22e">CreateElement</span>(<span style="color:#a6e22e">compoUni</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">comp</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">continue</span>
+		}
+		<span style="color:#a6e22e">elements</span>[<span style="color:#a6e22e">compoUni</span>] = <span style="color:#a6e22e">comp</span>
+	}
+
+	<span style="color:#75715e">// 聚合数据
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}{}
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">uni</span>, <span style="color:#a6e22e">compo</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">elements</span> {
+		<span style="color:#a6e22e">data</span>[<span style="color:#a6e22e">uni</span>], <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">compo</span>.<span style="color:#a6e22e">ExportData</span>(<span style="color:#a6e22e">parameter</span>)
+	}
+
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span>
+}
+</code></pre></div><p>改造相关内容，over ~</p>
+<p>经过改造，后续再拓展或者维护首页模块数据的时候，基本不需要动到获取数据的方法：<code>GetHomeModules()</code> ，拓展的时候只需要去拓展一个组件枚举类型，然后定义组件 <code>struct</code> 实现 组件接口 <code>IElement</code> 方法，在组件工厂 <code>ElemFactory</code> 中拓展对象创建，维护组件的时候也只需要对<code>ExportData()</code> 修改。</p>
+<p>这次的重构方案中体现了设计模式的几个原则，我们抽象了组件接口，针对接口编程，不针对实现编程，满足接口隔离原则，并且对修改关闭，对拓展开放，满足了开闭原则。</p>
+<h3 id="总结">总结：</h3>
+<p>最后，为了减少重复的代码开发，避免做添油加醋的事情，为了项目的可维护性，可拓展性，也避免成为后人口吐芬芳的对象，我们需要设计起来，实现可以应对变化，有弹性的系统。</p>
+
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
