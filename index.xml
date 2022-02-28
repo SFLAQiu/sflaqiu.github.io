@@ -14,6 +14,13 @@
     <guid>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</guid>
     <description><![CDATA[背景 在开发过程中你是否有遇到过这样的苦恼？产品发来一个需求，没做过，但是看完需求感觉应该处理起来很简单，然后找到对应的业务代码，发现代码像打]]></description>
 </item><item>
+    <title>大话接口性能优化策略</title>
+    <link>http://sflaqiu.github.io/posts/2021-06-15-api-optimize/</link>
+    <pubDate>Tue, 15 Jun 2021 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2021-06-15-api-optimize/</guid>
+    <description><![CDATA[前导 接口性能优化，这个在长期的开发中都是一直持续要做的事情，因为随着业务增长，用户使用量增加，业务复杂度增加，业务表数据量和请求量的增加，接]]></description>
+</item><item>
     <title>大话后端开发的奇淫技巧-2</title>
     <link>http://sflaqiu.github.io/posts/2020-12-01-shared-experience-2/</link>
     <pubDate>Tue, 01 Dec 2020 08:00:00 &#43;0800</pubDate>
@@ -69,12 +76,5 @@
     <author>作者</author>
     <guid>http://sflaqiu.github.io/posts/2019-02-17-dahua-php/</guid>
     <description><![CDATA[前言 近期因公司内部转岗，开始参与 PHP 项目进行后端开发，一直都是强类型写的比较多，弱类型语言也有接触了一些，如：nodejs，python，做一]]></description>
-</item><item>
-    <title>记一次站点被挂马问题排查</title>
-    <link>http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/</link>
-    <pubDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/</guid>
-    <description><![CDATA[起因，在下班准备回家之际，收到几条朋友发来的信息，说他的网站在百度搜索做信息流广告推广，但是从百度搜索点击打开就会跳转的博彩网站，让我帮忙排]]></description>
 </item></channel>
 </rss>

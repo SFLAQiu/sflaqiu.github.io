@@ -11,5 +11,12 @@
     <author>作者</author>
     <guid>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</guid>
     <description><![CDATA[背景 在开发过程中你是否有遇到过这样的苦恼？产品发来一个需求，没做过，但是看完需求感觉应该处理起来很简单，然后找到对应的业务代码，发现代码像打]]></description>
+</item><item>
+    <title>大话接口性能优化策略</title>
+    <link>http://sflaqiu.github.io/posts/2021-06-15-api-optimize/</link>
+    <pubDate>Tue, 15 Jun 2021 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2021-06-15-api-optimize/</guid>
+    <description><![CDATA[前导 接口性能优化，这个在长期的开发中都是一直持续要做的事情，因为随着业务增长，用户使用量增加，业务复杂度增加，业务表数据量和请求量的增加，接]]></description>
 </item></channel>
 </rss>

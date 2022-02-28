@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>大话接口性能优化策略 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="大话接口性能优化策略" />
+<meta property="og:description" content="前导 接口性能优化，这个在长期的开发中都是一直持续要做的事情，因为随着业务增长，用户使用量增加，业务复杂度增加，业务表数据量和请求量的增加，接" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2021-06-15-api-optimize/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-15T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-15T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="大话接口性能优化策略"/>
+<meta name="twitter:description" content="前导 接口性能优化，这个在长期的开发中都是一直持续要做的事情，因为随着业务增长，用户使用量增加，业务复杂度增加，业务表数据量和请求量的增加，接"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2021-06-15-api-optimize/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2020-12-01-shared-experience-2/" /><link rel="next" href="http://sflaqiu.github.io/posts/2022-01-20-design-pattern/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "大话接口性能优化策略",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2021-06-15-api-optimize\/"
+        },"genre": "posts","keywords": "接口优化","wordcount":  2643 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2021-06-15-api-optimize\/","datePublished": "2021-06-15T08:00:00+08:00","dateModified": "2021-06-15T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">大话接口性能优化策略</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%90%8E%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>后端</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-06-15">2021-06-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2643 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;<span id="/posts/2021-06-15-api-optimize/" class="leancloud_visitors" data-flag-title="大话接口性能优化策略">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h4 id="前导">前导</h4>
+<p>接口性能优化，这个在长期的开发中都是一直持续要做的事情，因为随着业务增长，用户使用量增加，业务复杂度增加，业务表数据量和请求量的增加，接口从原来100ms左右，逐渐变成几百ms，甚至个别请求到几s，所以我们就需要对业务中，平均请求响应时间比较慢的接口进行性能优化</p>
+<p>筛选性能问题的接口，我们的规则是所有请求的95分位中，超过300ms的占比较大的接口就需要进行优化了，至于占多少比列就要要开始优化，我觉得还是要看具体看接口在业务中的重要性，有时间竟可能的把95分位中300ms+占比&gt;=1%的接口，进行优化</p>
+<h4 id="先排查mysql">先排查mysql</h4>
+<p>在优化接口前，需要对导致接口性能问题的位置进行定位，根据经验，一般导致接口性能的很大一部分问题就是sql的慢查询，比如：部分用户产生的数据较多，导致这部分用户查询较慢，或者表数据量较大，没有设计索引，或者有索引，但是因为查询条件，排序条件等，无法有效的利用到索引</p>
+<h4 id="慢查询排查">慢查询排查</h4>
+<p>我们的慢语句有进行ELK收集，mysql配置了slow_query_time&gt;=1s 的 进行slow_query_log记录，在kibana 中对mysql_slow group中进行查询当前接口设计的大表的慢语句查询，看看是否有相关慢语句记录，拿到慢语句后，进行mysql explain 性能分析，看下查询使用哪个索引：key，然后看下查询是否高效：type，看下预估数据行数：rows，查询附加条件：extra，通过查询分析，对索引进行优化，或者对查询语句进行优化，充分利用索引，让查询更佳的高效</p>
+<p>具体索引explain的详细说明和优化策略参考：</p>
+<ul>
+<li><a href="https://juejin.cn/post/6844904035900719111" target="_blank" rel="noopener noreffer">一张图彻底搞懂MySQL的 explain</a></li>
+<li><a href="https://juejin.cn/post/6867180058549682184" target="_blank" rel="noopener noreffer">MySQL索引如何优化？二十条铁则送给你</a></li>
+</ul>
+<h4 id="冗余常用关联表字段">冗余常用关联表字段</h4>
+<p>对于部分业务接口中，涉及关联其他表查询部分字段等，将其中使用率较高，并且不会频繁更新的关联字段，适当设置冗余字段到业务表中，这样可以省去关联查询时间</p>
+<h4 id="存储统计数据">存储统计数据</h4>
+<p>对于涉及表统计查询的接口，可以将查询中，统计结果变化频率不高的查询，进行统计结果的存储（表存储/redis缓存），一旦相关数据产生变化就进行重置/删除，查询的时候优先从存储中获得统计结果，不存在进行select查询，并更新到存储中，存在就直接返回存储的统计结果，通过这种方式，可以省去频繁的统计查询时间</p>
+<h4 id="存储查询条件字段">存储查询条件字段</h4>
+<p>存储查询条件的目的是，可以通过存储的查询条件字段，保障后续查询的时候利用上这个条件，将查询范围缩小，并且可以重复利用索引条件，进行高效查询，如：</p>
+<pre tabindex="0"><code>
+-- 消息表 srv_msg，索引：idx_user_id_msg_at
+--  status=1 新消息，2 待读，3 已读
+
+-- 查询待读消息 + 已读的历史消息
+SELECT id,user_id,msg,status,msg_at,create_at,update_at
+FROM srv_msg
+WHERE user_id=1 AND msg_at&lt;:msg_at AND  status IN(1,2) 
+ORDER BY msg_at DESC
+
+
+-- 用户进入到消息列表，访问第一页时
+
+-- 消息更新为待读
+UPDATE srv_msg
+SET status=3
+WHERE user_id=1 AND status=2 
+
+-- 待读消息更新成已读
+UPDATE srv_msg
+SET status=2
+WHERE user_id=1 AND status=1 
+
+</code></pre><p>当消息表到千万，并且部分用户的消息特别多，发现这部分用户update的效率很低，explain 下查询，type=ref，key=idx_user_id_msg_at，filtered=10.00， row=1w+，很明了，虽然有使用索引，但是查询涉及查询行数过多，所以导致更新查询效率很慢</p>
+<p>索引只利用了user_id，msg_at没有用到，也不合适将status加入到索引中，那要怎么办呢？
+最后的优化方案是，将用户进入到消息首页的时间，进行存储到用户相关附加表的一个字段中（last_msg_at）,
+然后 update 条件加上 msg_at&lt;last_msg_at , 这样就可以充分利用索引，过滤掉大部分数据，加上这个条件后，再explain row=个位数</p>
+<h4 id="大表归档">大表归档</h4>
+<p>随着业务增长，数据量爆增，单表数据达到大几亿，并且占用存储空间也比较大，索引效率变低，增对这种场景，我们要如何节约服务器资源，并且又可以不影响查询效率呢？</p>
+<p>方案1，表归档+压缩</p>
+<p>根据一定的纬度对表进行垂直拆分，归档，比如：消息表，用户一般就关心最近的新消息，很少会去查询历史较长的消息信息，可以将表拆分成主表和历史表</p>
+<p>insert写入到主表里，大于一个月的数据，DBA通过数据迁移工具（pt-archiver数据归档利器），定时将超出时间的数据迁移到历史消息表中</p>
+<p>然后业务接口进行调整，优先从主表中查询消息，如果不足分页，在查询历史表</p>
+<p>这样处理后，大部分的用户都是查看最近一个月的消息，所以大部分查询都是命中主表，并且主表的数量会比较少，提高了查询的效率</p>
+<p>针对这种类型的业务大表，可以根据时间进行表拆分，然后查询的时候，进行年份，或者历史查询，再查询到对应的归档表中</p>
+<p>对于大表归档后，因为表数量较多，但是使用率不高，同时又占用比较大的存储资源，这里可以同时对大表进行表压缩</p>
+<p>压缩表从名字上来看，简单理解为压缩后的表，也就是把原始表根据一定的压缩算法按照一定的压缩比率压缩后生成的表，可以节省磁盘 IO，减少网络 IO</p>
+<p>将表的row_format 设置为 compressed，通过指定 key_block_size，来设置压缩表的页大小，设置后可以对大表压缩率大约为 50%</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://www.searchdoc.cn/rdbms/mysql/dev.mysql.com/doc/refman/5.7/en/innodb-compression-background.com.coder114.cn.html" target="_blank" rel="noopener noreffer">InnoDB表压缩官方文档</a></li>
+</ul>
+<p>方案2，表分片</p>
+<p>通过一定的纬度，如：用户ID取模分表，将不同的模的数据分配到不同的表中，通过大表水平拆分多张小表，从而达到提高查询效率的效果</p>
+<p>水平拆分会增加开发的复杂度，并且需要进行数据的迁移，以及考虑后续扩容，所以不到万不得已，不要过度设计</p>
+<ul>
+<li>proxy 层</li>
+<li>client 层</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li><a href="https://tech.meituan.com/2016/11/18/dianping-order-db-sharding.html" target="_blank" rel="noopener noreffer">大众点评订单系统分库分表实践</a></li>
+</ul>
+<h4 id="增加缓存">增加缓存</h4>
+<p>对于查询请求量较大的业务接口，并且数据变化频率不高，可以添加数据缓存，减少对数据库的频繁查询</p>
+<p>缓存可以做多级，比如：服务端缓存+redis缓存，优先从web应用所在的服务器缓存中获取数据，不存在再从redis中获取，然后再从db中获取，具体缓存方案和缓存策略，根据具体的业务设计解决方案</p>
+<h4 id="异步编程">异步编程</h4>
+<p>通过异步线程/golang协程，对查询较多并且相互之前不会互相依赖的查询操作，进行异步并行查询处理，然后等待多个数据查询都处理完成后，在聚合数据输出，通过并行的查询，减少了串行的相互等待的时间</p>
+<h4 id="异步消费">异步消费</h4>
+<p>对于非主要流程的业务操作，并且可以允许异步处理，可以将数据入列到队列中，然后通过脚本进程进行异步消费，减少非主业务流程的一些附加业务操作，占用请求的时间，这样调整后，让接口功能佳清晰，同时可以达到业务之间的解耦效果</p>
+<h4 id="压测">压测</h4>
+<p>最后呢，在优化前先进行几波不用强度的压测，然后记录下各项指标（qps，平均响应时间，等），优化完成后再进行压测，然后对比指标，看看优化后的效果是否达到期望，然后再上线，进行线上跟进，这样接口优化的整个过程就结束了</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-06-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%8E%A5%E5%8F%A3%E4%BC%98%E5%8C%96/">接口优化</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2020-12-01-shared-experience-2/" class="prev" rel="prev" title="大话后端开发的奇淫技巧-2"><i class="fas fa-angle-left fa-fw"></i>大话后端开发的奇淫技巧-2</a>
+            <a href="/posts/2022-01-20-design-pattern/" class="next" rel="next" title="今天你设计了吗？">今天你设计了吗？<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"lFknAj6PVdd83DHI2gXSVdTp-gzGzoHsz","appKey":"8Gd5DQP9MPPVmvUiccUsmA9X","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://lfknaj6p.lc-cn-n1-shared.com","visitor":true}},"search":{"algoliaAppID":"CCU1712KJI","algoliaIndex":"new-index-1645969308","algoliaSearchKey":"b5fda4342165775f0c64f3efefd43d09","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
