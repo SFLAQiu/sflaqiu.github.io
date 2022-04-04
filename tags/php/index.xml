@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>PHP - 标签 - SFLYQ的博客</title>
-        <link>http://sflaqiu.github.io/tags/php/</link>
+        <link>http://blog.thankbabe.com/tags/php/</link>
         <description>PHP - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 17 Feb 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/php/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 17 Feb 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/php/" rel="self" type="application/rss+xml" /><item>
     <title>大话转岗PHP开发小结</title>
-    <link>http://sflaqiu.github.io/posts/2019-02-17-dahua-php/</link>
+    <link>http://blog.thankbabe.com/posts/2019-02-17-dahua-php/</link>
     <pubDate>Sun, 17 Feb 2019 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2019-02-17-dahua-php/</guid>
+    <guid>http://blog.thankbabe.com/posts/2019-02-17-dahua-php/</guid>
     <description><![CDATA[前言 近期因公司内部转岗，开始参与 PHP 项目进行后端开发，一直都是强类型写的比较多，弱类型语言也有接触了一些，如：nodejs，python，做一]]></description>
 </item></channel>
 </rss>

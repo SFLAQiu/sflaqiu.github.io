@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>GraphQL - 标签 - SFLYQ的博客</title>
-        <link>http://sflaqiu.github.io/tags/graphql/</link>
+        <link>http://blog.thankbabe.com/tags/graphql/</link>
         <description>GraphQL - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Fri, 20 Apr 2018 21:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/graphql/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Fri, 20 Apr 2018 21:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/graphql/" rel="self" type="application/rss+xml" /><item>
     <title>大话GraphQL新手上车</title>
-    <link>http://sflaqiu.github.io/posts/2018-04-20-graphql/</link>
+    <link>http://blog.thankbabe.com/posts/2018-04-20-graphql/</link>
     <pubDate>Fri, 20 Apr 2018 21:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2018-04-20-graphql/</guid>
+    <guid>http://blog.thankbabe.com/posts/2018-04-20-graphql/</guid>
     <description><![CDATA[GraphQL 是什么？ GraphQL 既是一种用于 API 的查询语言也是一个满足你数据查询的运行时（来自：官方解释） 理解起来就是，GraphQL 有自己查询语法，发起的 API 请求]]></description>
 </item></channel>
 </rss>

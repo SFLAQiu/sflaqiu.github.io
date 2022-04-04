@@ -1,36 +1,36 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>安全 - 分类 - SFLYQ的博客</title>
-        <link>http://sflaqiu.github.io/categories/%E5%AE%89%E5%85%A8/</link>
+        <link>http://blog.thankbabe.com/categories/%E5%AE%89%E5%85%A8/</link>
         <description>安全 - 分类 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/categories/%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
     <title>记一次站点被挂马问题排查</title>
-    <link>http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/</link>
+    <link>http://blog.thankbabe.com/posts/2018-09-13-anquan-guama/</link>
     <pubDate>Thu, 13 Sep 2018 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2018-09-13-anquan-guama/</guid>
+    <guid>http://blog.thankbabe.com/posts/2018-09-13-anquan-guama/</guid>
     <description><![CDATA[起因，在下班准备回家之际，收到几条朋友发来的信息，说他的网站在百度搜索做信息流广告推广，但是从百度搜索点击打开就会跳转的博彩网站，让我帮忙排]]></description>
 </item><item>
     <title>大话今天你被刷了吗？</title>
-    <link>http://sflaqiu.github.io/posts/2016-12-11-shuake/</link>
+    <link>http://blog.thankbabe.com/posts/2016-12-11-shuake/</link>
     <pubDate>Sun, 11 Dec 2016 12:00:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2016-12-11-shuake/</guid>
+    <guid>http://blog.thankbabe.com/posts/2016-12-11-shuake/</guid>
     <description><![CDATA[content {:toc} 互联网发展至今产品层出不穷迭代迅速，产品在运营推广的过程中需要做活动推广业务对外进行引流、注册 热门的活动在运营的过程中总是会发现某些用户]]></description>
 </item><item>
     <title>大话接口隐私与安全</title>
-    <link>http://sflaqiu.github.io/posts/2016-06-06-donot-touch-my-url/</link>
+    <link>http://blog.thankbabe.com/posts/2016-06-06-donot-touch-my-url/</link>
     <pubDate>Sun, 05 Jun 2016 14:35:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2016-06-06-donot-touch-my-url/</guid>
+    <guid>http://blog.thankbabe.com/posts/2016-06-06-donot-touch-my-url/</guid>
     <description><![CDATA[content {:toc} 作为后端程序猿自己写的接口就像自己的孩子一样，尽然制造出来了，那就要对他以后的人生负责到底； 随着业务的壮大，需要支撑业务接口也越来越多，]]></description>
 </item><item>
     <title>大话WEB安全</title>
-    <link>http://sflaqiu.github.io/posts/2016-04-04-safe/</link>
+    <link>http://blog.thankbabe.com/posts/2016-04-04-safe/</link>
     <pubDate>Sun, 03 Apr 2016 08:06:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2016-04-04-safe/</guid>
+    <guid>http://blog.thankbabe.com/posts/2016-04-04-safe/</guid>
     <description><![CDATA[content {:toc} WEB 安全 索引 SQL 脚本注入 XSS 跨站脚本攻击 CSRF 跨站请求伪造 HTTP 劫持 DDOS 攻击 其他 SQL 脚本注入 危险级数☆☆☆☆☆☆ 简介：SQL 脚本注入，就是在请求 URL 的参数中]]></description>
 </item></channel>
 </rss>

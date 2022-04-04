@@ -1,29 +1,29 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>高并发 - 分类 - SFLYQ的博客</title>
-        <link>http://sflaqiu.github.io/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/</link>
+        <link>http://blog.thankbabe.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/</link>
         <description>高并发 - 分类 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 21 May 2017 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 21 May 2017 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="self" type="application/rss+xml" /><item>
     <title>高并发业务接口开发思路(实战)</title>
-    <link>http://sflaqiu.github.io/posts/2017-05-21-api-design/</link>
+    <link>http://blog.thankbabe.com/posts/2017-05-21-api-design/</link>
     <pubDate>Sun, 21 May 2017 12:00:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2017-05-21-api-design/</guid>
+    <guid>http://blog.thankbabe.com/posts/2017-05-21-api-design/</guid>
     <description><![CDATA[高并发业务除了需要有支撑高并发的服务器架构，还需要根据业务需求和架构体系，设计出合理的开发方案， 这里根据一个实践过业务场景分析开发思路，罗列]]></description>
 </item><item>
     <title>大话程序猿眼里的高并发架构</title>
-    <link>http://sflaqiu.github.io/posts/2016-09-14-high-concurrency-scheme/</link>
+    <link>http://blog.thankbabe.com/posts/2016-09-14-high-concurrency-scheme/</link>
     <pubDate>Wed, 14 Sep 2016 14:35:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2016-09-14-high-concurrency-scheme/</guid>
+    <guid>http://blog.thankbabe.com/posts/2016-09-14-high-concurrency-scheme/</guid>
     <description><![CDATA[content {:toc} 前言 高并发经常会发生在有大活跃用户量，用户高聚集的业务场景中，如：秒杀活动，定时领取红包等。 为了让业务可以流畅的运行并且给用户一个好的交]]></description>
 </item><item>
     <title>大话程序猿眼里的高并发</title>
-    <link>http://sflaqiu.github.io/posts/2016-04-01-high-concurrency/</link>
+    <link>http://blog.thankbabe.com/posts/2016-04-01-high-concurrency/</link>
     <pubDate>Fri, 01 Apr 2016 23:06:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2016-04-01-high-concurrency/</guid>
+    <guid>http://blog.thankbabe.com/posts/2016-04-01-high-concurrency/</guid>
     <description><![CDATA[高并发是指在同一个时间点，有很多用户同时的访问 URL 地址，比如：淘宝的双 11，双 12，就会产生高并发,如贴吧的爆吧，就是恶意的高并发请求，也就是]]></description>
 </item></channel>
 </rss>
