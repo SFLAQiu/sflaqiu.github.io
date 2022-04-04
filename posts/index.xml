@@ -4,7 +4,14 @@
         <link>http://sflaqiu.github.io/posts/</link>
         <description>所有文章 | SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sat, 01 Jan 2022 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Mon, 04 Apr 2022 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Go服务错误堆栈收集降频策略</title>
+    <link>http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/</link>
+    <pubDate>Mon, 04 Apr 2022 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/</guid>
+    <description><![CDATA[背景： Go服务在高并发请求下，当服务出现异常，会出现大量的错误日志调用栈跟踪，并上报到UDP日志服务，导致I/O彪高的问题。 多数的情况下，我]]></description>
+</item><item>
     <title>今天你设计了吗？</title>
     <link>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</link>
     <pubDate>Sat, 01 Jan 2022 08:00:00 &#43;0800</pubDate>
@@ -67,12 +74,5 @@
     <author>作者</author>
     <guid>http://sflaqiu.github.io/posts/2019-06-04-redis-limit/</guid>
     <description><![CDATA[最近沉迷于业务开发无法自拔 🤣，有一段时间没有更新博文了，后续博文内容计划把一些业务场景下的实战方案，或者比较好的设计思路进行分享，就不像之前]]></description>
-</item><item>
-    <title>大话转岗PHP开发小结</title>
-    <link>http://sflaqiu.github.io/posts/2019-02-17-dahua-php/</link>
-    <pubDate>Sun, 17 Feb 2019 08:00:00 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://sflaqiu.github.io/posts/2019-02-17-dahua-php/</guid>
-    <description><![CDATA[前言 近期因公司内部转岗，开始参与 PHP 项目进行后端开发，一直都是强类型写的比较多，弱类型语言也有接触了一些，如：nodejs，python，做一]]></description>
 </item></channel>
 </rss>

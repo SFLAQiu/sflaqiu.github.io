@@ -2,10 +2,13 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>http://sflaqiu.github.io/categories/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
-            <loc>http://sflaqiu.github.io/posts/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
-            <loc>http://sflaqiu.github.io/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
-            <loc>http://sflaqiu.github.io/tags/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/categories/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/tags/go/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/categories/go/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/posts/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
+            <loc>http://sflaqiu.github.io/tags/</loc><lastmod>2022-04-04T08:00:00&#43;08:00</lastmod></url><url>
             <loc>http://sflaqiu.github.io/posts/2022-01-20-design-pattern/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
             <loc>http://sflaqiu.github.io/tags/%E5%90%8E%E7%AB%AF/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>
             <loc>http://sflaqiu.github.io/categories/%E5%90%8E%E7%AB%AF/</loc><lastmod>2022-01-01T08:00:00&#43;08:00</lastmod></url><url>

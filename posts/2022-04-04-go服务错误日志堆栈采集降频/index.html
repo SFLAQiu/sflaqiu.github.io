@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Go服务错误堆栈收集降频策略 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="Go服务错误堆栈收集降频策略" />
+<meta property="og:description" content="背景： Go服务在高并发请求下，当服务出现异常，会出现大量的错误日志调用栈跟踪，并上报到UDP日志服务，导致I/O彪高的问题。 多数的情况下，我" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-04T08:00:00+08:00" />
+<meta property="article:modified_time" content="2022-04-04T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go服务错误堆栈收集降频策略"/>
+<meta name="twitter:description" content="背景： Go服务在高并发请求下，当服务出现异常，会出现大量的错误日志调用栈跟踪，并上报到UDP日志服务，导致I/O彪高的问题。 多数的情况下，我"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2022-01-20-design-pattern/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Go服务错误堆栈收集降频策略",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91\/"
+        },"genre": "posts","keywords": "Go","wordcount":  1412 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91\/","datePublished": "2022-04-04T08:00:00+08:00","dateModified": "2022-04-04T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Go服务错误堆栈收集降频策略</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-04-04">2022-04-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1412 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;<span id="/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/" class="leancloud_visitors" data-flag-title="Go服务错误堆栈收集降频策略">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#背景">背景：</a></li>
+        <li><a href="#设计">设计：</a></li>
+        <li><a href="#项目">项目：</a></li>
+        <li><a href="#相关代码">相关代码：</a></li>
+        <li><a href="#项目使用">项目使用：</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h3 id="背景">背景：</h3>
+<p>Go服务在高并发请求下，当服务出现异常，会出现大量的错误日志调用栈跟踪，并上报到UDP日志服务，导致I/O彪高的问题。</p>
+<p>多数的情况下，我们只需要通过几条错误日志的分析即可定位问题，也不需要看过多的重复的错误日志，针对这种场景下的问题，对堆栈日志的收集进行时间间隔内限量，超出限量的部分进行概率性的跳过忽略。</p>
+<p>当前项目，日志指定的日志级别 &gt;= <code>error</code> 之上的级别都需要输出调用堆栈</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 实例化Zap日志对象
+</span><span class="c1"></span><span class="nx">logger</span> <span class="p">=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">core</span><span class="p">).</span><span class="nf">WithOptions</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">AddCaller</span><span class="p">()).</span><span class="nf">WithOptions</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">AddStacktrace</span><span class="p">(</span><span class="nx">zapcore</span><span class="p">.</span><span class="nx">ErrorLevel</span><span class="p">))</span>
+</code></pre></div><h4 id="elk日志">ELK日志：</h4>
+<p>有调用栈日志：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/log1.png"
+        data-srcset="/imgs/log1.png, /imgs/log1.png 1.5x, /imgs/log1.png 2x"
+        data-sizes="auto"
+        alt="/imgs/log1.png"
+        title="/imgs/log1.png" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/log2.jpg"
+        data-srcset="/imgs/log2.jpg, /imgs/log2.jpg 1.5x, /imgs/log2.jpg 2x"
+        data-sizes="auto"
+        alt="/imgs/log2.jpg"
+        title="/imgs/log2.jpg" /></p>
+<p>无调用栈跟踪</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/log1.png"
+        data-srcset="/imgs/log1.png, /imgs/log1.png 1.5x, /imgs/log1.png 2x"
+        data-sizes="auto"
+        alt="/imgs/log1.png"
+        title="/imgs/log1.png" /></p>
+<h3 id="设计">设计：</h3>
+<ul>
+<li>通过计数器进行时间间隔计数
+<ul>
+<li>实现封装</li>
+</ul>
+</li>
+<li>堆栈日志收集进行概率性跳过策略
+<ul>
+<li>通过配置文件配置和启用策略</li>
+</ul>
+</li>
+</ul>
+<h3 id="项目">项目：</h3>
+<ul>
+<li>core
+<ul>
+<li>feature-log-limit-test
+<ul>
+<li>时间间隔计数器：
+<ul>
+<li><code>/utils/hcounter/timeCounter.go</code></li>
+</ul>
+</li>
+<li>日志堆栈跳过策略：
+<ul>
+<li><code>/log/stackSkip.go</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="相关代码">相关代码：</h3>
+<p><code>/utils/hcounter/timeCounter.go</code></p>
+<ul>
+<li>计数器计数通过 atomic 原子操作，（原子计数性能比锁高）</li>
+<li>间隔重置计数器和时间通过 锁 确保并发不会重复重置</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">hcounter</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;sync&#34;</span>
+	<span class="s">&#34;sync/atomic&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">mutex</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+
+<span class="c1">// TimeCounter 时间间隔计数器
+</span><span class="c1">// 计数器计数通过 atomic 原子操作，（原子计数性能比锁高）
+</span><span class="c1">// 间隔重置计数器和时间通过 锁 确保并发不会重复重置
+</span><span class="c1">//
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">TimeCounter</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">counter</span>  <span class="kt">uint32</span>        <span class="c1">// 计数器，从0开始
+</span><span class="c1"></span>	<span class="nx">abortTs</span>  <span class="kt">int64</span>         <span class="c1">// 截止时间，当前时间+间隔时间
+</span><span class="c1"></span>	<span class="nx">Max</span>      <span class="kt">uint32</span>        <span class="c1">// 默认限制数量，默认：100
+</span><span class="c1"></span>	<span class="nx">Delta</span>    <span class="kt">uint32</span>        <span class="c1">// 计数器累加值，默认：1
+</span><span class="c1"></span>	<span class="nx">Interval</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="c1">// 间隔时间，默认：1分钟
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">TimeCounterOptions</span> <span class="kd">func</span><span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">NewTimeCounter</span><span class="p">(</span><span class="nx">options</span> <span class="o">...</span><span class="nx">TimeCounterOptions</span><span class="p">)</span> <span class="o">*</span><span class="nx">TimeCounter</span> <span class="p">{</span>
+	<span class="nx">tl</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">TimeCounter</span><span class="p">{}</span>
+	<span class="c1">// 初始化
+</span><span class="c1"></span>	<span class="nx">tl</span><span class="p">.</span><span class="nf">init</span><span class="p">()</span>
+	<span class="c1">// 赋能
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">options</span> <span class="p">{</span>
+		<span class="nf">opt</span><span class="p">(</span><span class="nx">tl</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">tl</span>
+<span class="p">}</span>
+
+<span class="c1">// 初始化，设置默认值
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Max</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Max</span> <span class="p">=</span> <span class="mi">100</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Delta</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Delta</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Interval</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Interval</span> <span class="p">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 初始设置新的截止时间
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="nf">initAbort</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">timestamp</span> <span class="kt">int64</span>
+	<span class="k">if</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">abortTs</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="nx">timestamp</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">tl</span><span class="p">.</span><span class="nx">Interval</span><span class="p">).</span><span class="nf">Unix</span><span class="p">()</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nx">timestamp</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Unix</span><span class="p">(</span><span class="nx">tl</span><span class="p">.</span><span class="nx">abortTs</span><span class="p">,</span> <span class="mi">0</span><span class="p">).</span><span class="nf">Add</span><span class="p">(</span><span class="nx">tl</span><span class="p">.</span><span class="nx">Interval</span><span class="p">).</span><span class="nf">Unix</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="c1">// 更新截止时间
+</span><span class="c1"></span>	<span class="nx">atomic</span><span class="p">.</span><span class="nf">StoreInt64</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">tl</span><span class="p">.</span><span class="nx">abortTs</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 初始设置计数器数值
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="nf">initCounter</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 初始化计数器，从0开始
+</span><span class="c1"></span>	<span class="nx">atomic</span><span class="p">.</span><span class="nf">StoreUint32</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">tl</span><span class="p">.</span><span class="nx">counter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 锁操作
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="nf">doLockHandle</span><span class="p">(</span><span class="nx">doFn</span> <span class="kd">func</span><span class="p">())</span> <span class="p">{</span>
+	<span class="nx">mutex</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">mutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+	<span class="nf">doFn</span><span class="p">()</span>
+
+<span class="p">}</span>
+
+<span class="c1">// CheckPass 校验是否通过
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="nf">CheckPass</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="nx">nowTs</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+	<span class="c1">// 校验是否过了截止时间
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">nowTs</span> <span class="p">&gt;</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">abortTs</span> <span class="p">{</span>
+		<span class="c1">// 重置截止时间和计数器 - 使用锁操作
+</span><span class="c1"></span>		<span class="nx">tl</span><span class="p">.</span><span class="nf">doLockHandle</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+			<span class="c1">// 锁里再检验，避免重复设置
+</span><span class="c1"></span>			<span class="k">if</span> <span class="nx">nowTs</span> <span class="o">&lt;=</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">abortTs</span> <span class="p">{</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+			<span class="c1">// 初始化截止时间
+</span><span class="c1"></span>			<span class="nx">tl</span><span class="p">.</span><span class="nf">initCounter</span><span class="p">()</span>
+			<span class="c1">// 获取新的截止时间更新
+</span><span class="c1"></span>			<span class="nx">tl</span><span class="p">.</span><span class="nf">initAbort</span><span class="p">()</span>
+		<span class="p">})</span>
+	<span class="p">}</span>
+	<span class="c1">// 获取当前计数器值是否超过
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">counter</span> <span class="p">&gt;</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Max</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">false</span>
+	<span class="p">}</span>
+	<span class="c1">// 计数器累加
+</span><span class="c1"></span>	<span class="nx">newCounter</span> <span class="o">:=</span> <span class="nx">atomic</span><span class="p">.</span><span class="nf">AddUint32</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">tl</span><span class="p">.</span><span class="nx">counter</span><span class="p">,</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Delta</span><span class="p">)</span>
+	<span class="c1">// 判断累加计数器是否超过
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">newCounter</span> <span class="p">&gt;</span> <span class="nx">tl</span><span class="p">.</span><span class="nx">Max</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">false</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">WithMax</span><span class="p">(</span><span class="nx">max</span> <span class="kt">uint32</span><span class="p">)</span> <span class="nx">TimeCounterOptions</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Max</span> <span class="p">=</span> <span class="nx">max</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">WithDelta</span><span class="p">(</span><span class="nx">delta</span> <span class="kt">uint32</span><span class="p">)</span> <span class="nx">TimeCounterOptions</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Delta</span> <span class="p">=</span> <span class="nx">delta</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">WithInterval</span><span class="p">(</span><span class="nx">interval</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="nx">TimeCounterOptions</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">tl</span> <span class="o">*</span><span class="nx">TimeCounter</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">tl</span><span class="p">.</span><span class="nx">Interval</span> <span class="p">=</span> <span class="nx">interval</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p><code>/log/stackSkip.go</code></p>
+<ul>
+<li>堆栈日志跳过策略</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">log</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="nx">ycfg</span> <span class="s">&#34;github.com/olebedev/config&#34;</span>
+	<span class="s">&#34;math/rand&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">const</span> <span class="nx">MaxNum</span> <span class="p">=</span> <span class="mi">1000</span>
+
+<span class="c1">// StackSkip 堆栈日志限制配置
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StackSkip</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Prob</span>           <span class="kt">float64</span> <span class="c1">// 跳过概率，小数不能大于1，支持3位小数（可以根据MaxNum修改，这次多位小数）
+</span><span class="c1"></span>	<span class="nx">CounterMax</span>     <span class="kt">int</span>     <span class="c1">// 时间间隔，最大允许堆栈日志数量
+</span><span class="c1"></span>	<span class="nx">IntervalSecond</span> <span class="kt">int</span>     <span class="c1">// 时间间隔，*/秒
+</span><span class="c1"></span>	<span class="nx">skipNum</span>        <span class="kt">int</span>     <span class="c1">// 跳过数值：随机 MaxNum = n ，n&lt;skipNum，就不进行日志堆栈获取
+</span><span class="c1"></span>	<span class="nx">hc</span>             <span class="o">*</span><span class="nx">hcounter</span><span class="p">.</span><span class="nx">TimeCounter</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">NewStackLimitCfg</span><span class="p">(</span><span class="nx">logCfg</span> <span class="o">*</span><span class="nx">ycfg</span><span class="p">.</span><span class="nx">Config</span><span class="p">)</span> <span class="o">*</span><span class="nx">StackSkip</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">logCfg</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+	<span class="nx">cfg</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">logCfg</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;StackSkip&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">cfg</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+	<span class="c1">// 配置获取
+</span><span class="c1"></span>	<span class="nx">sl</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">StackSkip</span><span class="p">{}</span>
+	<span class="nx">sl</span><span class="p">.</span><span class="nx">Prob</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">UFloat64</span><span class="p">(</span><span class="s">&#34;Prob&#34;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+	<span class="nx">sl</span><span class="p">.</span><span class="nx">CounterMax</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">UInt</span><span class="p">(</span><span class="s">&#34;CounterMax&#34;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+	<span class="nx">sl</span><span class="p">.</span><span class="nx">IntervalSecond</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">UInt</span><span class="p">(</span><span class="s">&#34;IntervalSecond&#34;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+	<span class="nx">sl</span><span class="p">.</span><span class="nx">skipNum</span> <span class="p">=</span> <span class="nb">int</span><span class="p">(</span><span class="nx">MaxNum</span> <span class="o">*</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">Prob</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">Prob</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">CounterMax</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">IntervalSecond</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">skipNum</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">skipNum</span> <span class="p">&gt;</span> <span class="nx">MaxNum</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="c1">// 初始化时间间隔计数器
+</span><span class="c1"></span>	<span class="nx">sl</span><span class="p">.</span><span class="nx">hc</span> <span class="p">=</span> <span class="nx">hcounter</span><span class="p">.</span><span class="nf">NewTimeCounter</span><span class="p">(</span>
+		<span class="nx">hcounter</span><span class="p">.</span><span class="nf">WithMax</span><span class="p">(</span><span class="nb">uint32</span><span class="p">(</span><span class="nx">sl</span><span class="p">.</span><span class="nx">CounterMax</span><span class="p">)),</span>
+		<span class="nx">hcounter</span><span class="p">.</span><span class="nf">WithDelta</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+		<span class="nx">hcounter</span><span class="p">.</span><span class="nf">WithInterval</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="nx">sl</span><span class="p">.</span><span class="nx">IntervalSecond</span><span class="p">)</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="k">return</span> <span class="nx">sl</span>
+<span class="p">}</span>
+
+<span class="c1">// NeedStack 是否需要堆栈日志
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">sl</span> <span class="nx">StackSkip</span><span class="p">)</span> <span class="nf">NeedStack</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="c1">// hc=nil 不限制
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">hc</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">true</span>
+	<span class="p">}</span>
+
+	<span class="c1">// 是否达到启动概率性策略
+</span><span class="c1"></span>	<span class="nx">pass</span> <span class="o">:=</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">hc</span><span class="p">.</span><span class="nf">CheckPass</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">pass</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">true</span>
+	<span class="p">}</span>
+
+	<span class="c1">// 使用概率性策略，根据配置概率，概率性略过一些不获取堆栈日志
+</span><span class="c1"></span>	<span class="nx">i</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nx">MaxNum</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">sl</span><span class="p">.</span><span class="nx">skipNum</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">false</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div><p>运用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">SyncUDPLog</span><span class="p">(</span><span class="nx">ls</span> <span class="nx">LogStruct</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// ...
+</span><span class="c1"></span>
+	<span class="c1">// 日志堆栈概率性跳过（解决并发下大量错误日志输出堆栈信息导致I/O过高）
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">ls</span><span class="p">.</span><span class="nx">NeedStack</span> <span class="o">&amp;&amp;</span> <span class="nx">logStackSkip</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">ls</span><span class="p">.</span><span class="nx">NeedStack</span> <span class="p">=</span> <span class="nx">logStackSkip</span><span class="p">.</span><span class="nf">NeedStack</span><span class="p">()</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="p">!</span><span class="nx">ls</span><span class="p">.</span><span class="nx">NeedStack</span> <span class="p">{</span>
+		<span class="c1">// 无堆栈上报
+</span><span class="c1"></span>	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// 有堆栈上报
+</span><span class="c1"></span>	<span class="p">}</span>
+</code></pre></div><h3 id="项目使用">项目使用：</h3>
+<p>增加配置才生效，可以根据需求配置间隔时间，允许最大数量，超出最大数量后，根据配置的概率，跳过忽略掉堆栈日志</p>
+<p>config/{{env}}/log.yaml</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">StackSkip</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c">#时间间隔，*/秒</span><span class="w">
+</span><span class="w">  </span><span class="nt">IntervalSecond</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span><span class="w">  </span><span class="c">#时间间隔，最大允许堆栈日志数量</span><span class="w">
+</span><span class="w">  </span><span class="nt">CounterMax</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">  </span><span class="c">#跳过概率，小数不能大于1，支持3位小数</span><span class="w">
+</span><span class="w">  </span><span class="nt">Prob</span><span class="p">:</span><span class="w"> </span><span class="m">0.8</span><span class="w">
+</span></code></pre></div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-04-04</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">Go</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2022-01-20-design-pattern/" class="prev" rel="prev" title="今天你设计了吗？"><i class="fas fa-angle-left fa-fw"></i>今天你设计了吗？</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"lFknAj6PVdd83DHI2gXSVdTp-gzGzoHsz","appKey":"8Gd5DQP9MPPVmvUiccUsmA9X","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://lfknaj6p.lc-cn-n1-shared.com","visitor":true}},"search":{"algoliaAppID":"CCU1712KJI","algoliaIndex":"new-index-1645969308","algoliaSearchKey":"b5fda4342165775f0c64f3efefd43d09","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
