@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Go应用服务疑似内存泄露问题排查 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="Go应用服务疑似内存泄露问题排查" />
+<meta property="og:description" content="背景 为了保障业务的可用性，增加应用服务请求依赖服务（grpc、http）的熔断降级策略，避免依赖服务不可用的情况下，出现级联服务故障产生雪崩" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-02-04T08:00:00+08:00" />
+<meta property="article:modified_time" content="2023-02-04T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go应用服务疑似内存泄露问题排查"/>
+<meta name="twitter:description" content="背景 为了保障业务的可用性，增加应用服务请求依赖服务（grpc、http）的熔断降级策略，避免依赖服务不可用的情况下，出现级联服务故障产生雪崩"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Go应用服务疑似内存泄露问题排查",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5\/"
+        },"genre": "posts","keywords": "Go","wordcount":  1767 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5\/","datePublished": "2023-02-04T08:00:00+08:00","dateModified": "2023-02-04T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Go应用服务疑似内存泄露问题排查</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/go/"><i class="far fa-folder fa-fw"></i>Go</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-02-04">2023-02-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1767 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/posts/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" class="leancloud_visitors" data-flag-title="Go应用服务疑似内存泄露问题排查">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#背景">背景</a></li>
+        <li><a href="#排查">排查</a></li>
+        <li><a href="#番外---验证">番外 - 验证</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h3 id="背景">背景</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_0.jpg"
+        data-srcset="/imgs/20230204_0.jpg, /imgs/20230204_0.jpg 1.5x, /imgs/20230204_0.jpg 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_0.jpg"
+        title="/imgs/20230204_0.jpg" /></p>
+<p>为了保障业务的可用性，增加应用服务请求依赖服务（grpc、http）的熔断降级策略，避免依赖服务不可用的情况下，出现级联服务故障产生雪崩，通过熔断降级尽可能把影响缩放到最小。</p>
+<p>因此需要在go应用服务中接入熔断组件，组件我们选择了：阿里开源的sentinel circuitbreaker，一顿封装后，项目接入、压测、验证并成功上线，同时上线后也进行了跟进了几个小时，一切正常。</p>
+<p>几天后，在一次常规性的应用服务的资源监控巡查中发现内存资源使用有些异常。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_1.webp"
+        data-srcset="/imgs/20230204_1.webp, /imgs/20230204_1.webp 1.5x, /imgs/20230204_1.webp 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_1.webp"
+        title="/imgs/20230204_1.webp" /></p>
+<p>看时间节点就是从熔断组件集成到项目后，就开始出现了内存的持续增长，看监控数据估算了下，一天增长10~20MB左右，还蛮有规律的。</p>
+<p>难道是熔断组件导致的内存泄露？于是就先回滚了熔断相关内容，继续观察内存使用情况，发现内存恢复正常平稳的状态。已经确定是熔断问题导致的内存增长的问题。但是还没定位到具体是什么原因导致的这个问题，毕竟这个组件是阿里开源，并且在社区中感受好评，不应该有这种问题，还是要给与respect，带着这个疑惑，开始了内存泄露的排查之路。</p>
+<h3 id="排查">排查</h3>
+<p>首先在测试环境进行压测，并发压测qps 300+，看资源监控无法复现线上的情况。</p>
+<p>组件的使用上也只是对多做了一层的封装，并没有做了什么消耗内存的附加操作，但还是要先自我怀疑，进行了封装熔断代码重新审查，也对一些地方做了改造，通过排除法进行压测对比，也没定位到什么问题。</p>
+<p>应用项目加入性能分析采集，使用pprof工具进行，对当前使用中（inuse_space）的堆内存进行分析，并且在测试环境中，对发布和压测后的heap采集进行diff对比，也没发现哪个代码会导致内存泄露的问题。因为测试环境无法复现，又将性能分析采集发布到生产上，跟了几天，依然无法定位问题。</p>
+<p>一直无法定位到问题，于是开始怀疑Prometheus里监控的k8s pod 内存指标数值的准确性。查阅资料，发现端倪。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_2.webp"
+        data-srcset="/imgs/20230204_2.webp, /imgs/20230204_2.webp 1.5x, /imgs/20230204_2.webp 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_2.webp"
+        title="/imgs/20230204_2.webp" /></p>
+<p><code>container_memory_working_set_bytes</code> 指标统计的内存是包含（<code>RSS</code>+ <code>Cache</code>）其中cache 包含file cache，系统内核为了提高磁盘IO的效率，将读写过的文件缓存在内存中。file cache并不会随着进程退出而释放，只会当容器销毁或者系统内存不足时才会由系统自动回收。</p>
+<p>但是因为应用服务没有做文件操作，所以也就不以为然，看看就过去了。</p>
+<p>又历经了几天的排查，已经毫无思绪，继续review代码，最终在初始化sentinel circuitbreaker代码中，发现熔断组件会默认刷日志到文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// NewDefaultConfig creates a new default config entity.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">NewDefaultConfig</span><span class="p">()</span> <span class="o">*</span><span class="nx">Entity</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Entity</span><span class="p">{</span>
+			<span class="c1">// .....
+</span><span class="c1"></span>			<span class="nx">Log</span><span class="p">:</span> <span class="nx">LogConfig</span><span class="p">{</span>
+				<span class="nx">Logger</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
+				<span class="nx">Dir</span><span class="p">:</span>    <span class="nf">GetDefaultLogDir</span><span class="p">(),</span>
+				<span class="nx">UsePid</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+				<span class="nx">Metric</span><span class="p">:</span> <span class="nx">MetricLogConfig</span><span class="p">{</span>
+					<span class="nx">SingleFileMaxSize</span><span class="p">:</span> <span class="nx">DefaultMetricLogSingleFileMaxSize</span><span class="p">,</span>
+					<span class="nx">MaxFileCount</span><span class="p">:</span>      <span class="nx">DefaultMetricLogMaxFileAmount</span><span class="p">,</span>
+					<span class="nx">FlushIntervalSec</span><span class="p">:</span>  <span class="nx">DefaultMetricLogFlushIntervalSec</span><span class="p">,</span>
+				<span class="p">},</span>
+			<span class="p">},</span>
+			<span class="c1">// .....
+</span><span class="c1"></span>		<span class="p">},</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>然后回想起来k8s 使用内存监控指标中包含file cache的问题。就此真正原因浮出水面了。</p>
+<p>让运维帮忙查看线上日志：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_3.webp"
+        data-srcset="/imgs/20230204_3.webp, /imgs/20230204_3.webp 1.5x, /imgs/20230204_3.webp 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_3.webp"
+        title="/imgs/20230204_3.webp" /></p>
+<p>可以看出每日的日志文件占用存储空间与之前监控的每天增长的内存范围差不多。</p>
+<p>最终代码改造：</p>
+<pre tabindex="0"><code># ....
+// sentinel 初始化
+conf := config.NewDefaultConfig()
+// 设置不刷日志到文件（注意：k8s的使用内存指标包含:rss + file cache，使用写日志文件，会导致k8s pod监控的内存持续增长）
+conf.Sentinel.Log.Metric.FlushIntervalSec = 0
+# ....
+</code></pre><p>剧终~</p>
+<hr>
+<h3 id="番外---验证">番外 - 验证</h3>
+<p>k8s中 <code>memory.usage = working_set = memory.usage_in_bytes - total_inactive_file</code>  根据cgroup memory关系有： <code>memory.usage_in_bytes = memory.kmem.usage_in_bytes + rss + cache</code></p>
+<p><code>memory.usage_in_bytes</code>的统计数据是包含了所有的file cache的，<code>total_active_file</code>和<code>total_inactive_file</code>都属于file cache的一部分。</p>
+<p>所以采用<code>memory.usage_in_bytes - total_inactive_file</code>计算出的结果并不是当前Pod中应用程序所占用的内存，当Pod内存资源紧张时<code>total_active_file</code>也是可回收利用的。</p>
+<p>Docker容器内存相关状态：</p>
+<pre tabindex="0"><code>cd /sys/fs/cgroup/memory 
+cat memory.stat
+# 输出
+cache 1470464
+rss 35373056
+rss_huge 0
+mapped_file 864256
+swap 0
+pgpgin 32152
+pgpgout 23157
+pgfault 35743
+pgmajfault 4
+inactive_anon 0
+active_anon 35332096
+inactive_file 1466368
+active_file 4096
+unevictable 0
+hierarchical_memory_limit 1073741824
+hierarchical_memsw_limit 1073741824
+total_cache 1470464
+total_rss 35373056
+total_rss_huge 0
+total_mapped_file 864256
+total_swap 0
+total_pgpgin 0
+total_pgpgout 0
+total_pgfault 0
+total_pgmajfault 0
+total_inactive_anon 0
+total_active_anon 35332096
+total_inactive_file 1466368
+total_active_file 4096
+total_unevictable 0
+</code></pre><p>通过 shell 脚本，循环写内容到文件</p>
+<pre tabindex="0"><code>  s=&quot;&quot;
+  for ((i=1; i&lt;=500000; i++))
+  do
+      s=$s$i;
+      ns=&quot;${s}\r\n&quot;;
+      # echo $ns;
+      echo $ns &gt;&gt; test.log
+  done
+</code></pre><p>进过多次的执行shell，对比</p>
+<p>before：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_4.webp"
+        data-srcset="/imgs/20230204_4.webp, /imgs/20230204_4.webp 1.5x, /imgs/20230204_4.webp 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_4.webp"
+        title="/imgs/20230204_4.webp" /></p>
+<p>after：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20230204_5.webp"
+        data-srcset="/imgs/20230204_5.webp, /imgs/20230204_5.webp 1.5x, /imgs/20230204_5.webp 2x"
+        data-sizes="auto"
+        alt="/imgs/20230204_5.webp"
+        title="/imgs/20230204_5.webp" /></p>
+<hr>
+<p>可以明显看到，每次执行shell脚本，循环写入文件，文件越写越大，k8s pod内存监控使用内存不断地增长，并且没有释放掉。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://ormissia.github.io/posts/problems/5002-k8s-memory/" target="_blank" rel="noopener noreffer">Grafana上监控kubernetes中Pod已用内存不准问题分析</a></li>
+<li><a href="https://lyyao09.github.io/2021/07/24/k8s/K8S%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5-Pod%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E9%AB%98/" target="_blank" rel="noopener noreffer">K8S问题排查-Pod内存占用高</a></li>
+<li><a href="https://mp.weixin.qq.com/s/HosxXlz9e1jOmIY60RRkaQ" target="_blank" rel="noopener noreffer">golang：快来抓住内存泄漏的“真凶”！</a></li>
+<li><a href="https://colobu.com/2019/08/28/go-memory-leak-i-dont-think-so/" target="_blank" rel="noopener noreffer">Go内存泄漏？不是那么简单!</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-02-04</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">Go</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2022-04-04-go%E6%9C%8D%E5%8A%A1%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%A0%86%E6%A0%88%E9%87%87%E9%9B%86%E9%99%8D%E9%A2%91/" class="prev" rel="prev" title="Go服务错误堆栈收集降频策略"><i class="fas fa-angle-left fa-fw"></i>Go服务错误堆栈收集降频策略</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"lFknAj6PVdd83DHI2gXSVdTp-gzGzoHsz","appKey":"8Gd5DQP9MPPVmvUiccUsmA9X","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://lfknaj6p.lc-cn-n1-shared.com","visitor":true}},"search":{"algoliaAppID":"CCU1712KJI","algoliaIndex":"new-index-1645969308","algoliaSearchKey":"b5fda4342165775f0c64f3efefd43d09","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

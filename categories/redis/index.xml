@@ -1,36 +1,36 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Redis - 分类 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/categories/redis/</link>
+        <link>http://sflaqiu.github.io/categories/redis/</link>
         <description>Redis - 分类 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Thu, 08 Aug 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/categories/redis/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Thu, 08 Aug 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/redis/" rel="self" type="application/rss+xml" /><item>
     <title>Redis实战之实现定时执行任务</title>
-    <link>http://blog.thankbabe.com/posts/2019-08-08-yield-task/</link>
+    <link>http://sflaqiu.github.io/posts/2019-08-08-yield-task/</link>
     <pubDate>Thu, 08 Aug 2019 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2019-08-08-yield-task/</guid>
+    <guid>http://sflaqiu.github.io/posts/2019-08-08-yield-task/</guid>
     <description><![CDATA[需求 异步执行任务 支持定时执行 支持取消任务 保障快速执行 技术背景 基于 redis 实现 php 实现 基于 redis 的 sorted set + hash，实现定时执行任务的 Demo sorted set 介绍： redis 有序集合]]></description>
 </item><item>
     <title>Redis实战之限制操作频率</title>
-    <link>http://blog.thankbabe.com/posts/2019-06-04-redis-limit/</link>
+    <link>http://sflaqiu.github.io/posts/2019-06-04-redis-limit/</link>
     <pubDate>Tue, 04 Jun 2019 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2019-06-04-redis-limit/</guid>
+    <guid>http://sflaqiu.github.io/posts/2019-06-04-redis-limit/</guid>
     <description><![CDATA[最近沉迷于业务开发无法自拔 🤣，有一段时间没有更新博文了，后续博文内容计划把一些业务场景下的实战方案，或者比较好的设计思路进行分享，就不像之前]]></description>
 </item><item>
     <title>大话Redis进阶</title>
-    <link>http://blog.thankbabe.com/posts/2016-08-05-redis-up/</link>
+    <link>http://sflaqiu.github.io/posts/2016-08-05-redis-up/</link>
     <pubDate>Fri, 05 Aug 2016 14:35:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-08-05-redis-up/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-08-05-redis-up/</guid>
     <description><![CDATA[content {:toc} 使用Redis过程中，总是会遇到各种各样问题，这里进行问题的总结，作为Redis 进阶的经验分享。 更新缓存的问题 [主动]需要操作人员去操作]]></description>
 </item><item>
     <title>大话Redis基础</title>
-    <link>http://blog.thankbabe.com/posts/2016-04-02-redis/</link>
+    <link>http://sflaqiu.github.io/posts/2016-04-02-redis/</link>
     <pubDate>Fri, 01 Apr 2016 23:06:10 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-04-02-redis/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-04-02-redis/</guid>
     <description><![CDATA[content {:toc} 前期多做功课，摆对正确姿势去使用 redis 可以加快请求数据的响应时间，然而噬无忌惮的使用会让你为内存问题而烦恼，从长远的角度看这个不仅仅是只要加]]></description>
 </item></channel>
 </rss>

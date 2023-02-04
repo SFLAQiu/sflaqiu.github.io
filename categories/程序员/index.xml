@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>程序员 - 分类 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/categories/%E7%A8%8B%E5%BA%8F%E5%91%98/</link>
+        <link>http://sflaqiu.github.io/categories/%E7%A8%8B%E5%BA%8F%E5%91%98/</link>
         <description>程序员 - 分类 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 26 Jun 2016 14:35:05 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/categories/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 26 Jun 2016 14:35:05 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="self" type="application/rss+xml" /><item>
     <title>大话程序猿VS产品狗</title>
-    <link>http://blog.thankbabe.com/posts/2016-06-28-cpgandcxy/</link>
+    <link>http://sflaqiu.github.io/posts/2016-06-28-cpgandcxy/</link>
     <pubDate>Sun, 26 Jun 2016 14:35:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-06-28-cpgandcxy/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-06-28-cpgandcxy/</guid>
     <description><![CDATA[content {:toc} 一个好的互联网公司都离不开好的产品经理，对产品有着充分理解、有强大的分析判断和执行的能力、有良好的沟通和表达能力，对未来自市场、用户等各]]></description>
 </item></channel>
 </rss>

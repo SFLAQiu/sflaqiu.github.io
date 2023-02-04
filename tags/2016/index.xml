@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>2016 - 标签 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/tags/2016/</link>
+        <link>http://sflaqiu.github.io/tags/2016/</link>
         <description>2016 - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sat, 31 Dec 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/2016/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sat, 31 Dec 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/2016/" rel="self" type="application/rss+xml" /><item>
     <title>再见2016，你好2017</title>
-    <link>http://blog.thankbabe.com/posts/2016-12-31-2016-end/</link>
+    <link>http://sflaqiu.github.io/posts/2016-12-31-2016-end/</link>
     <pubDate>Sat, 31 Dec 2016 12:00:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-12-31-2016-end/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-12-31-2016-end/</guid>
     <description><![CDATA[光阴似箭，岁月如梭，2016即将过去，回首2016我自己个儿都整了些啥玩意儿？ 搭建博客站： 年初我搭建了我自己的博客，托管在Git云平台的pa]]></description>
 </item></channel>
 </rss>

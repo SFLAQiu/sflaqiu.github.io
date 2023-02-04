@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>开发工具 - 标签 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</link>
+        <link>http://sflaqiu.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</link>
         <description>开发工具 - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 18 Oct 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 18 Oct 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="self" type="application/rss+xml" /><item>
     <title>大话WEB开发必备神器</title>
-    <link>http://blog.thankbabe.com/posts/2016-10-19-sq-shared/</link>
+    <link>http://sflaqiu.github.io/posts/2016-10-19-sq-shared/</link>
     <pubDate>Tue, 18 Oct 2016 12:00:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-10-19-sq-shared/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-10-19-sq-shared/</guid>
     <description><![CDATA[content {:toc} 开发的过程中经常会使用到的各种辅助软件，学会并灵活的使用这些工具，可以提高开发效率，提高排查问题的速度，达到一个事半功倍的效果； 这里我就]]></description>
 </item></channel>
 </rss>

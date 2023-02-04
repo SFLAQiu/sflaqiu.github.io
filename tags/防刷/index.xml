@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>防刷 - 标签 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/tags/%E9%98%B2%E5%88%B7/</link>
+        <link>http://sflaqiu.github.io/tags/%E9%98%B2%E5%88%B7/</link>
         <description>防刷 - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 11 Dec 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/%E9%98%B2%E5%88%B7/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sun, 11 Dec 2016 12:00:05 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E9%98%B2%E5%88%B7/" rel="self" type="application/rss+xml" /><item>
     <title>大话今天你被刷了吗？</title>
-    <link>http://blog.thankbabe.com/posts/2016-12-11-shuake/</link>
+    <link>http://sflaqiu.github.io/posts/2016-12-11-shuake/</link>
     <pubDate>Sun, 11 Dec 2016 12:00:05 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2016-12-11-shuake/</guid>
+    <guid>http://sflaqiu.github.io/posts/2016-12-11-shuake/</guid>
     <description><![CDATA[content {:toc} 互联网发展至今产品层出不穷迭代迅速，产品在运营推广的过程中需要做活动推广业务对外进行引流、注册 热门的活动在运营的过程中总是会发现某些用户]]></description>
 </item></channel>
 </rss>

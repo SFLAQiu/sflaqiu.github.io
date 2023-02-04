@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>APP配置功能 - 标签 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/tags/app%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/</link>
+        <link>http://sflaqiu.github.io/tags/app%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/</link>
         <description>APP配置功能 - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 08 Oct 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/app%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 08 Oct 2019 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/app%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" rel="self" type="application/rss+xml" /><item>
     <title>大话APP配置功能的设计和落地</title>
-    <link>http://blog.thankbabe.com/posts/2019-10-08-config-model/</link>
+    <link>http://sflaqiu.github.io/posts/2019-10-08-config-model/</link>
     <pubDate>Tue, 08 Oct 2019 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2019-10-08-config-model/</guid>
+    <guid>http://sflaqiu.github.io/posts/2019-10-08-config-model/</guid>
     <description><![CDATA[在参与各种 app 业务开发的过程中，大部分都会遇到需要对某些功能/界面/数据可以灵活的管理后台控制，客户端根据配置变化而变化，不需要发版本就可以解]]></description>
 </item></channel>
 </rss>

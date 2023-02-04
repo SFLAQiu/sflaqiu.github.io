@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>经验沉淀 - 标签 - SFLYQ的博客</title>
-        <link>http://blog.thankbabe.com/tags/%E7%BB%8F%E9%AA%8C%E6%B2%89%E6%B7%80/</link>
+        <link>http://sflaqiu.github.io/tags/%E7%BB%8F%E9%AA%8C%E6%B2%89%E6%B7%80/</link>
         <description>经验沉淀 - 标签 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Wed, 23 May 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://blog.thankbabe.com/tags/%E7%BB%8F%E9%AA%8C%E6%B2%89%E6%B7%80/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Wed, 23 May 2018 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/%E7%BB%8F%E9%AA%8C%E6%B2%89%E6%B7%80/" rel="self" type="application/rss+xml" /><item>
     <title>大话后端开发的奇淫技巧大集合</title>
-    <link>http://blog.thankbabe.com/posts/2018-05-23-shared-experience/</link>
+    <link>http://sflaqiu.github.io/posts/2018-05-23-shared-experience/</link>
     <pubDate>Wed, 23 May 2018 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://blog.thankbabe.com/posts/2018-05-23-shared-experience/</guid>
+    <guid>http://sflaqiu.github.io/posts/2018-05-23-shared-experience/</guid>
     <description><![CDATA[Hi，大家好，很荣幸有这个机会可以通过写博文的方式，把这些年在后端开发过程中总结沉淀下来的经验和设计思路分享出来 模块化设计 根据业务场景，将业]]></description>
 </item></channel>
 </rss>
