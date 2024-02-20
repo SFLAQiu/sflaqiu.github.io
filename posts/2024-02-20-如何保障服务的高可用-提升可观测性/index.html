@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>如何保障服务的高可用：提升可观测性 - SFLYQ的博客</title><meta name="Description" content=""><meta property="og:title" content="如何保障服务的高可用：提升可观测性" />
+<meta property="og:description" content="一 、简介 保障服务的高可用，必不可少的措施，就是需要对服务资源使用度量情况、运行异常、逻辑错误、请求链路、等各项度量指标、日志和链路了如指掌，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sflaqiu.github.io/posts/2024-02-20-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-20T08:00:00+08:00" />
+<meta property="article:modified_time" content="2024-02-20T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="如何保障服务的高可用：提升可观测性"/>
+<meta name="twitter:description" content="一 、简介 保障服务的高可用，必不可少的措施，就是需要对服务资源使用度量情况、运行异常、逻辑错误、请求链路、等各项度量指标、日志和链路了如指掌，"/>
+<meta name="application-name" content="SFLYQ的博客">
+<meta name="apple-mobile-web-app-title" content="SFLYQ的博客"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://sflaqiu.github.io/posts/2024-02-20-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/" /><link rel="prev" href="http://sflaqiu.github.io/posts/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "如何保障服务的高可用：提升可观测性",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/sflaqiu.github.io\/posts\/2024-02-20-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7\/"
+        },"genre": "posts","keywords": "后端, 高可用, 可观测性","wordcount":  3974 ,
+        "url": "http:\/\/sflaqiu.github.io\/posts\/2024-02-20-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7\/","datePublished": "2024-02-20T08:00:00+08:00","dateModified": "2024-02-20T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "SFLYQ"},"author": {
+                "@type": "Person",
+                "name": "SFLYQ"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="SFLYQ的博客"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/favicon.ico"
+        data-srcset="/imgs/favicon.ico, /imgs/favicon.ico 1.5x, /imgs/favicon.ico 2x"
+        data-sizes="auto"
+        alt="/imgs/favicon.ico"
+        title="/imgs/favicon.ico" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">如何保障服务的高可用：提升可观测性</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%90%8E%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>后端</a>&nbsp;<a href="/categories/%E9%AB%98%E5%8F%AF%E7%94%A8/"><i class="far fa-folder fa-fw"></i>高可用</a>&nbsp;<a href="/categories/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><i class="far fa-folder fa-fw"></i>可观测性</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-02-20">2024-02-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3974 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/posts/2024-02-20-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/" class="leancloud_visitors" data-flag-title="如何保障服务的高可用：提升可观测性">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#21-日志应用">2.1 日志应用</a></li>
+    <li><a href="#22-日志架构">2.2 日志架构</a>
+      <ul>
+        <li><a href="#221-udp-日志服务日志收集架构">2.2.1 <strong>UDP</strong> <strong>日志服务日志收集架构</strong></a></li>
+        <li><a href="#222-nginx-日志文件-收集架构">2.2.2 N<strong>ginx</strong> <strong>日志文件</strong> <strong>收集架构</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#31-链路追踪应用">3.1 <strong>链路追踪应用</strong></a></li>
+    <li><a href="#32-关于-jeager">3.2 关于 <strong>jeager</strong></a>
+      <ul>
+        <li><a href="#321-jeager-链路逻辑图">3.2.1 jeager <strong>链路逻辑图</strong></a></li>
+        <li><a href="#322-jeager-架构图">3.2.2 <strong>jeager 架构图</strong></a></li>
+        <li><a href="#323-jeager-组件说明">3.2.3 <strong>jeager 组件说明</strong></a></li>
+        <li><a href="#324-jeager-代码入侵">3.2.4 <strong>jeager 代码入侵</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-度量指标应用">4.1 <strong>度量指标应用</strong></a></li>
+    <li><a href="#42-关于-prometheus">4.2 关于 <strong>Prometheus</strong></a>
+      <ul>
+        <li><a href="#421-prometheus-的整体架构">4.2.1 <strong>Prometheus 的整体架构</strong></a></li>
+        <li><a href="#422-prometheus-组件简要">4.2.2 <strong>Prometheus 组件简要</strong></a></li>
+        <li><a href="#423-prometheus-中四种度量">4.2.3 <strong>Prometheus 中四种度量</strong></a></li>
+        <li><a href="#424-prometheus-应用">4.2.4 <strong>Prometheus 应用</strong></a></li>
+      </ul>
+    </li>
+    <li><a href="#43-关于-grafana">4.3 关于 Grafana</a>
+      <ul>
+        <li><a href="#431-grafana-应用">4.3.1 <strong>Grafana 应用</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#如何保障服务的高可用系列">如何保障服务的高可用系列</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="一-简介">一 、简介</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp"
+        data-srcset="/imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp, /imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp 1.5x, /imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp 2x"
+        data-sizes="auto"
+        alt="/imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp"
+        title="/imgs/388a59d45e464130a2bb1e3cb53f2c54~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp" /></p>
+<p>保障服务的高可用，必不可少的措施，就是需要对服务资源使用度量情况、运行异常、逻辑错误、请求链路、等各项度量指标、日志和链路了如指掌，并且通过对服务的实时监控和分析，配置指标预警值，对异常进行告警，通知到相关负责人，通过可观测性的提升，预防和及时发现问题，保障服务的可用性。</p>
+<p>在可观测性的内容中，可以抽象出三大元素：<strong>日志（Logs）</strong> 、<strong>跟踪（Traces）</strong> 、<strong>指标（Metrics）</strong> ，这三大元素就是可观测性的三大支柱。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/05505cd934554b5ea1b482e73b1faf3d~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=300&amp;h=275&amp;s=36391&amp;e=png&amp;b=fffefe"
+        data-srcset="/imgs/05505cd934554b5ea1b482e73b1faf3d~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=300&amp;h=275&amp;s=36391&amp;e=png&amp;b=fffefe, /imgs/05505cd934554b5ea1b482e73b1faf3d~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=300&amp;h=275&amp;s=36391&amp;e=png&amp;b=fffefe 1.5x, /imgs/05505cd934554b5ea1b482e73b1faf3d~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=300&amp;h=275&amp;s=36391&amp;e=png&amp;b=fffefe 2x"
+        data-sizes="auto"
+        alt="/imgs/05505cd934554b5ea1b482e73b1faf3d~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=300&amp;h=275&amp;s=36391&amp;e=png&amp;b=fffefe"
+        title="image.png" /></p>
+<p>日志收集、链路追踪和度量指标都是<strong>遥测</strong>体系的重要组成部分，它们一起构成了观测系统运行状态和性能的关键数据基础。</p>
+<p>下面梳理在从业过程中对于可观测性的相关架构和开源工具的实现原理的理解，这里点到为止，主要让大家了解有哪些技术点，想要了解更具体的内容，可以到搜索中查询，有很多好的详细的文章。</p>
+<h1 id="二日志logs">二、<strong>日志（Logs）</strong></h1>
+<p>记录并<strong>汇集</strong>系统运行时产生的<strong>日志</strong>，包括但不限于<strong>错误信息</strong>、<strong>警告</strong>、<strong>调试信息</strong>以及<strong>应用行为细节</strong>，这些信息有助于进行<strong>问题排查</strong>、<strong>性能分析</strong>和<strong>系统审计</strong>。</p>
+<h2 id="21-日志应用">2.1 日志应用</h2>
+<ul>
+<li>nginx-err：<strong>nginx-log</strong> + <strong>logstash</strong> + <strong>es</strong> + <strong>kibana</strong></li>
+<li>go-error：<strong>log-center</strong> + <strong>kafka</strong> + <strong>logstash</strong> + <strong>es</strong> +<strong>kibana</strong></li>
+</ul>
+<p>其中用到的工具：</p>
+<p><strong>ELK</strong><br>
+<strong>Elasticsearch：</strong> 分布式搜索与分析引擎（存储日志数据）。<br>
+<strong>Logstash：</strong> 数据收集、过滤与转发工具（Elastic Stack 一部分）。<br>
+<strong>Kibana：</strong> 数据可视化平台（Elastic Stack 一部分）<br>
+<strong>log-center：</strong> 自研 UDP 日志服务</p>
+<h2 id="22-日志架构">2.2 日志架构</h2>
+<h3 id="221-udp-日志服务日志收集架构">2.2.1 <strong>UDP</strong> <strong>日志服务日志收集架构</strong></h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/656fde91db3d41c2bc8b190f234fb08f~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=250&amp;h=402&amp;s=79309&amp;e=png&amp;b=fcfbfb"
+        data-srcset="/imgs/656fde91db3d41c2bc8b190f234fb08f~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=250&amp;h=402&amp;s=79309&amp;e=png&amp;b=fcfbfb, /imgs/656fde91db3d41c2bc8b190f234fb08f~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=250&amp;h=402&amp;s=79309&amp;e=png&amp;b=fcfbfb 1.5x, /imgs/656fde91db3d41c2bc8b190f234fb08f~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=250&amp;h=402&amp;s=79309&amp;e=png&amp;b=fcfbfb 2x"
+        data-sizes="auto"
+        alt="/imgs/656fde91db3d41c2bc8b190f234fb08f~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=250&amp;h=402&amp;s=79309&amp;e=png&amp;b=fcfbfb"
+        title="screenshot-20240220-212233.png" /></p>
+<p>Log-center 是自研的 upd 日志服务，应用服务将日志上报到日志服务，日志服务将日志写入到 kafka，然后再通过 logstash 从 kafka 同步到 ES，研发人员通过 kibana 查询 ES 日志。</p>
+<p>kibana 功能还是很强大，除了日志查询，还支持 Visualize 统计图表，Dashboards 仪表板 添加 Panels 等等，具体可以搜索了解相关介绍。</p>
+<h3 id="222-nginx-日志文件-收集架构">2.2.2 N<strong>ginx</strong> <strong>日志文件</strong> <strong>收集架构</strong></h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe"
+        data-srcset="/imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe, /imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe 1.5x, /imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe 2x"
+        data-sizes="auto"
+        alt="/imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe"
+        title="/imgs/e270e42f73824c47b4ca70cb4d1d24c0~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=257&amp;h=300&amp;s=26088&amp;e=png&amp;b=fefefe" /></p>
+<p>通过 logstash 将 nginx 日志采集上报到 ES，其他和上面一样。</p>
+<h1 id="三跟踪traces">三、跟踪（Traces）</h1>
+<p>在分布式系统中，尤其是微服部署，服务之间的链路调用错综复杂。链路追踪用于追踪一个请求在整个系统中的传递过程，记录每个服务调用的详细信息，如调用顺序、耗时、状态等，这对于解决分布式系统中的复杂问题和优化系统性能至关重要。</p>
+<h2 id="31-链路追踪应用">3.1 <strong>链路追踪应用</strong></h2>
+<ul>
+<li>php <strong>apm</strong></li>
+<li>go <strong>jeager</strong> trace</li>
+<li><strong>kiali</strong> istio mesh</li>
+</ul>
+<p>其中用到的工具：</p>
+<p><strong>Jaeger：</strong> 分布式追踪系统，用于微服务和云原生应用的性能监控与故障排查。<br>
+<strong>Kiali：</strong> 服务网格可视化与管理工具（Istio）。</p>
+<h2 id="32-关于-jeager">3.2 关于 <strong>jeager</strong></h2>
+<p>jeager 分布式追踪，链路组成：<strong>Span</strong>，<strong>Trace</strong>。</p>
+<p>一个 Span 表示 Jaeger 的<strong>逻辑工作单元</strong>，Span 具有<strong>操作名称，操作的开始时间，和持续时间</strong>。Span 可以嵌套并排序以建立因果关系模型。</p>
+<p>一个 Trace 是通过系统的数据/执行路径，Trace 可被认为是由<strong>一组 Span 定义的有向无环图</strong>。</p>
+<h3 id="321-jeager-链路逻辑图">3.2.1 jeager <strong>链路逻辑图</strong></h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe"
+        data-srcset="/imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe, /imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe 1.5x, /imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe 2x"
+        data-sizes="auto"
+        alt="/imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe"
+        title="/imgs/b8c36693272d40e6ad6fdd937c32c8f8~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=38959&amp;e=png&amp;b=fefefe" /></p>
+<h3 id="322-jeager-架构图">3.2.2 <strong>jeager 架构图</strong></h3>
+<p>收集器直接<strong>写入存储</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd"
+        data-srcset="/imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd, /imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd 1.5x, /imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd 2x"
+        data-sizes="auto"
+        alt="/imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd"
+        title="/imgs/88479f10152f49ec9888f62cc8bb1861~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=80644&amp;e=png&amp;b=fefdfd" /></p>
+<p>收集器<strong>写入</strong> <strong>Kafka</strong> 作为中间缓冲</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd"
+        data-srcset="/imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd, /imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd 1.5x, /imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd 2x"
+        data-sizes="auto"
+        alt="/imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd"
+        title="/imgs/660c56cf345d4c86bc54706fa0ef7bdd~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=960&amp;h=540&amp;s=83055&amp;e=png&amp;b=fefdfd" /></p>
+<h3 id="323-jeager-组件说明">3.2.3 <strong>jeager 组件说明</strong></h3>
+<ul>
+<li><strong>Jaeger Client</strong> 为不同语言实现了符合 OpenTracing 标准的 SDK。应用程序通过 API 写入数据，client library 把 trace 信息按照应用程序指定的采样策略传递给 jaeger-agent。</li>
+<li><strong>Agent</strong> 它是一个监听在 UDP 端口上接收 span 数据的网络守护进程，它会将数据批量发送给 collector。它被设计成一个基础组件，部署到所有的宿主机上。Agent 将 client library 和 collector 解耦，为 client library 屏蔽了路由和发现 collector 的细节。</li>
+<li><strong>Collector</strong> 接收 jaeger-agent 发送来的数据，然后将数据写入后端存储。Collector 被设计成无状态的组件，因此您可以同时运行任意数量的 jaeger-collector。</li>
+<li><strong>Data Store</strong> 后端存储被设计成一个可插拔的组件，支持将数据写入 cassandra、elastic search。</li>
+<li><strong>Query</strong> 接收查询请求，然后从后端存储系统中检索 trace 并通过 UI 进行展示。</li>
+</ul>
+<h3 id="324-jeager-代码入侵">3.2.4 <strong>jeager 代码入侵</strong></h3>
+<p>将微服务中的 gRPC 和 HTTP 代码中嵌入追踪相关的代码</p>
+<ul>
+<li>在 HTTP 服务中集成 Jaeger，早期的做法可能需要在每个请求处理器中显式创建一个新的 Span，并设置父 Span（如果存在）。例如，在 Node.js 中，使用 <code>opentracing</code> 库和 <code>jaeger-client</code> 时，需要在中间件中注入追踪逻辑，初始化 Span 并将其绑定到请求上下文中。</li>
+<li>在 gRPC 服务中，同样需要在每个服务方法的前后创建 Span，通常也需要设置相应的父 Span。gRPC 社区为此提供了拦截器（Interceptor）机制，可以避免直接在业务逻辑中添加追踪代码。通过编写一个 gRPC 拦截器，可以在不修改原有业务逻辑代码的情况下注入 Jaeger 的追踪行为。</li>
+</ul>
+<p>存储 mysql ，中间件 redis、kafka ，相关的 client 包也都支持添加追踪的相关拦截的代码。</p>
+<p>这样整个链路追踪就可以贯穿应用的各个关系层级，在 jeager ui 中就可以看到从请求发起到服务调用，以及存储操作，中间件操作的整个链路的调用关系。</p>
+<h1 id="四指标metrics">四、指标（Metrics）</h1>
+<p>度量是系统运行时统计的各种量化数据，如 CPU 使用率、内存使用量、网络带宽、请求处理速率、错误率等，这些数据可用于实时监控系统性能、预测潜在问题、制定容量规划、掌握服务水平。</p>
+<h2 id="41-度量指标应用">4.1 <strong>度量指标应用</strong></h2>
+<ul>
+<li>k8s：<strong>k8s-ServiceMonitor</strong> + <strong>promethus</strong> + <strong>grafana</strong></li>
+<li>Kafka：<strong>kafka-exporter</strong> + <strong>promethus</strong> + <strong>grafana</strong></li>
+<li>esc： <strong>ecs-exporter</strong> + <strong>promethus</strong> + <strong>grafana</strong></li>
+<li>mysql：<strong>mysql-exporter</strong> + <strong>promethus</strong> + <strong>grafana</strong></li>
+<li>redis：<strong>redis-exporter</strong> + <strong>promethus</strong> + <strong>grafana</strong></li>
+<li>&hellip;</li>
+</ul>
+<p>其中用到的工具：</p>
+<p><strong>Grafana</strong>：多数据源的监控仪表板与分析工具。<br>
+<strong>Prometheus：</strong> 监控与警报工具，主要用于度量收集与分析</p>
+<h2 id="42-关于-prometheus">4.2 关于 <strong>Prometheus</strong></h2>
+<p>它针对大规模的集群环境设计了拉取式的数据采集方式，你只需要在你的应用里面实现一个<code>metrics</code>接口，然后把这个接口告诉<code>Prometheus</code>就可以完成数据采集了。而且还内置了报警功能。</p>
+<h3 id="421-prometheus-的整体架构">4.2.1 <strong>Prometheus 的整体架构</strong></h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb"
+        data-srcset="/imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb, /imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb 1.5x, /imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb 2x"
+        data-sizes="auto"
+        alt="/imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb"
+        title="/imgs/d0d387924f694e84bd0131caa21173b9~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1584&amp;h=954&amp;s=755921&amp;e=png&amp;b=fdfbfb" /></p>
+<h3 id="422-prometheus-组件简要">4.2.2 <strong>Prometheus 组件简要</strong></h3>
+<ul>
+<li><strong>Prometheus Server：</strong> 存储和检索时序数据的核心，定期从配置的监控目标拉取指标。</li>
+<li><strong>Exporter：</strong> 各种第三方工具，负责将不同服务和系统的度量数据暴露给 Prometheus，转换成 Prometheus 可读格式。</li>
+<li><strong>Pushgateway（可选）：</strong> 中间代理，允许短期任务或其他非长驻服务将指标推送到 Prometheus，因为 Prometheus 通常采用的是 Pull 模型。</li>
+<li><strong>PromQL：</strong> 专为 Prometheus 设计的时间序列查询语言，用于分析和聚合监控数据。</li>
+<li><strong>Alertmanager：</strong> 警报处理组件，对 Prometheus 产生的警报进行管理和通知，包括静默、分组及路由至适当的接收者。</li>
+<li><strong>Web UI</strong> <strong>：</strong> 内置图形界面，用于查询、可视化和浏览 Prometheus 数据以及查看报警状态。</li>
+<li><strong>Client Libraries：</strong> 提供给应用开发者直接在代码中集成 Prometheus 监控的库，以便更方便地暴露应用内部的度量指标。</li>
+</ul>
+<p>以上各组件共同构成了完整的 Prometheus 监控体系结构，能够实现高效地数据采集、存储、分析和报警功能。</p>
+<h3 id="423-prometheus-中四种度量">4.2.3 <strong>Prometheus 中四种度量</strong></h3>
+<ul>
+<li><strong>Counter：</strong> 计数器类型，用于表示只增不减的累计值，如请求总数、错误次数等。即使服务重启，计数器也会在下次收集时保留上次的值。它的特点是不能减少，只能增加或重置为零。</li>
+<li><strong>Gauge：</strong> 表盘类型，表示任意时刻可增可减的瞬时值，如内存使用量、在线用户数、请求处理速率等。Gauge 可以上升、下降或保持不变，可以用来表示任意变量的状态。</li>
+<li><strong>Histogram</strong> <strong>：</strong> 直方图类型，用于测量观测值的分布情况，例如请求响应时间。它可以自动对观测值进行桶划分，提供观测值落在各个桶内的数量以及总和、平均值等统计信息。</li>
+<li><strong>Summary：</strong> 概要统计类型，也用于衡量观测值的分布，但它允许自定义计算百分位数（如 p50, p90, p99），并且可以提供观测值的总次数、总和以及自定义的百分位数数据。与 Histogram 类似，但提供了更多的灵活性和计算精度。</li>
+</ul>
+<h3 id="424-prometheus-应用">4.2.4 <strong>Prometheus 应用</strong></h3>
+<p><strong>业务指标：</strong> 将业务中的一些核心指标、队列长度、异常情况、等业务度量输出，然后通过 grafana 配置面板进行展示和预警， grafana 的使用具体后面会介绍到。</p>
+<p>业务应用服务的指标上报，基本都是使用 pull metric 的方式，通过应用服务项目代码接入 prometheus client ，应用服务启动后会同时起一个用于拉取指标的 http 服务，然后在内网中暴露访问端口，prometheus config 来配置抓取应用暴露的指标端点。</p>
+<p><strong>资源监控：</strong> 通过 exporter 将服务架构中使用到的 esc 、k8s node pod container 、mysql 、redis 、kafka 等，服务器资源，核心功能指标进行上报，同样使用 grafana 展示和预警。</p>
+<h2 id="43-关于-grafana">4.3 关于 Grafana</h2>
+<p>Grafana 是一个监控仪表系统，它可以大大帮助我们简化监控的复杂度，我们只需要提供需要监控的数据，它就可以帮助生成各种可视化仪表，同时它还有报警功能，可以在系统出现问题时发出通知。</p>
+<p>Grafana 支持许多不同的数据源，每个数据源都有一个特定的查询编辑器，每个数据源的查询语言和能力都是不同的，我们可以把来自多个数据源的数据组合到一个仪表板，但每一个面板被绑定到一个特定的数据源。</p>
+<p>具体的 Web UI 的使用 AlertManager 告警的配置，这里就不介绍，想要了解的可以搜索，总结就是很强大。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f"
+        data-srcset="/imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f, /imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f 1.5x, /imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f 2x"
+        data-sizes="auto"
+        alt="/imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f"
+        title="/imgs/7257e0b34efe46509cf4f62a91805907~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1040&amp;h=580&amp;s=210046&amp;e=png&amp;b=181b1f" /></p>
+<h3 id="431-grafana-应用">4.3.1 <strong>Grafana 应用</strong></h3>
+<p>我们将日志 ES、指标的 Promethues 加入到 grafana 数据源，然后增加 panel 可视化图表，通过 AlertManager 设置预警值，通过钉钉群通知进行告警通知，整体搭配起来使用是真的香。</p>
+<p><strong>ES 日志</strong>：可以对日志进行查询可视化展示和监控，比如：请求 qps、异常 5xx 数量、 程序 error 数量、 msyql 慢日志、等请求和程序异常情况的预警。</p>
+<p><strong>Promethues 度量：</strong> 对上报的业务指标度量进行监控和异常告警，如：队列消费异常、核心功能异常、服务资源、等。</p>
+<h1 id="五未来展望">五、未来展望</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b"
+        data-srcset="/imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b, /imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b 1.5x, /imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b 2x"
+        data-sizes="auto"
+        alt="/imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b"
+        title="/imgs/a62a0cec9794462980d323794d9242e3~tplv-k3u1fbpfcp-jj-mark_3024_0_0_0_q75.awebp#?w=1572&amp;h=868&amp;s=1404356&amp;e=png&amp;b=822b0b" /></p>
+<p>当前接入多个可观测性的工具系统，各系统自相对独立，排查问题只能通过唯一标识 uid 等信息，通过人工的串联信息，如果我们能够在多个系统中进行观测信息的串联，那就可以减去人工匹配的过程，达到事半功倍的效果。如：用户反馈问题或者异常告警，通过从请求异常/请求日志中获得链路的 trace-id，然后在链路追踪中查看用户当前这个请求的链路情况，以及可以查询当前请求所在时刻的服务器节点、 pod、container 资源情况，串联后可以提升人员对问题排查、性能优化分析的效率。</p>
+<h1 id="六持续更新">六、持续更新</h1>
+<h2 id="如何保障服务的高可用系列">如何保障服务的高可用系列</h2>
+<ul>
+<li>如何保障服务的高可用：提升可观测性（当前）</li>
+<li>如何保障服务的高可用：提升服务性能（预告）</li>
+<li>如何保障服务的高可用：提升可靠性（预告）</li>
+<li>如何保障服务的高可用：提升告警应急能力（预告）</li>
+</ul>
+<blockquote>
+<p>预告的文章待后续持续输出，有喜欢的朋友双击 点赞 收藏 👍 + 666🤙</p>
+<p>系列收录在 Github<a href="https://github.com/SFLAQiu/web-develop" target="_blank" rel="noopener noreffer">《大话 WEB 开发》</a></p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2024-02-20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>,&nbsp;<a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>,&nbsp;<a href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/">可观测性</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/2023-02-04-go%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%96%91%E4%BC%BC%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" class="prev" rel="prev" title="Go应用服务疑似内存泄露问题排查"><i class="fas fa-angle-left fa-fw"></i>Go应用服务疑似内存泄露问题排查</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">喜欢请 Star Github：<a href="https://github.com/SFLAQiu/web-develop" target="_blank">web-develop</a></div><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://github.com/SFLAQiu" target="_blank">SFLYQ</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"lFknAj6PVdd83DHI2gXSVdTp-gzGzoHsz","appKey":"8Gd5DQP9MPPVmvUiccUsmA9X","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://lfknaj6p.lc-cn-n1-shared.com","visitor":true}},"search":{"algoliaAppID":"CCU1712KJI","algoliaIndex":"new-index-1645969308","algoliaSearchKey":"b5fda4342165775f0c64f3efefd43d09","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
