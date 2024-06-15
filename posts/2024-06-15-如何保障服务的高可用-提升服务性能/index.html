@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/sflaqiu.github.io\/posts\/2024-06-15-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%80%A7%E8%83%BD\/"
-        },"genre": "posts","keywords": "后端, 高可用, 高性能, 性能优化, 架构","wordcount":  6308 ,
+        },"genre": "posts","keywords": "后端, 高可用, 高性能, 性能优化, 架构","wordcount":  6278 ,
         "url": "http:\/\/sflaqiu.github.io\/posts\/2024-06-15-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%80%A7%E8%83%BD\/","datePublished": "2024-06-15T08:00:00+08:00","dateModified": "2024-06-15T08:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": "SFLYQ"},"author": {
@@ -118,7 +118,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">如何保障服务的高可用：提升服务性能</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="http://github.com/SFLAQiu" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>SFLYQ</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%90%8E%E7%AB%AF/"><i class="far fa-folder fa-fw"></i>后端</a>&nbsp;<a href="/categories/%E9%AB%98%E5%8F%AF%E7%94%A8/"><i class="far fa-folder fa-fw"></i>高可用</a>&nbsp;<a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/"><i class="far fa-folder fa-fw"></i>高性能</a>&nbsp;<a href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><i class="far fa-folder fa-fw"></i>性能优化</a>&nbsp;<a href="/categories/%E6%9E%B6%E6%9E%84/"><i class="far fa-folder fa-fw"></i>架构</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-06-15">2024-06-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6308 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-06-15">2024-06-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6278 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id="/posts/2024-06-15-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%80%A7%E8%83%BD/" class="leancloud_visitors" data-flag-title="如何保障服务的高可用：提升服务性能">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
                     </span>&nbsp;</div>
@@ -391,9 +391,23 @@
 <h2 id="81-架构演进">8.1 架构演进</h2>
 <p>随着业务的迭代运营，DAU、MAU 增长，QPS 增多，为了应对大流量带来的三高挑战：高可用、高并发、高性能，为了保障用户体验，为了保障服务稳定性、鲁棒性，为了支撑未来3-5年的增长，基于以上的诉求点，服务架构也随之升级，从单体架构、拆分隔离部署、负载均衡多服务节点部署、再到更细粒度的分布式微服务部署。</p>
 <p>架构设计与演进并不是一蹴而就的过程，不追求过度设计，遵循架构设计三大原则：简单优于复杂、演进优于一步到位，合适优于业界领先。</p>
-<p>暂时无法在飞书文档外展示此内容</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20240615-16.png"
+        data-srcset="/imgs/20240615-16.png, /imgs/20240615-16.png 1.5x, /imgs/20240615-16.png 2x"
+        data-sizes="auto"
+        alt="/imgs/20240615-16.png"
+        title="image.png" /></p>
 <p>通过服务部署保障高性能的中心思想主要围绕以下几个方面：负载均衡、资源隔离、冗余备份、过载保护（限流、熔断、降级）、弹性扩容。</p>
-<p>暂时无法在飞书文档外展示此内容</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/imgs/20240615-17.png"
+        data-srcset="/imgs/20240615-17.png, /imgs/20240615-17.png 1.5x, /imgs/20240615-17.png 2x"
+        data-sizes="auto"
+        alt="/imgs/20240615-17.png"
+        title="image.png" /></p>
 <h2 id="82-架构图">8.2 架构图</h2>
 <p>作为服务端开发人员，需要对应用服务的部署架构足够熟悉，尤其是分布式的微服务部署，整体链路关系网错综复杂，当线上出现请求idletimeout网络问题、服务不可用的级联效应、雪崩效应、 等问题的时候，如果你对部署架构没有足够的了解，就很难排查出问题，包括在做分布式系统设计的时候，也需要对当前架构有足够熟悉。</p>
 <p>这里有个建议，服务端可以去找运维了解部署架构、部署细节，然后自己去画架构图，通过作图的过程加强架构理解，同时图可以可以更好的表达和呈现架构层级关系、流量走向、基础设施、组件结构细节，架构图还可以存储归档，分享新童鞋，帮助其他人了解和自己回忆。</p>
