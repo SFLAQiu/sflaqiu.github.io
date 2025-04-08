@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>AICode - 标签 - SFLYQ的博客</title>
+        <link>http://sflaqiu.github.io/tags/aicode/</link>
+        <description>AICode - 标签 - SFLYQ的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 08 Apr 2025 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/tags/aicode/" rel="self" type="application/rss+xml" /><item>
+    <title>AICode 工具调研 - Go</title>
+    <link>http://sflaqiu.github.io/posts/2025-04-08-aicode%E6%B5%8B%E8%AF%84/</link>
+    <pubDate>Tue, 08 Apr 2025 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2025-04-08-aicode%E6%B5%8B%E8%AF%84/</guid>
+    <description><![CDATA[AI Code 工具调研 - Go 技术背景 通过使用 AICode 工具，辅助开发者编程。 通过标准化流程，实现全面的接入使用。 通过本地化部署，定制私有化需求和提升安全性。 短期]]></description>
+</item></channel>
+</rss>

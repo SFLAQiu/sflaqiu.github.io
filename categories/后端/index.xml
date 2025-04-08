@@ -4,7 +4,14 @@
         <link>http://sflaqiu.github.io/categories/%E5%90%8E%E7%AB%AF/</link>
         <description>后端 - 分类 - SFLYQ的博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>563644741@qq.com (SFLYQ)</managingEditor>
-            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Sat, 15 Jun 2024 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E5%90%8E%E7%AB%AF/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>563644741@qq.com (SFLYQ)</webMaster><lastBuildDate>Tue, 08 Apr 2025 08:00:00 &#43;0800</lastBuildDate><atom:link href="http://sflaqiu.github.io/categories/%E5%90%8E%E7%AB%AF/" rel="self" type="application/rss+xml" /><item>
+    <title>AICode 工具调研 - Go</title>
+    <link>http://sflaqiu.github.io/posts/2025-04-08-aicode%E6%B5%8B%E8%AF%84/</link>
+    <pubDate>Tue, 08 Apr 2025 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://sflaqiu.github.io/posts/2025-04-08-aicode%E6%B5%8B%E8%AF%84/</guid>
+    <description><![CDATA[AI Code 工具调研 - Go 技术背景 通过使用 AICode 工具，辅助开发者编程。 通过标准化流程，实现全面的接入使用。 通过本地化部署，定制私有化需求和提升安全性。 短期]]></description>
+</item><item>
     <title>如何保障服务的高可用：提升服务性能</title>
     <link>http://sflaqiu.github.io/posts/2024-06-15-%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8-%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%80%A7%E8%83%BD/</link>
     <pubDate>Sat, 15 Jun 2024 08:00:00 &#43;0800</pubDate>
